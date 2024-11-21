@@ -7,23 +7,29 @@ import (
 )
 
 type profile struct {
-	path         string
-	hash         string
-	shellVersion string
+	path                string
+	hash                string
+	shellVersion        string
+	isValidHash         bool
+	isValidPath         bool
+	isValidShellVersion bool
 }
 
 var profiles []profile
 
-func (p *profile) IsValid() error {
-	log.Printf("Validating profile: %+v", p)
-	fv := new(FieldValidator)
-	fv.InArray(p.shellVersion, []string{"pwsh", "powershell"})
-	if !fv.IsValid() {
-		log.Printf("Validation failed for profile: %+v", p)
-		return fv.Error()
+func LoadProfile(line []string) profile {
+	p := profile{}
+	p.path = line[0]
+	p.hash = line[1]
+	p.shellVersion = line[2]
+	p.isValidPath = validatePath(p.path) == nil
+	if p.isValidPath {
+		p.isValidHash = validateHash(p.hash, p.path) == nil
+	} else {
+		p.isValidHash = false
 	}
-	log.Printf("Validation succeeded for profile: %+v", p)
-	return nil
+	p.isValidShellVersion = validateShellVersion(p.shellVersion) == nil
+	return p
 }
 
 func loadProfiles(filePath string) error {
@@ -45,16 +51,8 @@ func loadProfiles(filePath string) error {
 	log.Printf("Loaded %d records from CSV file", len(records)-1)
 
 	for _, record := range records[1:] {
-		profile := profile{
-			path:         record[0],
-			hash:         record[1],
-			shellVersion: record[2],
-		}
+		profile := LoadProfile(record)
 		log.Printf("Processing profile: %+v", profile)
-		if err := profile.IsValid(); err != nil {
-			log.Printf("Invalid profile: %v", err)
-			return err
-		}
 		profiles = append(profiles, profile)
 		log.Printf("Added profile: %+v", profile)
 	}

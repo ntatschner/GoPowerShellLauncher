@@ -3,6 +3,8 @@ package cmd
 import (
 	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
+
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 var (
@@ -20,7 +22,7 @@ var createCmd = &cobra.Command{
 	Short: "Create a new launcher shortcut",
 	Long:  `Create a new PowerShell launcher shortcut with the given name and options selected herein.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		GoPowerShellLauncher.Logger.Info("Creating a new launcher shortcut")
+		l.Logger.Info("Creating a new launcher shortcut")
 		// Do Stuff Here
 	},
 }

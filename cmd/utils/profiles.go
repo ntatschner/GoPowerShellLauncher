@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	l "GoPowerShellLauncher/cmd/logger"
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 type profile struct {

@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"io"
 	"os"
+
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 type Config struct {
@@ -11,6 +13,7 @@ type Config struct {
 }
 
 func loadConfig(filePath string) (*Config, error) {
+	l.Logger.Info("Loading configuration file", "Path", filePath)
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err

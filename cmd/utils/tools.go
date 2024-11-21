@@ -8,9 +8,12 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 func validatePath(path string) error {
+	l.Logger.Info("Validating path", "Path", path)
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return fmt.Errorf("path does not exist: %s", path)
@@ -22,6 +25,7 @@ func validatePath(path string) error {
 }
 
 func validateHash(hash string, filePath string) error {
+	l.Logger.Info("Validating hash", "Hash", hash, "Path", filePath)
 	// Check if the path is valid before validating the hash
 	if err := validatePath(filePath); err != nil {
 		return err
@@ -56,6 +60,7 @@ func validateHash(hash string, filePath string) error {
 }
 
 func compareHashes(hash1, hash2 []byte) bool {
+	l.Logger.Info("Comparing hashes", "Hash1", hash1, "Hash2", hash2)
 	if len(hash1) != len(hash2) {
 		return false
 	}
@@ -68,6 +73,7 @@ func compareHashes(hash1, hash2 []byte) bool {
 }
 
 func validateShellVersion(shellVersion string) error {
+	l.Logger.Info("Validating shell version", "ShellVersion", shellVersion)
 	switch shellVersion {
 	case "pwsh", "powershell":
 		return nil
@@ -77,6 +83,7 @@ func validateShellVersion(shellVersion string) error {
 }
 
 func validateDescription(description string) error {
+	l.Logger.Info("Validating description", "Description", description)
 	if len(description) > 100 {
 		return fmt.Errorf("description is too long (max 100 characters)")
 	}
@@ -84,6 +91,7 @@ func validateDescription(description string) error {
 }
 
 func getProfileContent(path string) (string, error) {
+	l.Logger.Info("Getting profile content", "Path", path)
 	file, err := os.Open(path)
 	if err != nil {
 		return "", err
@@ -98,11 +106,12 @@ func getProfileContent(path string) (string, error) {
 }
 
 func mergeSelectedProfiles(selected map[int]struct{}) string {
+	l.Logger.Info("Merging selected profiles", "Selected", selected)
 	var merged string
 	for i := range selected {
 		content, err := getProfileContent(profiles[i].path)
 		if err != nil {
-			logger.Errorf("Error reading profile content", "Error", err)
+			l.Logger.Warn("Error reading profile content", "Error", err)
 			continue
 		}
 		merged += content + "\n"
@@ -111,6 +120,7 @@ func mergeSelectedProfiles(selected map[int]struct{}) string {
 }
 
 func launchPowerShell(m model) tea.Cmd {
+	l.Logger.Info("Launching PowerShell")
 	return func() tea.Msg {
 		merged := mergeSelectedProfiles(m.selected)
 		// create temporary file to store the merged profile

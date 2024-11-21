@@ -22,7 +22,7 @@ func InitLogger() {
 	multiWriter := io.MultiWriter(os.Stdout, logFile)
 
 	// Create a new logger and set its output to the multi-writer
-	Logger = log.New()
+	Logger = log.New(multiWriter)
 	Logger.SetOutput(multiWriter)
 	Logger.SetPrefix("GoPowerShellLauncher 🤖:")
 	Logger.SetTimeFormat(time.Kitchen)

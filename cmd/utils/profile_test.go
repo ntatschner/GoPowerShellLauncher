@@ -1,4 +1,4 @@
-package cmd
+package utils
 
 import (
 	"crypto/sha256"
@@ -54,50 +54,72 @@ func TestLoadProfile(t *testing.T) {
 	}{
 		{
 			name: "Valid profile",
-			line: []string{file1Path, hash1, "pwsh"},
+			line: []string{file1Path, hash1, "pwsh", "A valid description"},
 			expected: profile{
 				path:                file1Path,
 				hash:                hash1,
 				shellVersion:        "pwsh",
+				description:         "A valid description",
 				isValidPath:         true,
 				isValidHash:         true,
 				isValidShellVersion: true,
+				isValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid path",
-			line: []string{"", hash1, "pwsh"},
+			line: []string{"", hash1, "pwsh", "A valid description"},
 			expected: profile{
 				path:                "",
 				hash:                hash1,
 				shellVersion:        "pwsh",
+				description:         "A valid description",
 				isValidPath:         false,
 				isValidHash:         false,
 				isValidShellVersion: true,
+				isValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid hash",
-			line: []string{file1Path, "", "pwsh"},
+			line: []string{file1Path, "", "pwsh", "A valid description"},
 			expected: profile{
 				path:                file1Path,
 				hash:                "",
 				shellVersion:        "pwsh",
+				description:         "A valid description",
 				isValidPath:         true,
 				isValidHash:         false,
 				isValidShellVersion: true,
+				isValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid shell version",
-			line: []string{file2Path, hash2, "invalidShell"},
+			line: []string{file2Path, hash2, "invalidShell", "A valid description"},
 			expected: profile{
 				path:                file2Path,
 				hash:                hash2,
 				shellVersion:        "invalidShell",
+				description:         "A valid description",
 				isValidPath:         true,
 				isValidHash:         true,
 				isValidShellVersion: false,
+				isValidDescription:  true,
+			},
+		},
+		{
+			name: "Invalid description",
+			line: []string{file2Path, hash2, "pwsh", "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid."},
+			expected: profile{
+				path:                file2Path,
+				hash:                hash2,
+				shellVersion:        "pwsh",
+				description:         "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid.",
+				isValidPath:         true,
+				isValidHash:         true,
+				isValidShellVersion: true,
+				isValidDescription:  false,
 			},
 		},
 	}
@@ -114,6 +136,9 @@ func TestLoadProfile(t *testing.T) {
 			if result.shellVersion != tt.expected.shellVersion {
 				t.Errorf("LoadProfile().shellVersion = %v, expected %v", result.shellVersion, tt.expected.shellVersion)
 			}
+			if result.description != tt.expected.description {
+				t.Errorf("LoadProfile().description = %v, expected %v", result.description, tt.expected.description)
+			}
 			if result.isValidPath != tt.expected.isValidPath {
 				t.Errorf("LoadProfile().isValidPath = %v, expected %v", result.isValidPath, tt.expected.isValidPath)
 			}
@@ -122,6 +147,9 @@ func TestLoadProfile(t *testing.T) {
 			}
 			if result.isValidShellVersion != tt.expected.isValidShellVersion {
 				t.Errorf("LoadProfile().isValidShellVersion = %v, expected %v", result.isValidShellVersion, tt.expected.isValidShellVersion)
+			}
+			if result.isValidDescription != tt.expected.isValidDescription {
+				t.Errorf("LoadProfile().isValidDescription = %v, expected %v", result.isValidDescription, tt.expected.isValidDescription)
 			}
 		})
 	}

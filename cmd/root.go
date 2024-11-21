@@ -1,30 +1,32 @@
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-
+Copyright © 2024 Nigel Tatschner <ntatschner@gmail.com>
 */
 package cmd
 
 import (
 	"os"
 
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
-
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "GoPowerShellLauncher",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
+	Short: "Launches PowerShell \"Profile\" scripts with ease.",
+	Long: `GoPowerShellLauncher is a CLI tool that allows you to easily launch PowerShell scripts,
+	called "Profiles", with a simple command. It is designed to be used in conjunction with
+	"PowerShell Profile" scripts that are designed to be run in a specific environment.
+	You can create shortcuts to your favorite PowerShell Profile scripts, and launch them.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		l.Logger.Info("Launching PowerShell Launcher UI")
+		tprogram := tea.NewProgram()
+		if err := tprogram.Start(); err != nil {
+			l.Logger.Errorf("Error starting the program", "Error", err)
+		}
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -47,5 +49,3 @@ func init() {
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-

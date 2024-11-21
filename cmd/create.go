@@ -17,9 +17,10 @@ func init() {
 
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "Create a new launcher",
-	Long:  `Create a new PowerShell launcher with the given name and options selected herein.`,
+	Short: "Create a new launcher shortcut",
+	Long:  `Create a new PowerShell launcher shortcut with the given name and options selected herein.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		GoPowerShellLauncher.Logger.Info("Creating a new launcher shortcut")
 		// Do Stuff Here
 	},
 }

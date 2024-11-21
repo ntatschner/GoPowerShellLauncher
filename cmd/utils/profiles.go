@@ -1,27 +1,33 @@
-package cmd
+package utils
 
 import (
 	"encoding/csv"
-	"log"
+	"fmt"
 	"os"
+
+	l "GoPowerShellLauncher/cmd/logger"
 )
 
 type profile struct {
 	path                string
 	hash                string
 	shellVersion        string
+	description         string
 	isValidHash         bool
 	isValidPath         bool
 	isValidShellVersion bool
+	isValidDescription  bool
 }
 
 var profiles []profile
 
 func LoadProfile(line []string) profile {
+	l.Logger.Info("Loading profile", "line", line)
 	p := profile{}
 	p.path = line[0]
 	p.hash = line[1]
 	p.shellVersion = line[2]
+	p.description = line[3]
 	p.isValidPath = validatePath(p.path) == nil
 	if p.isValidPath {
 		p.isValidHash = validateHash(p.hash, p.path) == nil
@@ -29,6 +35,7 @@ func LoadProfile(line []string) profile {
 		p.isValidHash = false
 	}
 	p.isValidShellVersion = validateShellVersion(p.shellVersion) == nil
+	p.isValidDescription = validateDescription(p.description) == nil
 	return p
 }
 
@@ -48,14 +55,14 @@ func loadProfiles(filePath string) error {
 		return err
 	}
 
-	log.Printf("Loaded %d records from CSV file", len(records)-1)
+	l.Logger.Info(fmt.Sprintf("Loaded %d records from CSV file", len(records)-1))
 
 	for _, record := range records[1:] {
 		profile := LoadProfile(record)
-		log.Printf("Processing profile: %+v", profile)
+		l.Logger.Info(fmt.Sprintf("Processing profile: %+v", profile))
 		profiles = append(profiles, profile)
-		log.Printf("Added profile: %+v", profile)
+		l.Logger.Info(fmt.Sprintf("Added profile: %+v", profile))
 	}
-	log.Printf("Total profiles loaded: %d", len(profiles))
+	l.Logger.Info(fmt.Sprintf("Total profiles loaded: %d", len(profiles)))
 	return nil
 }

@@ -5,7 +5,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 type menuItem struct {
 	title       string
 	description string
-	cmd         tea.Cmd
+	screen      utils.SwitchViewMsg
 }
 
 func (m menuItem) FilterValue() string {
@@ -52,9 +52,8 @@ func (m *model) initList(width, height int) {
 	m.menuList.Title = "Main Menu"
 	m.menuList.SetFilteringEnabled(false)
 	menuItems := []list.Item{
-		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", cmd: profileselector.New().Init()},
-		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", cmd: nil},
-		menuItem{title: "Exit", description: "Quits the program", cmd: tea.Quit},
+		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", screen: "profileView"},
+		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", screen: "shortcutView"},
 	}
 
 	var items []list.Item
@@ -71,14 +70,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter", " ":
 			selectedItem := m.menuList.SelectedItem()
 			if menuItem, ok := selectedItem.(menuItem); ok {
-				l.Logger.Info("Triggering command", "Command", m.menuList.SelectedItem())
-				return m, menuItem.cmd
+				l.Logger.Info("Switching Screen", "Screen", m.menuList.SelectedItem())
+				return m, func() tea.Msg {
+					return utils.SwitchViewMsg(menuItem.screen)
+				}
 			}
 		}
 	}
-	var cmd tea.Cmd
-	m.menuList, cmd = m.menuList.Update(msg)
-	return m, cmd
+	return m, nil
 }
 
 func (m model) View() string {

@@ -33,6 +33,7 @@ func (m ParentModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case utils.SwitchViewMsg:
 		if nextView, ok := m.screens[string(msg)]; ok {
 			m.currentView = nextView
+			return m, m.currentView.Init()
 		}
 	default:
 		var cmd tea.Cmd

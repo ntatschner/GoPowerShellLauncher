@@ -16,3 +16,105 @@
 4:32PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
 4:32PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
 4:32PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:36PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+4:36PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:36PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:37PM INFO <mainview/mainview.go:75> GoPowerShellLauncher 🤖:: Switching Screen Screen="{title:Select Profiles description:PowerShell profile selection screen. screen:profileView}"
+4:41PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+4:41PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:41PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:41PM INFO <mainview/mainview.go:75> GoPowerShellLauncher 🤖:: Switching Screen Screen="{title:Select Profiles description:PowerShell profile selection screen. screen:profileView}"
+4:42PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+4:42PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:42PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:42PM INFO <mainview/mainview.go:75> GoPowerShellLauncher 🤖:: Switching Screen Screen="{title:Select Profiles description:PowerShell profile selection screen. screen:profileView}"
+4:52PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+4:52PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:52PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed down
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed down
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed up
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed down
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed right
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed left
+4:52PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed up
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed A
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed S
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed a
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed s
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed s
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed a
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed d
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed f
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed q
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed ctrl+c
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+4:53PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+5:10PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:10PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:10PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed down
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed up
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed right
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed q
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed ctrl+c
+5:10PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed esc
+5:11PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:11PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:11PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:11PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+5:11PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+5:12PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:12PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:12PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed down
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed up
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed enter
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed q
+5:12PM INFO <parentview/parentview.go:35> GoPowerShellLauncher 🤖:: Key pressed  
+5:13PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:13PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:13PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:13PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed down
+5:13PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed up
+5:13PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed enter
+5:13PM INFO <mainview/mainview.go:77> GoPowerShellLauncher 🤖:: Switching Screen Screen="{title:Select Profiles description:PowerShell profile selection screen. screen:profileView}"
+5:13PM INFO <profileselector/profileselector.go:110> GoPowerShellLauncher 🤖:: Key pressed enter
+5:13PM INFO <profileselector/profileselector.go:110> GoPowerShellLauncher 🤖:: Key pressed enter
+5:13PM INFO <profileselector/profileselector.go:110> GoPowerShellLauncher 🤖:: Key pressed enter
+5:13PM INFO <profileselector/profileselector.go:110> GoPowerShellLauncher 🤖:: Key pressed  
+5:19PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:19PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:19PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:19PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed down
+5:19PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed up
+5:19PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed q
+5:19PM INFO <mainview/mainview.go:72> GoPowerShellLauncher 🤖:: Key pressed  
+5:19PM INFO <mainview/mainview.go:77> GoPowerShellLauncher 🤖:: Switching Screen Screen="{title:Select Profiles description:PowerShell profile selection screen. screen:profileView}"
+5:19PM INFO <profileselector/profileselector.go:89> GoPowerShellLauncher 🤖:: Initializing profile list
+5:19PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=config.json
+5:19PM ERRO <profileselector/profileselector.go:94> GoPowerShellLauncher 🤖:: Failed to load configuration file error="open config.json: The system cannot find the file specified."
+5:19PM ERRO <cmd/root.go:28> GoPowerShellLauncher 🤖:: Error starting the program Error="program was killed: context canceled"
+5:21PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:21PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:21PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:22PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:22PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:22PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:23PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+5:23PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+5:23PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI

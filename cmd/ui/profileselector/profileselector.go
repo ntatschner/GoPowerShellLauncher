@@ -106,9 +106,8 @@ func (m *model) initList(width, height int) {
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		m.initList(msg.Width, msg.Height)
 	case tea.KeyMsg:
+		l.Logger.Info("Key pressed", "msg", msg.String())
 		switch msg.String() {
 		case "enter":
 			//selectedItems := m.profilesList.SelectedItem()

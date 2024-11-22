@@ -70,6 +70,7 @@ func (m profileItem) Description() string {
 type model struct {
 	profilesList list.Model
 	selected     map[int]struct{}
+	keymap       utils.KeyMap
 }
 
 func New() *model {
@@ -79,6 +80,7 @@ func New() *model {
 func (m model) Init() tea.Cmd {
 	return func() tea.Msg {
 		m.initList(150, 100)
+		m.keymap = utils.DefaultKeyMap()
 		return nil
 	}
 }

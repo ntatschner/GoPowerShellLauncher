@@ -9,3 +9,10 @@
 3:59PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=config.json
 3:59PM ERRO <profileselector/profileselector.go:92> GoPowerShellLauncher 🤖:: Failed to load configuration file error="open config.json: The system cannot find the file specified."
 3:59PM ERRO <cmd/root.go:28> GoPowerShellLauncher 🤖:: Error starting the program Error="program was killed: context canceled"
+4:19PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+4:19PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:19PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:20PM INFO <mainview/mainview.go:73> GoPowerShellLauncher 🤖:: Switching Screen Screen="{title:Select Profiles description:PowerShell profile selection screen. screen:profileView}"
+4:32PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+4:32PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:32PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI

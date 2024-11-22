@@ -34,6 +34,7 @@ func (m menuItem) Description() string {
 // MainView is the main view of the application
 type model struct {
 	menuList list.Model
+	keymap   utils.KeyMap
 }
 
 func New() *model {
@@ -43,6 +44,7 @@ func New() *model {
 func (m model) Init() tea.Cmd {
 	return func() tea.Msg {
 		m.initList(150, 100)
+		m.keymap = utils.DefaultKeyMap()
 		return nil
 	}
 }

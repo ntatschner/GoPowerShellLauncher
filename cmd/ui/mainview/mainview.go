@@ -4,7 +4,6 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 var (
@@ -50,12 +49,6 @@ func (m model) Init() tea.Cmd {
 	return nil
 }
 
-func InitMainView() (tea.Model, tea.Cmd) {
-	l.Logger.Info("Initializing MainView...")
-	list := list.New([]list.Item{}, list.NewDefaultDelegate(), 150, 20)
-
-}
-
 func (m *model) initList(width, height int) {
 	m.menuList = list.New([]list.Item{}, list.NewDefaultDelegate(), width, height)
 	m.menuList.Title = "Main Menu"
@@ -77,9 +70,5 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	return lipgloss.JoinVertical(
-		lipgloss.Center,
-		titleStyle.Render("GoPowerShellLauncher"),
-		subtleStyle.Render("Press q to quit"),
-	)
+	return m.menuList.View()
 }

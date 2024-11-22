@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
-	"syscall"
 
+	"github.com/charmbracelet/bubbles/list"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
+
+type SwitchViewMsg string
 
 func validatePath(path string) error {
 	l.Logger.Info("Validating path", "Path", path)
@@ -105,7 +106,7 @@ func getProfileContent(path string) (string, error) {
 	return string(content), nil
 }
 
-func mergeSelectedProfiles(selected map[int]struct{}) string {
+func MergeSelectedProfiles(selected map[int]struct{}) string {
 	l.Logger.Info("Merging selected profiles", "Selected", selected)
 	var merged string
 	for i := range selected {
@@ -119,38 +120,11 @@ func mergeSelectedProfiles(selected map[int]struct{}) string {
 	return merged
 }
 
-func launchPowerShell(m model) tea.Cmd {
-	l.Logger.Info("Launching PowerShell")
-	return func() tea.Msg {
-		merged := mergeSelectedProfiles(m.selected)
-		// create temporary file to store the merged profile
-		tmpFile, err := os.CreateTemp("", "merged_profile_*.ps1")
-		if err != nil {
-			logger.Errorf("Error creating temporary file", "Error", err)
-			return shellClosed{}
-		}
-		_, err = tmpFile.Write([]byte(merged))
-		if err != nil {
-			logger.Errorf("Error writing to temporary file", "Error", err)
-			tmpFile.Close()
-			os.Remove(tmpFile.Name())
-			return shellClosed{}
-		}
-		tmpFile.Close() // Close the file before running the PowerShell command
-
-		cmd := exec.Command("cmd", "/C", "start", "/wait", "powershell", "-NoExit", "-File", tmpFile.Name())
-		cmd.SysProcAttr = &syscall.SysProcAttr{
-			CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
-
-		err = cmd.Start()
-		if err != nil {
-			logger.Errorf("Error starting PowerShell command", "Error", err)
-			os.Remove(tmpFile.Name())
-			return shellClosed{}
-		}
-		cmd.Wait()
-		// Remove the temporary file after starting the command
-		os.Remove(tmpFile.Name())
-		return shellClosed{}
+func loadAvailableShells() []list.Item {
+	l.Logger.Info("Loading available shells")
+	var items []list.Item
+	for _, shell := range shells {
+		items = append(items, shell)
 	}
+	return items
 }

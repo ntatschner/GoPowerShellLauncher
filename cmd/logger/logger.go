@@ -9,15 +9,15 @@ import (
 )
 
 var Logger *log.Logger
+var logFile *os.File
 
 func InitLogger() {
+	var err error
 	// Open a file for writing logs
-	logFile, err := os.OpenFile("GoPowerShellLauncher.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	logFile, err = os.OpenFile("GoPowerShellLauncher.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalf("Failed to open log file: %v", err)
 	}
-	defer logFile.Close()
-
 	// Create a multi-writer to write logs to both the file and the standard output
 	multiWriter := io.MultiWriter(os.Stdout, logFile)
 
@@ -29,4 +29,11 @@ func InitLogger() {
 	Logger.SetReportTimestamp(true)
 	Logger.SetReportCaller(true)
 	Logger.Info("Logger initialized")
+}
+
+// CloseLogger closes the log file
+func CloseLogger() {
+	if logFile != nil {
+		logFile.Close()
+	}
 }

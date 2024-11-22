@@ -5,19 +5,12 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
 )
 
 var (
 	titleStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF")).Bold(true)
 	subtleStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF99FF")).Italic(true)
-)
-
-type sessionState int
-
-const (
-	mainView sessionState = iota
-	profileView
-	confirmationView
 )
 
 type menuItem struct {
@@ -40,9 +33,6 @@ func (m menuItem) Description() string {
 
 // MainView is the main view of the application
 type model struct {
-	state    sessionState
-	profiles tea.Model
-	shells   tea.Model
 	menuList list.Model
 }
 
@@ -51,17 +41,25 @@ func New() *model {
 }
 
 func (m model) Init() tea.Cmd {
-	return nil
+	return func() tea.Msg {
+		m.initList(150, 100)
+		return nil
+	}
 }
 
 func (m *model) initList(width, height int) {
 	m.menuList = list.New([]list.Item{}, list.NewDefaultDelegate(), width, height)
 	m.menuList.Title = "Main Menu"
-	m.menuList.SetItems([]list.Item{
-		menuItem{title: "Select Profiles", description: "", cmd: nil},
-		menuItem{title: "Create Shortcuts", description: "", cmd: nil},
-		menuItem{title: "Exit", description: "", cmd: tea.Quit},
-	})
+	m.menuList.SetFilteringEnabled(false)
+	menuItems := []list.Item{
+		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", cmd: profileselector.New().Init()},
+		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", cmd: nil},
+		menuItem{title: "Exit", description: "Quits the program", cmd: tea.Quit},
+	}
+
+	var items []list.Item
+	items = append(items, menuItems...)
+	m.menuList.SetItems(items)
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -71,8 +69,11 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "enter", " ":
-			// Add Logic to handle selection entry screen
-			l.Logger.Info("Triggeting command", "Command", m.menuList.SelectedItem())
+			selectedItem := m.menuList.SelectedItem()
+			if menuItem, ok := selectedItem.(menuItem); ok {
+				l.Logger.Info("Triggering command", "Command", m.menuList.SelectedItem())
+				return m, menuItem.cmd
+			}
 		}
 	}
 	var cmd tea.Cmd

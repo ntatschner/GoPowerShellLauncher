@@ -11,6 +11,7 @@ import (
 func main() {
 	// Initialize the logger
 	l.InitLogger()
+	defer l.CloseLogger()
 	l.Logger.Info("Starting..")
 	cmd.Execute()
 }

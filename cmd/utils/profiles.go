@@ -19,6 +19,10 @@ type profile struct {
 	isValidDescription  bool
 }
 
+func (p profile) Title() string       { return p.path }
+func (p profile) Description() string { return p.description }
+func (p profile) FilterValue() string { return p.path }
+
 var profiles []profile
 
 func LoadProfile(line []string) profile {
@@ -39,24 +43,22 @@ func LoadProfile(line []string) profile {
 	return p
 }
 
-func loadProfiles(filePath string) error {
-	// clear current profiles
-	profiles = []profile{}
-
+func LoadProfiles(filePath string) ([]profile, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer file.Close()
 
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	l.Logger.Info(fmt.Sprintf("Loaded %d records from CSV file", len(records)-1))
 
+	var profiles []profile
 	for _, record := range records[1:] {
 		profile := LoadProfile(record)
 		l.Logger.Info(fmt.Sprintf("Processing profile: %+v", profile))
@@ -64,5 +66,5 @@ func loadProfiles(filePath string) error {
 		l.Logger.Info(fmt.Sprintf("Added profile: %+v", profile))
 	}
 	l.Logger.Info(fmt.Sprintf("Total profiles loaded: %d", len(profiles)))
-	return nil
+	return profiles, nil
 }

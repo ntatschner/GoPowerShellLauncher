@@ -12,7 +12,7 @@ type Config struct {
 	CsvPath string `json:"csv_path"`
 }
 
-func loadConfig(filePath string) (*Config, error) {
+func LoadConfig(filePath string) (*Config, error) {
 	l.Logger.Info("Loading configuration file", "Path", filePath)
 	file, err := os.Open(filePath)
 	if err != nil {

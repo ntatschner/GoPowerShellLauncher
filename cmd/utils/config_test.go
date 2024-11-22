@@ -54,7 +54,7 @@ func TestLoadConfig(t *testing.T) {
 			}
 			defer os.Remove(filePath)
 
-			config, err := loadConfig(filePath)
+			config, err := LoadConfig(filePath)
 			if (err != nil) != tt.expectError {
 				t.Errorf("loadConfig() error = %v, expectError %v", err, tt.expectError)
 				return

@@ -7,6 +7,7 @@ import (
 	"os"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/mainview"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
@@ -22,9 +23,9 @@ var rootCmd = &cobra.Command{
 	You can create shortcuts to your favorite PowerShell Profile scripts, and launch them.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		l.Logger.Info("Launching PowerShell Launcher UI")
-		tprogram := tea.NewProgram()
-		if err := tprogram.Start(); err != nil {
-			l.Logger.Errorf("Error starting the program", "Error", err)
+		tprogram := tea.NewProgram(mainview.New())
+		if _, err := tprogram.Run(); err != nil {
+			l.Logger.Error("Error starting the program", "Error", err)
 		}
 	},
 }

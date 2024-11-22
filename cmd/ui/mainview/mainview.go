@@ -45,6 +45,10 @@ type model struct {
 	menuList list.Model
 }
 
+func New() *model {
+	return &model{}
+}
+
 func (m model) Init() tea.Cmd {
 	return nil
 }

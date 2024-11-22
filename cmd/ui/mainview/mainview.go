@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 var (
@@ -67,6 +68,12 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.initList(msg.Width, msg.Height)
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter", " ":
+			// Add Logic to handle selection entry screen
+			l.Logger.Info("Triggeting command", "Command", m.menuList.SelectedItem())
+		}
 	}
 	var cmd tea.Cmd
 	m.menuList, cmd = m.menuList.Update(msg)

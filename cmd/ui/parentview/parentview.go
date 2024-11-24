@@ -2,47 +2,48 @@ package parentview
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/mainview"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shellview"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/menuview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/common"
 )
 
 type ParentModel struct {
-	currentView tea.Model
-	screens     map[string]tea.Model
+	state        common.SessionState
+	menuView     tea.Model
+	profilesView tea.Model
+	previousView tea.Model
 }
 
 func New() ParentModel {
-	return ParentModel{
-		currentView: mainview.New(),
-		screens: map[string]tea.Model{
-			"mainView":    mainview.New(),
-			"profileView": profileselector.New(),
-			"shellView":   shellview.New(),
-		},
-	}
+	return menuview.New()
 }
 
 func (m ParentModel) Init() tea.Cmd {
-	return m.currentView.Init()
+	return nil
 }
 
 func (m ParentModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
+	var cmds []tea.Cmd
 	switch msg := msg.(type) {
-	case utils.SwitchViewMsg:
-		if nextView, ok := m.screens[string(msg)]; ok {
-			m.currentView = nextView
-			return m, m.currentView.Init()
+	case tea.WindowSizeMsg:
+		common.WindowSize = msg
+	case tea.KeyMsg:
+		m.state = menuView
+	}
+	switch m.state {
+	case menuView:
+		menuModel, ok := menuview.New()
+		if !ok {
+			l.Logger.Error("Failed to load view")
+		} else {
+			return menuModel, nil
 		}
-	default:
-		var cmd tea.Cmd
-		m.currentView, cmd = m.currentView.Update(msg)
-		return m, cmd
 	}
 	return m, nil
 }
 
 func (m ParentModel) View() string {
-	return m.currentView.View()
+	modelView := m.state[m.state].View()
+	return modelView
 }

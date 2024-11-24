@@ -4,8 +4,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/common"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/parentview"
 )
 
 var (
@@ -16,7 +16,7 @@ var (
 type menuItem struct {
 	title       string
 	description string
-	screen      utils.SwitchViewMsg
+	screen      string
 }
 
 func (m menuItem) FilterValue() string {
@@ -34,29 +34,23 @@ func (m menuItem) Description() string {
 // MainView is the main view of the application
 type model struct {
 	menuList list.Model
-	keymap   utils.KeyMap
-}
-
-func New() *model {
-	return &model{
-		keymap: utils.DefaultKeyMap(),
-	}
 }
 
 func (m model) Init() tea.Cmd {
-	return func() tea.Msg {
-		m.initList(150, 100)
-		return nil
-	}
+	return nil
 }
 
-func (m *model) initList(width, height int) {
-	m.menuList = list.New([]list.Item{}, list.NewDefaultDelegate(), width, height)
+func (m model) New() (tea.Model, tea.Cmd) {
+	return m.initList()
+}
+
+func (m *model) initList() (tea.Model, tea.Cmd) {
+	m.menuList = list.New([]list.Item{}, list.NewDefaultDelegate(), common.WindowSize.Height, common.WindowSize.Width)
 	m.menuList.Title = "Main Menu"
 	m.menuList.SetFilteringEnabled(false)
 	menuItems := []list.Item{
-		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", screen: "profileView"},
-		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", screen: "shortcutView"},
+		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", screen: "profilesView"},
+		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", screen: "profilesView"},
 	}
 
 	var items []list.Item
@@ -65,18 +59,17 @@ func (m *model) initList(width, height int) {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	initialMsg := msg
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		common.WindowSize = msg
 	case tea.KeyMsg:
-		l.Logger.Info("Key pressed", "msg", msg.String())
 		switch msg.String() {
-		case "enter", " ":
-			selectedItem := m.menuList.SelectedItem()
-			if menuItem, ok := selectedItem.(menuItem); ok {
-				l.Logger.Info("Switching Screen", "Screen", m.menuList.SelectedItem())
-				return m, func() tea.Msg {
-					return utils.SwitchViewMsg(menuItem.screen)
-				}
-			}
+		case "enter":
+			newItem := m.menuList.SelectedItem()
+			newModel = profileselector.profilesList.Update(msg)
+			newModel, newCmd := parentview.ParentModel.Update(initialMsg)
+			return newView, cmd
 		}
 	}
 	return m, nil

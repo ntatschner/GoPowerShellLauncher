@@ -5,7 +5,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/common"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/parentview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
 )
 
 var (
@@ -56,20 +56,21 @@ func (m *model) initList() (tea.Model, tea.Cmd) {
 	var items []list.Item
 	items = append(items, menuItems...)
 	m.menuList.SetItems(items)
+	return m, nil
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	initialMsg := msg
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		common.WindowSize = msg
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "enter":
-			newItem := m.menuList.SelectedItem()
-			newModel = profileselector.profilesList.Update(msg)
-			newModel, newCmd := parentview.ParentModel.Update(initialMsg)
-			return newView, cmd
+			newItem := m.menuList.SelectedItem().(menuItem).screen
+			if newItem == "profilesView" {
+				newModel := profileselector.New()
+				return newModel, nil
+			}
 		}
 	}
 	return m, nil

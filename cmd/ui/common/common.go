@@ -7,14 +7,6 @@ import (
 
 var WindowSize tea.WindowSizeMsg
 
-type SessionState int
-
-const (
-	menuView SessionState = iota
-	profilesView
-	conformationView
-)
-
 type KeyMap struct {
 	Back key.Binding
 }

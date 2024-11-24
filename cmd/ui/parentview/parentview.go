@@ -3,19 +3,26 @@ package parentview
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/menuview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/common"
 )
 
+type sessionState int
+
+const (
+	menuView sessionState = iota
+	profilesView
+	conformationView
+)
+
 type ParentModel struct {
-	state        common.SessionState
-	menuView     tea.Model
+	state        sessionState
+	mainView     tea.Model
 	profilesView tea.Model
 	previousView tea.Model
 }
 
-func New() ParentModel {
-	return menuview.New()
+func (m ParentModel) New() tea.Model {
+	return m.mainView
 }
 
 func (m ParentModel) Init() tea.Cmd {
@@ -23,8 +30,6 @@ func (m ParentModel) Init() tea.Cmd {
 }
 
 func (m ParentModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	var cmd tea.Cmd
-	var cmds []tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		common.WindowSize = msg
@@ -33,17 +38,16 @@ func (m ParentModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	}
 	switch m.state {
 	case menuView:
-		menuModel, ok := menuview.New()
-		if !ok {
+		menuModel := m.mainView.Init()
+		if menuModel == nil {
 			l.Logger.Error("Failed to load view")
 		} else {
-			return menuModel, nil
+			return m.mainView.Update(menuModel)
 		}
 	}
 	return m, nil
 }
 
 func (m ParentModel) View() string {
-	modelView := m.state[m.state].View()
-	return modelView
+	return m.mainView.View()
 }

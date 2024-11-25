@@ -118,3 +118,6 @@
 5:23PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
 5:23PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
 5:23PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:15PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+6:15PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+6:15PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI

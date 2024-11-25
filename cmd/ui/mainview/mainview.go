@@ -1,81 +1,62 @@
 package mainview
 
 import (
-	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/common"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/menuview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
 )
 
-var (
-	titleStyle  = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF")).Bold(true)
-	subtleStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF99FF")).Italic(true)
+type sessionState int
+
+const (
+	menuView sessionState = iota
+	profilesView
 )
 
-type menuItem struct {
-	title       string
-	description string
-	screen      string
+type mainModel struct {
+	state        sessionState
+	mainView     tea.Model
+	profilesView tea.Model
+	currentView  tea.Model
 }
 
-func (m menuItem) FilterValue() string {
-	return m.title
-}
-
-func (m menuItem) Title() string {
-	return m.title
-}
-
-func (m menuItem) Description() string {
-	return m.description
-}
-
-// MainView is the main view of the application
-type model struct {
-	menuList list.Model
-}
-
-func (m model) Init() tea.Cmd {
-	return nil
-}
-
-func (m model) New() (tea.Model, tea.Cmd) {
-	return m.initList()
-}
-
-func (m *model) initList() (tea.Model, tea.Cmd) {
-	m.menuList = list.New([]list.Item{}, list.NewDefaultDelegate(), common.WindowSize.Height, common.WindowSize.Width)
-	m.menuList.Title = "Main Menu"
-	m.menuList.SetFilteringEnabled(false)
-	menuItems := []list.Item{
-		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", screen: "profilesView"},
-		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", screen: "profilesView"},
+func NewMainModel() mainModel {
+	mainView := menuview.New()
+	profilesView := profileselector.New()
+	return mainModel{
+		state:        menuView,
+		mainView:     mainView,
+		profilesView: profilesView,
+		currentView:  mainView,
 	}
-
-	var items []list.Item
-	items = append(items, menuItems...)
-	m.menuList.SetItems(items)
-	return m, nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m mainModel) Init() tea.Cmd {
+	return m.currentView.Init()
+}
+
+func (m mainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		common.WindowSize = msg
 	case tea.KeyMsg:
 		switch msg.String() {
+		case "q":
+			return m, tea.Quit
 		case "enter":
-			newItem := m.menuList.SelectedItem().(menuItem).screen
-			if newItem == "profilesView" {
-				newModel := profileselector.New()
-				return newModel, nil
+			if m.state == menuView {
+				m.state = profilesView
+				m.currentView = m.profilesView
+			} else {
+				m.state = menuView
+				m.currentView = m.mainView
 			}
 		}
 	}
-	return m, nil
+
+	var cmd tea.Cmd
+	m.currentView, cmd = m.currentView.Update(msg)
+	return m, cmd
 }
 
-func (m model) View() string {
-	return m.menuList.View()
+func (m mainModel) View() string {
+	return m.currentView.View()
 }

@@ -121,3 +121,83 @@
 6:15PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
 6:15PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
 6:15PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+7:57PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+7:57PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+7:57PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:02PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+8:02PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:02PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:05PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+8:05PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:05PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:06PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+8:06PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:06PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:06PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+8:06PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:06PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:06PM INFO <mainview/mainview.go:25> GoPowerShellLauncher 🤖:: Creating a new main view
+8:06PM INFO <menuview/menuview.go:37> GoPowerShellLauncher 🤖:: Creating a new menu view
+8:12PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+8:12PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:12PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:12PM INFO <mainview/mainview.go:25> GoPowerShellLauncher 🤖:: Creating a new main view
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed up
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed up
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed esc
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed  
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed  
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+d
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+ 
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+g
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed alt+j
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed g
+8:13PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed f
+8:45PM INFO <logger/logger.go:31> GoPowerShellLauncher 🤖:: Logger initialized
+8:45PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:45PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:45PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+8:49PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+8:49PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:49PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:49PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+8:49PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:49PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:49PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:49PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:49PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:52PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+8:52PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:52PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:52PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:52PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:53PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:53PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed down
+8:53PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:58PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+8:58PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+8:58PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+8:58PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+8:58PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+8:58PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+9:02PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+9:02PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+9:02PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+9:02PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+9:02PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter

@@ -19,11 +19,12 @@ func InitLogger() {
 		log.Fatalf("Failed to open log file: %v", err)
 	}
 	// Create a multi-writer to write logs to both the file and the standard output
-	multiWriter := io.MultiWriter(os.Stdout, logFile)
+	//multiWriter := io.MultiWriter(os.Stdout, logFile)
+	writer := io.Writer(logFile)
 
 	// Create a new logger and set its output to the multi-writer
-	Logger = log.New(multiWriter)
-	Logger.SetOutput(multiWriter)
+	Logger = log.New(writer)
+	Logger.SetOutput(writer)
 	Logger.SetPrefix("GoPowerShellLauncher 🤖:")
 	Logger.SetTimeFormat(time.Kitchen)
 	Logger.SetReportTimestamp(true)

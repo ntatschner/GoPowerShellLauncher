@@ -1,11 +1,8 @@
 package profileselector
 
 import (
-	"fmt"
-	"io"
-	"strings"
-
 	"github.com/charmbracelet/bubbles/list"
+	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
@@ -19,74 +16,20 @@ var (
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#FF00FF")).Bold(true)
 )
 
-type item string
+var baseStyle = lipgloss.NewStyle().
+	BorderStyle(lipgloss.NormalBorder()).
+	BorderForeground(lipgloss.Color("240"))
 
-func (i item) FilterValue() string { return "" }
-
-type itemDelegate struct{}
-
-func (d itemDelegate) Height() int                             { return 1 }
-func (d itemDelegate) Spacing() int                            { return 0 }
-func (d itemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
-func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i, ok := listItem.(item)
-	if !ok {
-		return
-	}
-
-	str := fmt.Sprintf("%d. %s", index+1, i)
-
-	fn := itemStyle.Render
-	if index == m.Index() {
-		fn = func(s ...string) string {
-			return selectedItemStyle.Render("\\u{1F449} " + strings.Join(s, " "))
-		}
-	}
-
-	fmt.Fprint(w, fn(str))
-}
-
-type sessionState int
-
-type profileItem struct {
-	title       string
-	description string
-	cmd         tea.Cmd
-}
-
-func (m profileItem) FilterValue() string {
-	return m.title
-}
-
-func (m profileItem) Title() string {
-	return m.title
-}
-
-func (m profileItem) Description() string {
-	return m.description
-}
-
-// MainView is the main view of the application
 type model struct {
-	profilesList list.Model
-	selected     map[int]struct{}
+	table table.Model
+	items []table.Row
 }
 
-func New() *model {
-	return &model{}
-}
+func (m model) Init() tea.Cmd { return nil }
 
-func (m model) Init() tea.Cmd {
-	return func() tea.Msg {
-		m.initList(150, 100)
-		return nil
-	}
-}
-
-func (m *model) initList(width, height int) {
+func InitTable() {
 	l.Logger.Info("Initializing profile list")
-	m.profilesList = list.New([]list.Item{}, itemDelegate{}, width, height)
-	m.profilesList.Title = "Available Profiles"
+
 	loadConfig, err := utils.LoadConfig("config.json")
 	if err != nil {
 		l.Logger.Error("Failed to load configuration file", "error", err)
@@ -95,32 +38,40 @@ func (m *model) initList(width, height int) {
 	if err != nil {
 		l.Logger.Error("Failed to load profiles", "error", err)
 	}
-	var items []list.Item
+	var rows []table.Row
 	for _, p := range profiles {
-		items = append(items, p)
+		items = append(rows, p)
 	}
-	m.profilesList.SetItems(items)
+	
+}
+
+type profileItem struct {
+	title       string
+	description string
+}
+
+func (p profileItem) Title() string       { return p.title }
+func (p profileItem) Description() string { return p.description }
+func (p profileItem) FilterValue() string { return p.title }
+
+func New() model {
+
+
+	return model{table: }
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		l.Logger.Info("Key pressed", "msg", msg.String())
-		switch msg.String() {
-		case "enter":
-			//selectedItems := m.profilesList.SelectedItem()
-		case " ":
-			_, ok := m.selected[m.profilesList.Cursor()]
-			if ok {
-				delete(m.selected, m.profilesList.Cursor())
-			} else {
-				m.selected[m.profilesList.Cursor()] = struct{}{}
-			}
-		}
+	case tea.WindowSizeMsg:
+		m.table.SetHeight(msg.Height)
+		m.table.SetWidth(msg.Width)
 	}
-	return m, nil
+
+	var cmd tea.Cmd
+	m.table, cmd = m.table.Update(msg)
+	return m, cmd
 }
 
 func (m model) View() string {
-	return m.profilesList.View()
+	return m.table.View()
 }

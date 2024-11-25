@@ -2,6 +2,7 @@ package mainview
 
 import (
 	tea "github.com/charmbracelet/bubbletea"
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/menuview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
 )
@@ -18,9 +19,11 @@ type mainModel struct {
 	mainView     tea.Model
 	profilesView tea.Model
 	currentView  tea.Model
+	windowSize   tea.WindowSizeMsg
 }
 
 func NewMainModel() mainModel {
+	l.Logger.Info("Creating a new main view")
 	mainView := menuview.New()
 	profilesView := profileselector.New()
 	return mainModel{
@@ -28,6 +31,7 @@ func NewMainModel() mainModel {
 		mainView:     mainView,
 		profilesView: profilesView,
 		currentView:  mainView,
+		windowSize:   tea.WindowSizeMsg{},
 	}
 }
 
@@ -37,6 +41,10 @@ func (m mainModel) Init() tea.Cmd {
 
 func (m mainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
+	case tea.WindowSizeMsg:
+		m.windowSize = msg
+		// Pass the window size to the current view if needed
+		m.currentView, _ = m.currentView.Update(msg)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "q":

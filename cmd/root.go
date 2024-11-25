@@ -23,7 +23,7 @@ var rootCmd = &cobra.Command{
 	You can create shortcuts to your favorite PowerShell Profile scripts, and launch them.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		l.Logger.Info("Launching PowerShell Launcher UI")
-		tprogram := tea.NewProgram(mainview.NewMainModel())
+		tprogram := tea.NewProgram(mainview.NewMainModel(), tea.WithAltScreen())
 		if _, err := tprogram.Run(); err != nil {
 			l.Logger.Error("Error starting the program", "Error", err)
 		}

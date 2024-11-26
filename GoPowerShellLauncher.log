@@ -211,3 +211,42 @@
 1:59PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
 1:59PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
 1:59PM ERRO <profileselector/profileselector.go:58> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+3:57PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+3:57PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+3:57PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+3:57PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+3:57PM ERRO <profileselector/profileselector.go:58> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+4:00PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+4:00PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:00PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:00PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+4:00PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+4:00PM ERRO <profileselector/profileselector.go:58> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+4:03PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+4:03PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:03PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:03PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+4:03PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+4:03PM ERRO <profileselector/profileselector.go:57> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+4:04PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+4:04PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:04PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:04PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+4:04PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Initializing profile list
+4:04PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=config.json
+4:04PM ERRO <utils/config.go:19> GoPowerShellLauncher 🤖:: Failed to open configuration file path=config.json error="open config.json: The system cannot find the file specified."
+4:04PM ERRO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Failed to load configuration file error="open config.json: The system cannot find the file specified."
+4:04PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+4:04PM ERRO <profileselector/profileselector.go:58> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+4:12PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+4:12PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:12PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:12PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+4:12PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+4:12PM ERRO <profileselector/profileselector.go:63> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+4:14PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+4:14PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+4:14PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+4:14PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+4:14PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+4:14PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."

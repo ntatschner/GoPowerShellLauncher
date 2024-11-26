@@ -1,6 +1,8 @@
 package profileselector
 
 import (
+	"os"
+
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -29,18 +31,22 @@ var configPath string
 
 func (m model) ConfigPath() string { return m.configPath }
 
-func (m model) Init() tea.Cmd { return nil }
-
-func (m model) InitTable() {
+func (m model) Init() tea.Cmd {
 	l.Logger.Info("Initializing profile list")
-
-	loadConfig, err := utils.LoadConfig("config.json")
+	path, err := os.Getwd()
+	l.Logger.Info("Getting working directory", "path", path)
+	if err != nil {
+		l.Logger.Error("Failed to get working directory", "error", err)
+	}
+	path = path + string(os.PathSeparator) + "config"
+	loadConfig, err := utils.LoadConfig(path)
 	if err != nil {
 		l.Logger.Error("Failed to load configuration file", "error", err)
 	} else {
 		l.Logger.Info("Loaded configuration file", "config", loadConfig)
 		configPath = loadConfig.CsvPath
 	}
+	return nil
 }
 
 func New() model {

@@ -61,6 +61,7 @@ func LoadProfile(line []string) profile {
 func LoadProfiles(filePath string) ([]profile, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
+		l.Logger.Error("Failed to open CSV file", "path", filePath, "error", err)
 		return nil, err
 	}
 	defer file.Close()

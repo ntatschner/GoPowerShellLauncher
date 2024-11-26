@@ -16,6 +16,7 @@ func LoadConfig(filePath string) (*Config, error) {
 	l.Logger.Info("Loading configuration file", "Path", filePath)
 	file, err := os.Open(filePath)
 	if err != nil {
+		l.Logger.Error("Failed to open configuration file", "path", filePath, "error", err)
 		return nil, err
 	}
 	defer file.Close()

@@ -201,3 +201,13 @@
 9:02PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
 9:02PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
 9:02PM INFO <profileselector/profileselector.go:108> GoPowerShellLauncher 🤖:: Key pressed enter
+1:59PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+1:59PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+1:59PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+1:59PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+1:59PM ERRO <profileselector/profileselector.go:58> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+1:59PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+1:59PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+1:59PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+1:59PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+1:59PM ERRO <profileselector/profileselector.go:58> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."

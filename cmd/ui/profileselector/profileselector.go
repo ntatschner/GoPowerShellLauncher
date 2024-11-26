@@ -1,7 +1,6 @@
 package profileselector
 
 import (
-	"github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/table"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -21,43 +20,65 @@ var baseStyle = lipgloss.NewStyle().
 	BorderForeground(lipgloss.Color("240"))
 
 type model struct {
-	table table.Model
-	items []table.Row
+	table      table.Model
+	items      []table.Row
+	configPath string
 }
+
+var configPath string
+
+func (m model) ConfigPath() string { return m.configPath }
 
 func (m model) Init() tea.Cmd { return nil }
 
-func InitTable() {
+func (m model) InitTable() {
 	l.Logger.Info("Initializing profile list")
 
 	loadConfig, err := utils.LoadConfig("config.json")
 	if err != nil {
 		l.Logger.Error("Failed to load configuration file", "error", err)
+	} else {
+		l.Logger.Info("Loaded configuration file", "config", loadConfig)
+		configPath = loadConfig.CsvPath
 	}
-	profiles, err := utils.LoadProfiles(loadConfig.CsvPath)
+}
+
+func New() model {
+	var valid string
+	columns := []table.Column{
+		{Title: "Name", Width: 20},
+		{Title: "Valid", Width: 20},
+		{Title: "Description", Width: 20},
+		{Title: "Path", Width: 20},
+		{Title: "Hash", Width: 20},
+		{Title: "Shell", Width: 20},
+	}
+	profiles, err := utils.LoadProfiles(configPath)
 	if err != nil {
 		l.Logger.Error("Failed to load profiles", "error", err)
 	}
-	var rows []table.Row
+	var items []table.Row
 	for _, p := range profiles {
-		items = append(rows, p)
+		if p.Valid() {
+			valid = "✅"
+		} else {
+			valid = "❌"
+		}
+		items = append(items, table.Row{
+			p.Name(),
+			valid,
+			p.Description(),
+			p.Path(),
+			p.Hash(),
+			p.Shell(),
+		})
 	}
-	
-}
+	table := table.New()
+	table.Focus()
+	table.SetColumns(columns)
+	table.SetRows(items)
 
-type profileItem struct {
-	title       string
-	description string
-}
-
-func (p profileItem) Title() string       { return p.title }
-func (p profileItem) Description() string { return p.description }
-func (p profileItem) FilterValue() string { return p.title }
-
-func New() model {
-
-
-	return model{table: }
+	return model{table: table}
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

@@ -4,11 +4,13 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"strings"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 type profile struct {
+	name                string
 	path                string
 	hash                string
 	shellVersion        string
@@ -19,9 +21,22 @@ type profile struct {
 	isValidDescription  bool
 }
 
-func (p profile) Title() string       { return p.path }
-func (p profile) Description() string { return p.description }
-func (p profile) FilterValue() string { return p.path }
+func (p profile) Path() string { return p.path }
+func (p profile) Name() string {
+	name := strings.Split(p.path, "\\")
+	return name[len(name)-1]
+}
+func (p profile) Description() string       { return p.description }
+func (p profile) Hash() string              { return p.hash }
+func (p profile) Shell() string             { return p.shellVersion }
+func (p profile) IsValidHash() bool         { return p.isValidHash }
+func (p profile) IsValidPath() bool         { return p.isValidPath }
+func (p profile) IsValidDescription() bool  { return p.isValidDescription }
+func (p profile) IsValidShellVersion() bool { return p.isValidShellVersion }
+func (p profile) Valid() bool {
+	return p.isValidPath && p.isValidHash && p.isValidShellVersion && p.isValidDescription
+}
+func (p profile) FilterValue() string { return p.name }
 
 var profiles []profile
 

@@ -32,13 +32,17 @@ var configPath string
 func (m model) ConfigPath() string { return m.configPath }
 
 func (m model) Init() tea.Cmd {
+	return nil
+}
+
+func New() model {
 	l.Logger.Info("Initializing profile list")
 	path, err := os.Getwd()
 	l.Logger.Info("Getting working directory", "path", path)
 	if err != nil {
 		l.Logger.Error("Failed to get working directory", "error", err)
 	}
-	path = path + string(os.PathSeparator) + "config"
+	path = path + string(os.PathSeparator) + "config.json"
 	loadConfig, err := utils.LoadConfig(path)
 	if err != nil {
 		l.Logger.Error("Failed to load configuration file", "error", err)
@@ -46,10 +50,6 @@ func (m model) Init() tea.Cmd {
 		l.Logger.Info("Loaded configuration file", "config", loadConfig)
 		configPath = loadConfig.CsvPath
 	}
-	return nil
-}
-
-func New() model {
 	var valid string
 	columns := []table.Column{
 		{Title: "Name", Width: 20},

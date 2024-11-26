@@ -43,6 +43,7 @@ var profiles []profile
 func LoadProfile(line []string) profile {
 	l.Logger.Info("Loading profile", "line", line)
 	p := profile{}
+	p.name = strings.Split(line[0], string(os.PathSeparator))[len(strings.Split(line[0], string(os.PathSeparator)))-1]
 	p.path = line[0]
 	p.hash = line[1]
 	p.shellVersion = line[2]
@@ -58,6 +59,18 @@ func LoadProfile(line []string) profile {
 	return p
 }
 
+func validateHeaders(headers []string, expectedHeaders []string) error {
+	if len(headers) != len(expectedHeaders) {
+		return fmt.Errorf("invalid number of headers: got %d, expected %d", len(headers), len(expectedHeaders))
+	}
+	for i, header := range headers {
+		if header != expectedHeaders[i] {
+			return fmt.Errorf("invalid header: got %s, expected %s", header, expectedHeaders[i])
+		}
+	}
+	return nil
+}
+
 func LoadProfiles(filePath string) ([]profile, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
@@ -71,9 +84,13 @@ func LoadProfiles(filePath string) ([]profile, error) {
 	if err != nil {
 		return nil, err
 	}
-
+	// Validate csv headers
+	headers := []string{"path", "hash", "shellversion", "description"}
+	if err := validateHeaders(records[0], headers); err != nil {
+		l.Logger.Error("Invalid CSV headers 🤯:", "expected", headers, "found", records[0])
+		return nil, err
+	}
 	l.Logger.Info(fmt.Sprintf("Loaded %d records from CSV file", len(records)-1))
-
 	var profiles []profile
 	for _, record := range records[1:] {
 		profile := LoadProfile(record)

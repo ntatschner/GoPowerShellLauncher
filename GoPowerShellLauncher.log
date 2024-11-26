@@ -250,3 +250,68 @@
 4:14PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
 4:14PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
 4:14PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+6:30PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+6:30PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+6:30PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:30PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+6:30PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+6:30PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+6:43PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+6:43PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+6:43PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:43PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+6:43PM INFO <profileselector/profileselector.go:39> GoPowerShellLauncher 🤖:: Initializing profile list
+6:43PM INFO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+6:43PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json
+6:43PM ERRO <utils/config.go:19> GoPowerShellLauncher 🤖:: Failed to open configuration file 😢: path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json error="open C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json: The system cannot find the file specified."
+6:43PM ERRO <profileselector/profileselector.go:48> GoPowerShellLauncher 🤖:: Failed to load configuration file error="open C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json: The system cannot find the file specified."
+6:43PM ERRO <utils/profiles.go:64> GoPowerShellLauncher 🤖:: Failed to open CSV file path="" error="open : The system cannot find the file specified."
+6:43PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="open : The system cannot find the file specified."
+6:44PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+6:44PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+6:44PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:44PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+6:44PM INFO <profileselector/profileselector.go:39> GoPowerShellLauncher 🤖:: Initializing profile list
+6:44PM INFO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+6:44PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json
+6:44PM INFO <profileselector/profileselector.go:50> GoPowerShellLauncher 🤖:: Loaded configuration file config=&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv}
+6:44PM INFO <utils/profiles.go:75> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+6:44PM INFO <utils/profiles.go:44> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 95E517F27687C3B278CBB64EF7D691DFA33B35CDC9597E5BD43E794666935A46 All]"
+6:45PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+6:45PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+6:45PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:45PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+6:45PM INFO <profileselector/profileselector.go:39> GoPowerShellLauncher 🤖:: Initializing profile list
+6:45PM INFO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+6:45PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json
+6:45PM INFO <profileselector/profileselector.go:50> GoPowerShellLauncher 🤖:: Loaded configuration file config=&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv}
+6:45PM INFO <utils/profiles.go:75> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+6:45PM INFO <utils/profiles.go:44> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 95E517F27687C3B278CBB64EF7D691DFA33B35CDC9597E5BD43E794666935A46 All]"
+7:19PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+7:19PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+7:19PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+7:19PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+7:19PM INFO <profileselector/profileselector.go:39> GoPowerShellLauncher 🤖:: Initializing profile list
+7:19PM INFO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+7:19PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json
+7:19PM INFO <profileselector/profileselector.go:50> GoPowerShellLauncher 🤖:: Loaded configuration file config=&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv}
+7:19PM ERRO <utils/profiles.go:89> GoPowerShellLauncher 🤖:: Invalid CSV headers 🤯: expected="[path hash shellversion description]" found="[path hash shellversion]"
+7:19PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="invalid number of headers: got 3, expected 4"
+7:21PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+7:21PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+7:21PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+7:21PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+7:21PM INFO <profileselector/profileselector.go:39> GoPowerShellLauncher 🤖:: Initializing profile list
+7:21PM INFO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+7:21PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json
+7:21PM INFO <profileselector/profileselector.go:50> GoPowerShellLauncher 🤖:: Loaded configuration file config=&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv}
+7:21PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="record on line 2: wrong number of fields"
+7:31PM INFO <logger/logger.go:32> GoPowerShellLauncher 🤖:: Logger initialized
+7:31PM INFO <GoPowerShellLauncher/main.go:15> GoPowerShellLauncher 🤖:: Starting..
+7:31PM INFO <cmd/root.go:25> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+7:31PM INFO <mainview/mainview.go:26> GoPowerShellLauncher 🤖:: Creating a new main view
+7:31PM INFO <profileselector/profileselector.go:39> GoPowerShellLauncher 🤖:: Initializing profile list
+7:31PM INFO <profileselector/profileselector.go:41> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+7:31PM INFO <utils/config.go:16> GoPowerShellLauncher 🤖:: Loading configuration file Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\config.json
+7:31PM INFO <profileselector/profileselector.go:50> GoPowerShellLauncher 🤖:: Loaded configuration file config=&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv}
+7:31PM ERRO <profileselector/profileselector.go:64> GoPowerShellLauncher 🤖:: Failed to load profiles error="record on line 2: wrong number of fields"

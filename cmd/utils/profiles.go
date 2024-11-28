@@ -68,7 +68,6 @@ func LoadProfile(line []string) profile {
 	p.isValidHash = validateField(p.hash, func(hash string) error { return validateHash(hash, p.path) }, "hash")
 	p.isValidShellVersion = validateField(p.shellVersion, validateShellVersion, "shell version")
 	p.isValidDescription = validateField(p.description, validateDescription, "description")
-
 	return p
 }
 

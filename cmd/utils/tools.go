@@ -128,3 +128,18 @@ func loadAvailableShells() []list.Item {
 	}
 	return items
 }
+
+func LoadProfileContent(profilePath string) (string, error) {
+	l.Logger.Info("Loading profile content", "ProfilePath", profilePath)
+	file, err := os.Open(profilePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		return "", err
+	}
+	return string(content), nil
+}

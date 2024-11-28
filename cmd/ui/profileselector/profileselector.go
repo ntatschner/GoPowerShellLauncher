@@ -8,11 +8,14 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/codeviewerview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shellview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
 
 var (
-	titleStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF")).Bold(true)
+	titleStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("#2f80c2")).Bold(true).Align(lipgloss.Center).Underline(true)
 	subtleStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF99FF")).Italic(true)
 	itemStyle         = lipgloss.NewStyle().PaddingLeft(4).Background(lipgloss.Color("#FF99FF"))
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#FF00FF")).Bold(true)
@@ -40,13 +43,11 @@ type model struct {
 	profilesList list.Model
 	selected     map[int]struct{}
 	csvPath      string
+	windowSize   tea.WindowSizeMsg
+	viewChanger  view.ViewChanger
 }
 
-var configPath string
-
-func (m model) CsvPath() string { return m.csvPath }
-
-func New() model {
+func New(viewChanger view.ViewChanger) *model {
 	l.Logger.Info("Initializing profile list")
 	path, err := os.Getwd()
 	l.Logger.Info("Getting working directory", "path", path)
@@ -88,25 +89,26 @@ func New() model {
 	profilesList := list.New(items, list.NewDefaultDelegate(), 50, 30)
 	profilesList.Title = "Available Profiles"
 	profilesList.SetFilteringEnabled(true)
-	profilesList.StatusBarItemName()
 	profilesList.SetShowStatusBar(true)
 	profilesList.Styles.Title = titleStyle
-	profilesList.Styles.StatusBar = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF00FF")).Bold(true)
 
-	return model{
+	return &model{
 		profilesList: profilesList,
 		selected:     make(map[int]struct{}),
 		csvPath:      loadConfig.CsvPath,
+		viewChanger:  viewChanger,
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m *model) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	l.Logger.Info("Update called", "msg", msg)
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
+		m.windowSize = msg
 		m.profilesList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -124,6 +126,27 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					l.Logger.Info("Selected profile", "index", i)
 				}
 			}
+		case "enter":
+			// load selected profiles
+			var selectedProfiles []string
+			if len(m.selected) == 0 {
+				l.Logger.Info("No Profiles selected, using currently highlighted profile")
+				i := m.profilesList.Index()
+				item := m.profilesList.Items()[i].(profileItem)
+				selectedProfiles = append(selectedProfiles, item.path)
+			}
+			for i := range m.selected {
+				item := m.profilesList.Items()[i].(profileItem)
+				selectedProfiles = append(selectedProfiles, item.path)
+			}
+			// open shellview with profiles selected
+			l.Logger.Info("Selected profiles", "profiles", selectedProfiles)
+			m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger))
+		case "v":
+			// view profile content
+			i := m.profilesList.Index()
+			item := m.profilesList.Items()[i].(profileItem)
+			m.viewChanger.ChangeView(codeviewerview.New(item.path, m.windowSize, m.viewChanger))
 		}
 	}
 
@@ -132,6 +155,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) View() string {
+func (m *model) View() string {
 	return m.profilesList.View()
 }

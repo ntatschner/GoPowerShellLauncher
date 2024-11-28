@@ -4,6 +4,8 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 )
 
 var (
@@ -13,28 +15,34 @@ var (
 type menuItem struct {
 	title       string
 	description string
+	pageName    string
 }
 
 func (m menuItem) Title() string       { return m.title }
 func (m menuItem) Description() string { return m.description }
 func (m menuItem) FilterValue() string { return m.title }
+func (m menuItem) PageName() string    { return m.pageName }
 
 type model struct {
-	menuList list.Model
+	menuList    list.Model
+	viewChanger view.ViewChanger
 }
 
-func New() model {
+func New(viewChanger view.ViewChanger) model {
 	items := []list.Item{
-		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen."},
-		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen."},
-		menuItem{title: "Exit", description: "Exit the application."},
+		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", pageName: "profilesView"},
+		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", pageName: "shortcutsView"},
+		menuItem{title: "Exit", description: "Exit the application.", pageName: "exit"},
 	}
 
 	list := list.New(items, list.NewDefaultDelegate(), 20, 10)
 	list.Title = "Main Menu"
 	list.SetFilteringEnabled(false)
 
-	return model{menuList: list}
+	return model{
+		menuList:    list,
+		viewChanger: viewChanger,
+	}
 }
 
 func (m model) Init() tea.Cmd {
@@ -46,6 +54,20 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		h, v := appStyle.GetFrameSize()
 		m.menuList.SetSize(msg.Width-h, msg.Height-v)
+	case tea.KeyMsg:
+		switch msg.String() {
+		case "enter":
+			i := m.menuList.Index()
+			item := m.menuList.Items()[i].(menuItem)
+			switch item.PageName() {
+			case "profilesView":
+				m.viewChanger.ChangeView(profileselector.New(m.viewChanger))
+			case "shortcutsView":
+				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))
+			case "exit":
+				return m, tea.Quit
+			}
+		}
 	}
 
 	var cmd tea.Cmd

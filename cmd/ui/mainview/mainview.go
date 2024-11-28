@@ -6,15 +6,6 @@ import (
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/menuview"
 )
 
-type sessionState int
-
-const (
-	menuView sessionState = iota
-	profilesView
-	shellsView
-	codeViewerView
-)
-
 type mainModel struct {
 	currentView  tea.Model
 	previousView tea.Model
@@ -23,11 +14,12 @@ type mainModel struct {
 
 func NewMainModel() *mainModel {
 	l.Logger.Info("Creating a new main view")
-	mainView := menuview.New(nil)
-	return &mainModel{
-		currentView: mainView,
-		windowSize:  tea.WindowSizeMsg{},
+	mainModel := &mainModel{
+		windowSize: tea.WindowSizeMsg{},
 	}
+	mainView := menuview.New(mainModel)
+	mainModel.currentView = mainView
+	return mainModel
 }
 
 func (m *mainModel) Init() tea.Cmd {
@@ -76,4 +68,5 @@ func (m *mainModel) handleChangeViewMsg(msg ChangeViewMsg) (tea.Model, tea.Cmd) 
 func (m *mainModel) ChangeView(newView tea.Model) {
 	m.previousView = m.currentView
 	m.currentView = newView
+	tea.NewProgram(m).Send(ChangeViewMsg{NewView: newView})
 }

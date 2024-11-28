@@ -4,6 +4,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 )
@@ -28,7 +29,8 @@ type model struct {
 	viewChanger view.ViewChanger
 }
 
-func New(viewChanger view.ViewChanger) model {
+func New(viewChanger view.ViewChanger) *model {
+	l.Logger.Info("Initializing main menu")
 	items := []list.Item{
 		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", pageName: "profilesView"},
 		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", pageName: "shortcutsView"},
@@ -39,17 +41,17 @@ func New(viewChanger view.ViewChanger) model {
 	list.Title = "Main Menu"
 	list.SetFilteringEnabled(false)
 
-	return model{
+	return &model{
 		menuList:    list,
 		viewChanger: viewChanger,
 	}
 }
 
-func (m model) Init() tea.Cmd {
+func (m *model) Init() tea.Cmd {
 	return nil
 }
 
-func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		h, v := appStyle.GetFrameSize()
@@ -61,10 +63,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			item := m.menuList.Items()[i].(menuItem)
 			switch item.PageName() {
 			case "profilesView":
+				l.Logger.Info("Changing view to profile selector")
 				m.viewChanger.ChangeView(profileselector.New(m.viewChanger))
 			case "shortcutsView":
+				l.Logger.Info("Changing view to shortcut selector")
 				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))
 			case "exit":
+				l.Logger.Info("Exiting application")
 				return m, tea.Quit
 			}
 		}
@@ -75,6 +80,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) View() string {
+func (m *model) View() string {
 	return m.menuList.View()
 }

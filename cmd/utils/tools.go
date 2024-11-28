@@ -2,10 +2,11 @@ package utils
 
 import (
 	"crypto/sha256"
-	"encoding/base64"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/charmbracelet/bubbles/list"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
@@ -23,17 +24,27 @@ func validatePath(path string) error {
 	return nil
 }
 
-func validateHash(hash string, filePath string) error {
-	l.Logger.Info("Validating hash", "Hash", hash, "Path", filePath)
-	// Check if the path is valid before validating the hash
-	if err := validatePath(filePath); err != nil {
-		return err
+func compareHashes(hash1, hash2 []byte) bool {
+	l.Logger.Info("Comparing hashes", "Hash1", hex.EncodeToString(hash1), "Hash2", hex.EncodeToString(hash2))
+	if len(hash1) != len(hash2) {
+		return false
 	}
+	for i := range hash1 {
+		if hash1[i] != hash2[i] {
+			return false
+		}
+	}
+	l.Logger.Info("Hashes match")
+	return true
+}
 
-	// Decode the base64-encoded hash
-	decodedHash, err := base64.StdEncoding.DecodeString(hash)
+func validateHash(expectedHash, filePath string) error {
+	l.Logger.Info("Validating hash", "ExpectedHash", expectedHash, "FilePath", filePath)
+
+	// Decode the expected hash from hex
+	expectedHashBytes, err := hex.DecodeString(expectedHash)
 	if err != nil {
-		return fmt.Errorf("invalid base64 hash: %v", err)
+		return fmt.Errorf("invalid expected hash: %v", err)
 	}
 
 	// Open the file
@@ -50,31 +61,20 @@ func validateHash(hash string, filePath string) error {
 	}
 	computedHash := hasher.Sum(nil)
 
-	// Compare the computed hash with the provided hash
-	if !compareHashes(decodedHash, computedHash) {
-		return fmt.Errorf("hash mismatch: expected %x, got %x", decodedHash, computedHash)
+	// Compare the computed hash with the expected hash
+	if !compareHashes(expectedHashBytes, computedHash) {
+		return fmt.Errorf("hash mismatch: expected %x, got %x", expectedHashBytes, computedHash)
 	}
 
 	return nil
 }
 
-func compareHashes(hash1, hash2 []byte) bool {
-	l.Logger.Info("Comparing hashes", "Hash1", hash1, "Hash2", hash2)
-	if len(hash1) != len(hash2) {
-		return false
-	}
-	for i := range hash1 {
-		if hash1[i] != hash2[i] {
-			return false
-		}
-	}
-	return true
-}
-
 func validateShellVersion(shellVersion string) error {
 	l.Logger.Info("Validating shell version", "ShellVersion", shellVersion)
+	shellVersion = strings.ToLower(shellVersion)
 	switch shellVersion {
-	case "pwsh", "powershell":
+	case "pwsh", "powershell", "all":
+		l.Logger.Info("Shell version is valid")
 		return nil
 	default:
 		return fmt.Errorf("invalid shell version: %s", shellVersion)
@@ -86,6 +86,8 @@ func validateDescription(description string) error {
 	if len(description) > 100 {
 		return fmt.Errorf("description is too long (max 100 characters)")
 	}
+
+	l.Logger.Info("Description is valid")
 	return nil
 }
 

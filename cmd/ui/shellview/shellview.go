@@ -39,10 +39,10 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 			}
 		}
 		shellItem := types.ShellItem{
-			Title:        shell.Name(),
-			Description:  shell.Description() + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
-			ShortName:    shell.ShortName(),
-			ProfilePaths: profilesForShell,
+			ItemTitle:       shell.Name(),
+			ItemDescription: shell.Description() + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
+			ShortName:       shell.ShortName(),
+			ProfilePaths:    profilesForShell,
 		}
 		items = append(items, shellItem)
 	}

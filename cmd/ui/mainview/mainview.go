@@ -13,12 +13,12 @@ type mainModel struct {
 	windowSize    tea.WindowSizeMsg
 }
 
-func NewMainModel() *mainModel {
+func NewMainModel(windowsSize tea.WindowSizeMsg) *mainModel {
 	l.Logger.Info("Creating a new main view")
 	mainModel := &mainModel{
-		windowSize: tea.WindowSizeMsg{},
+		windowSize: windowsSize,
 	}
-	mainView := menuview.New(mainModel)
+	mainView := menuview.New(mainModel, windowsSize)
 	mainModel.currentView = mainView
 	return mainModel
 }

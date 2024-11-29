@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
-	"strings"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
@@ -27,17 +26,17 @@ func validateField(field string, validateFunc func(string) error, fieldName stri
 func LoadProfile(line []string) types.ProfileItem {
 	l.Logger.Info("Loading profile", "line", line)
 	p := types.ProfileItem{
-		Path:        line[0],
-		Hash:        line[1],
-		Shell:       line[2],
-		Description: strings.TrimLeft(line[3], " "),
+		Path:            line[0],
+		Hash:            line[1],
+		Shell:           line[2],
+		ItemDescription: line[3],
 	}
-	p.Title = p.GetName()
+	p.ItemTitle = p.GetName()
 
 	p.IsValidPath = validateField(p.Path, validatePath, "path")
 	p.IsValidHash = validateField(p.Hash, func(hash string) error { return validateHash(hash, p.Path) }, "hash")
 	p.IsValidShellVersion = validateField(p.Shell, validateShellVersion, "shell version")
-	p.IsValidDescription = validateField(p.Description, validateDescription, "description")
+	p.IsValidDescription = validateField(p.ItemDescription, validateDescription, "description")
 	p.IsValid = p.IsValidPath && p.IsValidHash && p.IsValidShellVersion && p.IsValidDescription
 	return p
 }

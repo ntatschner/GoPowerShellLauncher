@@ -11,20 +11,10 @@ import (
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/codeviewerview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shellview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
-
-var (
-	titleStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("#2f80c2")).Bold(true).Align(lipgloss.Center).Underline(true)
-	subtleStyle       = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF99FF")).Italic(true)
-	itemStyle         = lipgloss.NewStyle().PaddingLeft(4).Background(lipgloss.Color("#FF99FF"))
-	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("#FF00FF")).Bold(true)
-)
-
-var baseStyle = lipgloss.NewStyle().
-	BorderStyle(lipgloss.NormalBorder()).
-	BorderForeground(lipgloss.Color("240"))
 
 type model struct {
 	profilesList list.Model
@@ -34,7 +24,7 @@ type model struct {
 	viewChanger  view.ViewChanger
 }
 
-func New(viewChanger view.ViewChanger) *model {
+func New(viewChanger view.ViewChanger, windowsSize tea.WindowSizeMsg) *model {
 	l.Logger.Info("Initializing profile list")
 	path, err := os.Getwd()
 	l.Logger.Info("Getting working directory", "path", path)
@@ -56,27 +46,31 @@ func New(viewChanger view.ViewChanger) *model {
 
 	var items []list.Item
 	for _, p := range profiles {
-		valid := "❌"
+		msg := "Validated Import:"
+		valid := msg + "❌"
 		if p.IsValid {
-			valid = "✅"
+			valid = msg + "✅"
 		}
 		item := types.ProfileItem{
-			Title:       p.Title,
-			Description: fmt.Sprintf("%s %s %s %s %s", p.Description, valid, p.Path, p.Hash, p.Shell),
-			Valid:       valid,
-			IsValid:     p.IsValid,
-			Path:        p.Path,
-			Hash:        p.Hash,
-			Shell:       p.Shell,
+			ItemTitle:       p.ItemTitle,
+			ItemDescription: fmt.Sprintf("%s\n%s\n%s\n%s\n%s", p.GetDescription(), valid, p.GetPath(), p.GetHash(), p.GetShell()),
+			Valid:           valid,
+			IsValid:         p.IsValid,
+			Path:            p.Path,
+			Hash:            p.Hash,
+			Shell:           p.Shell,
 		}
 		items = append(items, item)
 	}
 
-	profilesList := list.New(items, list.NewDefaultDelegate(), 50, 30)
+	profilesList := list.New(items, list.NewDefaultDelegate(), 10, 10)
 	profilesList.Title = "Available Profiles"
+	profilesList.Styles.Title = styles.TitleStyle
+	profilesList.Styles.PaginationStyle = styles.PaginationStyle
+	profilesList.Styles.Title.Align(lipgloss.Center)
+	profilesList.Styles.HelpStyle = styles.HelpStyle
 	profilesList.SetFilteringEnabled(true)
 	profilesList.SetShowStatusBar(true)
-	profilesList.Styles.Title = titleStyle
 
 	return &model{
 		profilesList: profilesList,
@@ -91,11 +85,11 @@ func (m *model) Init() tea.Cmd {
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	l.Logger.Info("Update called", "msg", msg)
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
-		m.profilesList.SetSize(msg.Width, msg.Height)
+		h, v := styles.AppStyle.GetFrameSize()
+		m.profilesList.SetSize(msg.Width-h, msg.Height-v)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case " ":

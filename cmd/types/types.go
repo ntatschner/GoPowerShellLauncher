@@ -6,8 +6,8 @@ import (
 
 // ProfileItem represents a profile item in the list
 type ProfileItem struct {
-	Title               string
-	Description         string
+	ItemTitle           string
+	ItemDescription     string
 	Valid               string
 	IsValid             bool
 	Path                string
@@ -21,8 +21,9 @@ type ProfileItem struct {
 	IsValidDescription  bool
 }
 
-func (p ProfileItem) GetTitle() string    { return p.Title }
-func (p ProfileItem) FilterValue() string { return p.Title }
+func (p ProfileItem) Title() string       { return p.ItemTitle }
+func (p ProfileItem) Description() string { return p.ItemDescription }
+func (p ProfileItem) FilterValue() string { return p.ItemDescription }
 
 func (p ProfileItem) GetPath() string { return p.Path }
 func (p ProfileItem) GetName() string {
@@ -30,7 +31,7 @@ func (p ProfileItem) GetName() string {
 	p.Name = n[len(n)-1]
 	return p.Name
 }
-func (p ProfileItem) GetDescription() string       { return strings.TrimLeft(p.Description, " ") }
+func (p ProfileItem) GetDescription() string       { return strings.TrimLeft(p.ItemDescription, " ") }
 func (p ProfileItem) GetHash() string              { return p.Hash }
 func (p ProfileItem) GetShell() string             { return p.ShellVersion }
 func (p ProfileItem) GetIsValidHash() bool         { return p.IsValidHash }
@@ -42,10 +43,13 @@ func (p ProfileItem) IsValidProfile() bool {
 }
 
 type ShellItem struct {
-	Title        string
-	Description  string
-	ShortName    []string
-	ProfilePaths []string
+	ItemTitle       string
+	ItemDescription string
+	ShortName       []string
+	ProfilePaths    []string
 }
 
-func (s ShellItem) FilterValue() string { return s.Title }
+// Implement the list.Item interface for ShellItem
+func (s ShellItem) Title() string       { return s.ItemTitle }
+func (s ShellItem) Description() string { return s.ItemDescription }
+func (s ShellItem) FilterValue() string { return s.ItemTitle }

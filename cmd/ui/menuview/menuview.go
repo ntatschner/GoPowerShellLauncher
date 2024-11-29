@@ -3,14 +3,10 @@ package menuview
 import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
-)
-
-var (
-	appStyle = lipgloss.NewStyle().Padding(1, 2)
 )
 
 type menuItem struct {
@@ -27,9 +23,10 @@ func (m menuItem) PageName() string    { return m.pageName }
 type model struct {
 	menuList    list.Model
 	viewChanger view.ViewChanger
+	windowSize  tea.WindowSizeMsg
 }
 
-func New(viewChanger view.ViewChanger) *model {
+func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	l.Logger.Info("Initializing main menu")
 	items := []list.Item{
 		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", pageName: "profilesView"},
@@ -37,13 +34,14 @@ func New(viewChanger view.ViewChanger) *model {
 		menuItem{title: "Exit", description: "Exit the application.", pageName: "exit"},
 	}
 
-	list := list.New(items, list.NewDefaultDelegate(), 20, 10)
+	list := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
 	list.Title = "Main Menu"
 	list.SetFilteringEnabled(false)
 
 	return &model{
 		menuList:    list,
 		viewChanger: viewChanger,
+		windowSize:  windowSize,
 	}
 }
 
@@ -54,7 +52,8 @@ func (m *model) Init() tea.Cmd {
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
-		h, v := appStyle.GetFrameSize()
+		m.windowSize = msg
+		h, v := styles.AppStyle.GetFrameSize()
 		m.menuList.SetSize(msg.Width-h, msg.Height-v)
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -64,7 +63,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch item.PageName() {
 			case "profilesView":
 				l.Logger.Info("Changing view to profile selector")
-				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger))
+				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize))
 			case "shortcutsView":
 				l.Logger.Info("Changing view to shortcut selector")
 				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))

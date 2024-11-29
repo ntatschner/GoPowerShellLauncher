@@ -24,7 +24,7 @@ type model struct {
 	viewChanger  view.ViewChanger
 }
 
-func New(viewChanger view.ViewChanger, windowsSize tea.WindowSizeMsg) *model {
+func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	l.Logger.Info("Initializing profile list")
 	path, err := os.Getwd()
 	l.Logger.Info("Getting working directory", "path", path)
@@ -63,7 +63,7 @@ func New(viewChanger view.ViewChanger, windowsSize tea.WindowSizeMsg) *model {
 		items = append(items, item)
 	}
 
-	profilesList := list.New(items, list.NewDefaultDelegate(), windowsSize.Width, windowsSize.Height)
+	profilesList := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
 	profilesList.Title = "Available Profiles"
 	profilesList.Styles.Title = styles.TitleStyle
 	profilesList.Styles.PaginationStyle = styles.PaginationStyle
@@ -77,6 +77,7 @@ func New(viewChanger view.ViewChanger, windowsSize tea.WindowSizeMsg) *model {
 		selected:     make(map[int]struct{}),
 		csvPath:      loadConfig.CsvPath,
 		viewChanger:  viewChanger,
+		windowSize:   windowSize,
 	}
 }
 

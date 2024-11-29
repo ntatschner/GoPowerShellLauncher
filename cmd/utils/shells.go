@@ -4,39 +4,19 @@ import (
 	"fmt"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
 
-type shellItem struct {
-	title       string
-	description string
-	name        string
-	path        string
-	shortName   []string
-}
+var shells []types.ShellItem
 
-func (m shellItem) Name() string {
-	return m.name
-}
-
-func (m shellItem) Path() string {
-	return m.path
-}
-func (m shellItem) ShortName() []string {
-	return m.shortName
-}
-func (m shellItem) Title() string       { return m.name }
-func (m shellItem) Description() string { return "Shell for " + m.name }
-
-var shells []shellItem
-
-func LoadShells() ([]shellItem, error) {
-	shells = []shellItem{}
-	items := []shellItem{
-		{name: "PowerShell", shortName: []string{"powershell", "all"}, path: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
-		{name: "PowerShell Core", shortName: []string{"pwsh", "all"}, path: "C:\\Program Files\\PowerShell\\7\\pwsh.exe"},
+func LoadShells() ([]types.ShellItem, error) {
+	shells = []types.ShellItem{}
+	items := []types.ShellItem{
+		{Name: "PowerShell", ShortName: []string{"powershell", "all"}, Path: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
+		{Name: "PowerShell Core", ShortName: []string{"pwsh", "all"}, Path: "C:\\Program Files\\PowerShell\\7\\pwsh.exe"},
 	}
 	for s := range items {
-		err := validatePath(shells[s].path)
+		err := validatePath(shells[s].Path)
 		if err != nil {
 			l.Logger.Warn("Invalid shell path", "Error", err)
 		}

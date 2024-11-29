@@ -31,7 +31,7 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 		// get the profiles that use this shell
 		var profilesForShell []string
 		for _, profile := range profiles {
-			for _, shortName := range shell.ShortName() {
+			for _, shortName := range shell.GetShortName() {
 				if profile.Shell == shortName {
 					profilesForShell = append(profilesForShell, profile.Path)
 					break
@@ -39,9 +39,9 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 			}
 		}
 		shellItem := types.ShellItem{
-			ItemTitle:       shell.Name(),
+			ItemTitle:       shell.GetName(),
 			ItemDescription: shell.Description() + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
-			ShortName:       shell.ShortName(),
+			ShortName:       shell.GetShortName(),
 			ProfilePaths:    profilesForShell,
 		}
 		items = append(items, shellItem)

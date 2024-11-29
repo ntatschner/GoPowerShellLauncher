@@ -44,12 +44,24 @@ func (p ProfileItem) IsValidProfile() bool {
 
 type ShellItem struct {
 	ItemTitle       string
+	Name            string
+	Path            string
 	ItemDescription string
 	ShortName       []string
 	ProfilePaths    []string
 }
 
 // Implement the list.Item interface for ShellItem
-func (s ShellItem) Title() string       { return s.ItemTitle }
-func (s ShellItem) Description() string { return s.ItemDescription }
-func (s ShellItem) FilterValue() string { return s.ItemTitle }
+func (m ShellItem) GetName() string {
+	return m.Name
+}
+
+func (m ShellItem) GetPath() string {
+	return m.Path
+}
+func (m ShellItem) GetShortName() []string {
+	return m.ShortName
+}
+func (m ShellItem) Title() string       { return m.Name }
+func (m ShellItem) Description() string { return "Shell for " + m.Name }
+func (m ShellItem) FilterValue() string { return m.Name }

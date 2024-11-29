@@ -63,7 +63,7 @@ func New(viewChanger view.ViewChanger, windowsSize tea.WindowSizeMsg) *model {
 		items = append(items, item)
 	}
 
-	profilesList := list.New(items, list.NewDefaultDelegate(), 10, 10)
+	profilesList := list.New(items, list.NewDefaultDelegate(), windowsSize.Width, windowsSize.Height)
 	profilesList.Title = "Available Profiles"
 	profilesList.Styles.Title = styles.TitleStyle
 	profilesList.Styles.PaginationStyle = styles.PaginationStyle

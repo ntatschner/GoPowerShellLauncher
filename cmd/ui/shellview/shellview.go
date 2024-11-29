@@ -1,52 +1,62 @@
 package shellview
 
 import (
+	"strconv"
+
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
 
-type shellItem struct {
-	title       string
-	description string
-}
-
-func (s shellItem) Title() string       { return s.title }
-func (s shellItem) Description() string { return s.description }
-func (s shellItem) FilterValue() string { return s.title }
-
 type model struct {
-	shellsList  list.Model
-	selected    map[int]struct{}
-	windowSize  tea.WindowSizeMsg
-	viewChanger view.ViewChanger
+	shellsList     list.Model
+	selected       map[int]struct{}
+	windowSize     tea.WindowSizeMsg
+	viewChanger    view.ViewChanger
+	loadedProfiles []types.ProfileItem
 }
 
-func New(profiles []string, windowsSize tea.WindowSizeMsg, viewChanger view.ViewChanger) *model {
-	l.Logger.Info("Initializing shell list")
-	ws := windowsSize
-	shellsList := list.New([]list.Item{}, list.NewDefaultDelegate(), ws.Width, ws.Height)
-	shellsList.Title = "Available Shells"
-
-	loadShellItems, err := utils.LoadShells()
+func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger view.ViewChanger) *model {
+	l.Logger.Info("Initializing shell list", "profiles", profiles)
+	shells, err := utils.LoadShells()
 	if err != nil {
 		l.Logger.Error("Failed to load shells", "error", err)
 	}
-
+	// Load shell items based on profiles
 	var items []list.Item
-	for _, s := range loadShellItems {
-		items = append(items, shellItem{
-			title:       s.Title(),
-			description: s.Description(),
-		})
+	for _, shell := range shells {
+		// get the profiles that use this shell
+		var profilesForShell []string
+		for _, profile := range profiles {
+			for _, shortName := range shell.ShortName() {
+				if profile.Shell == shortName {
+					profilesForShell = append(profilesForShell, profile.Path)
+					break
+				}
+			}
+		}
+		shellItem := types.ShellItem{
+			Title:        shell.Name(),
+			Description:  shell.Description() + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
+			ShortName:    shell.ShortName(),
+			ProfilePaths: profilesForShell,
+		}
+		items = append(items, shellItem)
 	}
-	shellsList.SetItems(items)
+
+	shellsList := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
+	shellsList.Title = "Available Shells"
+	shellsList.SetFilteringEnabled(false)
+	shellsList.SetShowStatusBar(true)
 	return &model{
-		shellsList:  shellsList,
-		selected:    make(map[int]struct{}),
-		viewChanger: viewChanger,
+		shellsList:     shellsList,
+		selected:       make(map[int]struct{}),
+		windowSize:     windowSize,
+		viewChanger:    viewChanger,
+		loadedProfiles: profiles,
 	}
 }
 
@@ -62,19 +72,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.shellsList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case " ":
-			i := m.shellsList.Index()
-			if i < 0 || i >= len(m.shellsList.Items()) {
-				l.Logger.Error("Invalid index", "index", i)
-				break
-			}
-			if _, ok := m.selected[i]; ok {
-				delete(m.selected, i)
-				l.Logger.Info("Deselected shell", "index", i)
-			} else {
-				m.selected[i] = struct{}{}
-				l.Logger.Info("Selected shell", "index", i)
-			}
+		case "enter":
+			// Launch the selected shell with the profiles that use it
 		}
 	}
 
@@ -85,4 +84,15 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m *model) View() string {
 	return m.shellsList.View()
+}
+
+// CountProfilesMatchingShell counts the profiles that match the shell to the shortName of the shellItem
+func (m *model) CountProfilesMatchingShell(shortName string) int {
+	count := 0
+	for _, profile := range m.loadedProfiles {
+		if profile.Shell == shortName {
+			count++
+		}
+	}
+	return count
 }

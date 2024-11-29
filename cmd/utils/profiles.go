@@ -7,39 +7,8 @@ import (
 	"strings"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
-
-type profile struct {
-	name                string
-	path                string
-	hash                string
-	shellVersion        string
-	description         string
-	isValidHash         bool
-	isValidPath         bool
-	isValidShellVersion bool
-	isValidDescription  bool
-}
-
-func (p profile) Path() string { return p.path }
-func (p profile) Name() string {
-	n := strings.Split(p.path, "\\")
-	p.name = n[len(n)-1]
-	return p.name
-}
-func (p profile) Description() string       { return strings.TrimLeft(p.description, " ") }
-func (p profile) Hash() string              { return p.hash }
-func (p profile) Shell() string             { return p.shellVersion }
-func (p profile) IsValidHash() bool         { return p.isValidHash }
-func (p profile) IsValidPath() bool         { return p.isValidPath }
-func (p profile) IsValidDescription() bool  { return p.isValidDescription }
-func (p profile) IsValidShellVersion() bool { return p.isValidShellVersion }
-func (p profile) Valid() bool {
-	return p.isValidPath && p.isValidHash && p.isValidShellVersion && p.isValidDescription
-}
-func (p profile) FilterValue() string { return p.path }
-
-var profiles []profile
 
 func validateField(field string, validateFunc func(string) error, fieldName string) bool {
 	if err := validateFunc(field); err != nil {
@@ -54,20 +23,22 @@ func validateField(field string, validateFunc func(string) error, fieldName stri
 // Parameters:
 // line: a slice of strings containing the profile data.
 // Returns:
-// - profile: a profile struct with the loaded and validated data.
-func LoadProfile(line []string) profile {
+// - ProfileItem: a ProfileItem struct with the loaded and validated data.
+func LoadProfile(line []string) types.ProfileItem {
 	l.Logger.Info("Loading profile", "line", line)
-	p := profile{
-		path:         line[0],
-		hash:         line[1],
-		shellVersion: line[2],
-		description:  line[3],
+	p := types.ProfileItem{
+		Path:        line[0],
+		Hash:        line[1],
+		Shell:       line[2],
+		Description: strings.TrimLeft(line[3], " "),
 	}
+	p.Title = p.GetName()
 
-	p.isValidPath = validateField(p.path, validatePath, "path")
-	p.isValidHash = validateField(p.hash, func(hash string) error { return validateHash(hash, p.path) }, "hash")
-	p.isValidShellVersion = validateField(p.shellVersion, validateShellVersion, "shell version")
-	p.isValidDescription = validateField(p.description, validateDescription, "description")
+	p.IsValidPath = validateField(p.Path, validatePath, "path")
+	p.IsValidHash = validateField(p.Hash, func(hash string) error { return validateHash(hash, p.Path) }, "hash")
+	p.IsValidShellVersion = validateField(p.Shell, validateShellVersion, "shell version")
+	p.IsValidDescription = validateField(p.Description, validateDescription, "description")
+	p.IsValid = p.IsValidPath && p.IsValidHash && p.IsValidShellVersion && p.IsValidDescription
 	return p
 }
 
@@ -83,7 +54,7 @@ func validateHeaders(headers []string, expectedHeaders []string) error {
 	return nil
 }
 
-func LoadProfiles(filePath string) ([]profile, error) {
+func LoadProfiles(filePath string) ([]types.ProfileItem, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		l.Logger.Error("Failed to open CSV file", "path", filePath, "error", err)
@@ -106,7 +77,7 @@ func LoadProfiles(filePath string) ([]profile, error) {
 	}
 
 	l.Logger.Info(fmt.Sprintf("Loaded %d records from CSV file", len(records)-1))
-	var profiles []profile
+	var profiles []types.ProfileItem
 	for i, record := range records[1:] {
 		if len(record) != len(expectedHeaders) {
 			l.Logger.Error("Wrong number of fields", "line", i+2, "record", record)

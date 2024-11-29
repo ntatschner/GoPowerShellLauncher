@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/list"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
@@ -106,11 +105,11 @@ func getProfileContent(path string) (string, error) {
 	return string(content), nil
 }
 
-func MergeSelectedProfiles(selected map[int]struct{}) string {
+func MergeSelectedProfiles(selected []string) string {
 	l.Logger.Info("Merging selected profiles", "Selected", selected)
 	var merged string
 	for i := range selected {
-		content, err := getProfileContent(profiles[i].path)
+		content, err := getProfileContent(selected[i])
 		if err != nil {
 			l.Logger.Warn("Error reading profile content", "Error", err)
 			continue
@@ -118,15 +117,6 @@ func MergeSelectedProfiles(selected map[int]struct{}) string {
 		merged += content + "\n"
 	}
 	return merged
-}
-
-func loadAvailableShells() []list.Item {
-	l.Logger.Info("Loading available shells")
-	var items []list.Item
-	for _, shell := range shells {
-		items = append(items, shell)
-	}
-	return items
 }
 
 func LoadProfileContent(profilePath string) (string, error) {

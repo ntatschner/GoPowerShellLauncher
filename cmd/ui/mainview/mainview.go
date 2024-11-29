@@ -4,12 +4,13 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/menuview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 )
 
 type mainModel struct {
-	currentView  tea.Model
-	previousView tea.Model
-	windowSize   tea.WindowSizeMsg
+	currentView   tea.Model
+	previousViews []tea.Model
+	windowSize    tea.WindowSizeMsg
 }
 
 func NewMainModel() *mainModel {
@@ -37,9 +38,12 @@ func (m *mainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q":
 			return m, tea.Quit
 		case "backspace":
-			if m.previousView != nil {
-				m.currentView = m.previousView
-				m.previousView = nil
+			if len(m.previousViews) > 0 {
+				previousView := m.previousViews[len(m.previousViews)-1]
+				m.previousViews = m.previousViews[:len(m.previousViews)-1]
+				l.Logger.Info("Navigating back to previous view", "stackSize", len(m.previousViews))
+				m.currentView = previousView
+				return m, nil
 			}
 		}
 	case ChangeViewMsg:
@@ -60,13 +64,19 @@ type ChangeViewMsg struct {
 }
 
 func (m *mainModel) handleChangeViewMsg(msg ChangeViewMsg) (tea.Model, tea.Cmd) {
-	m.previousView = m.currentView
+	l.Logger.Info("Changing view", "newView", msg.NewView)
+	if m.currentView != nil {
+		m.previousViews = append(m.previousViews, m.currentView)
+		l.Logger.Info("Added current view to previousViews stack", "stackSize", len(m.previousViews))
+	}
 	m.currentView = msg.NewView
 	return m, nil
 }
 
-func (m *mainModel) ChangeView(newView tea.Model) {
-	m.previousView = m.currentView
-	m.currentView = newView
-	tea.NewProgram(m).Send(ChangeViewMsg{NewView: newView})
+func (m *mainModel) ChangeView(newView tea.Model) tea.Cmd {
+	return func() tea.Msg {
+		return ChangeViewMsg{NewView: newView}
+	}
 }
+
+var _ view.ViewChanger = (*mainModel)(nil)

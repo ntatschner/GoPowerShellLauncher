@@ -8,6 +8,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/codeviewerview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shellview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
@@ -24,20 +25,6 @@ var (
 var baseStyle = lipgloss.NewStyle().
 	BorderStyle(lipgloss.NormalBorder()).
 	BorderForeground(lipgloss.Color("240"))
-
-type profileItem struct {
-	title       string
-	description string
-	valid       string
-	isValid     bool
-	path        string
-	hash        string
-	shell       string
-}
-
-func (p profileItem) Title() string       { return p.title }
-func (p profileItem) Description() string { return p.description }
-func (p profileItem) FilterValue() string { return p.title }
 
 type model struct {
 	profilesList list.Model
@@ -70,18 +57,17 @@ func New(viewChanger view.ViewChanger) *model {
 	var items []list.Item
 	for _, p := range profiles {
 		valid := "❌"
-		if p.Valid() {
+		if p.IsValid {
 			valid = "✅"
 		}
-		item := profileItem{
-			title: p.Name(),
-			description: fmt.Sprintf("%s %s %s %s %s",
-				p.Description(), valid, p.Path(), p.Hash(), p.Shell()),
-			valid:   valid,
-			isValid: p.Valid(),
-			path:    p.Path(),
-			hash:    p.Hash(),
-			shell:   p.Shell(),
+		item := types.ProfileItem{
+			Title:       p.Title,
+			Description: fmt.Sprintf("%s %s %s %s %s", p.Description, valid, p.Path, p.Hash, p.Shell),
+			Valid:       valid,
+			IsValid:     p.IsValid,
+			Path:        p.Path,
+			Hash:        p.Hash,
+			Shell:       p.Shell,
 		}
 		items = append(items, item)
 	}
@@ -114,8 +100,12 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case " ":
 			i := m.profilesList.Index()
-			item := m.profilesList.Items()[i].(profileItem)
-			if !item.isValid {
+			if i < 0 || i >= len(m.profilesList.Items()) {
+				l.Logger.Error("Invalid index", "index", i)
+				break
+			}
+			item := m.profilesList.Items()[i].(types.ProfileItem)
+			if !item.IsValid {
 				l.Logger.Warn("Selected item is not valid")
 			} else {
 				if _, ok := m.selected[i]; ok {
@@ -128,25 +118,33 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "enter":
 			// load selected profiles
-			var selectedProfiles []string
+			var selectedProfiles []types.ProfileItem
 			if len(m.selected) == 0 {
 				l.Logger.Info("No Profiles selected, using currently highlighted profile")
 				i := m.profilesList.Index()
-				item := m.profilesList.Items()[i].(profileItem)
-				selectedProfiles = append(selectedProfiles, item.path)
+				if i < 0 || i >= len(m.profilesList.Items()) {
+					l.Logger.Error("Invalid index", "index", i)
+					break
+				}
+				item := m.profilesList.Items()[i].(types.ProfileItem)
+				selectedProfiles = append(selectedProfiles, item)
 			}
 			for i := range m.selected {
-				item := m.profilesList.Items()[i].(profileItem)
-				selectedProfiles = append(selectedProfiles, item.path)
+				item := m.profilesList.Items()[i].(types.ProfileItem)
+				selectedProfiles = append(selectedProfiles, item)
 			}
 			// open shellview with profiles selected
 			l.Logger.Info("Selected profiles", "profiles", selectedProfiles)
-			m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger))
+			return m, m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger))
 		case "v":
 			// view profile content
 			i := m.profilesList.Index()
-			item := m.profilesList.Items()[i].(profileItem)
-			m.viewChanger.ChangeView(codeviewerview.New(item.path, m.windowSize, m.viewChanger))
+			if i < 0 || i >= len(m.profilesList.Items()) {
+				l.Logger.Error("Invalid index", "index", i)
+				break
+			}
+			item := m.profilesList.Items()[i].(types.ProfileItem)
+			return m, m.viewChanger.ChangeView(codeviewerview.New(item.Path, m.windowSize, m.viewChanger))
 		}
 	}
 

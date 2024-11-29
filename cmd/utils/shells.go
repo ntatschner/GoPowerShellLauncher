@@ -9,32 +9,31 @@ import (
 type shellItem struct {
 	title       string
 	description string
+	name        string
 	path        string
+	shortName   []string
 }
 
-func (m shellItem) FilterValue() string {
-	return m.title
-}
-
-func (m shellItem) Title() string {
-	return m.title
-}
-
-func (m shellItem) Description() string {
-	return m.description
+func (m shellItem) Name() string {
+	return m.name
 }
 
 func (m shellItem) Path() string {
 	return m.path
 }
+func (m shellItem) ShortName() []string {
+	return m.shortName
+}
+func (m shellItem) Title() string       { return m.name }
+func (m shellItem) Description() string { return "Shell for " + m.name }
 
 var shells []shellItem
 
 func LoadShells() ([]shellItem, error) {
 	shells = []shellItem{}
 	items := []shellItem{
-		{title: "PowerShell", description: "Integrated PowerShell", path: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
-		{title: "PowerShell Core", description: "PowerShell Core (pwsh)", path: "C:\\Program Files\\PowerShell\\7\\pwsh.exe"},
+		{name: "PowerShell", shortName: []string{"powershell", "all"}, path: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
+		{name: "PowerShell Core", shortName: []string{"pwsh", "all"}, path: "C:\\Program Files\\PowerShell\\7\\pwsh.exe"},
 	}
 	for s := range items {
 		err := validatePath(shells[s].path)

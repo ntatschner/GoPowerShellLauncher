@@ -133,3 +133,7 @@ func LoadProfileContent(profilePath string) (string, error) {
 	}
 	return string(content), nil
 }
+
+func NormalizeString(s string) string {
+	return strings.ToLower(strings.TrimSpace(s))
+}

@@ -41,7 +41,8 @@ func (m *mainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if len(m.previousViews) > 0 {
 				previousView := m.previousViews[len(m.previousViews)-1]
 				m.previousViews = m.previousViews[:len(m.previousViews)-1]
-				l.Logger.Info("Navigating back to previous view", "stackSize", len(m.previousViews))
+				l.Logger.Debug("Navigating back to previous view", "stackSize", len(m.previousViews))
+				m.ClearSelectedItems()
 				m.currentView = previousView
 				return m, nil
 			}
@@ -60,22 +61,32 @@ func (m *mainModel) View() string {
 }
 
 type ChangeViewMsg struct {
-	NewView tea.Model
+	NewView         tea.Model
+	ClearSelections bool
 }
 
 func (m *mainModel) handleChangeViewMsg(msg ChangeViewMsg) (tea.Model, tea.Cmd) {
-	l.Logger.Info("Changing view", "newView", msg.NewView)
+	l.Logger.Debug("Changing view", "newView", msg.NewView)
 	if m.currentView != nil {
 		m.previousViews = append(m.previousViews, m.currentView)
-		l.Logger.Info("Added current view to previousViews stack", "stackSize", len(m.previousViews))
+		l.Logger.Debug("Added current view to previousViews stack", "stackSize", len(m.previousViews))
+	}
+	if msg.ClearSelections {
+		m.ClearSelectedItems() // Clear selected items when changing view
 	}
 	m.currentView = msg.NewView
 	return m, nil
 }
 
-func (m *mainModel) ChangeView(newView tea.Model) tea.Cmd {
+func (m *mainModel) ChangeView(newView tea.Model, clearSelections bool) tea.Cmd {
 	return func() tea.Msg {
-		return ChangeViewMsg{NewView: newView}
+		return ChangeViewMsg{NewView: newView, ClearSelections: clearSelections}
+	}
+}
+
+func (m *mainModel) ClearSelectedItems() {
+	if selectable, ok := m.currentView.(view.Clearable); ok {
+		selectable.ClearSelectedItems()
 	}
 }
 

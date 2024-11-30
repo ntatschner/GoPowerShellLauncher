@@ -25,23 +25,43 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 	if err != nil {
 		l.Logger.Error("Failed to load shells", "error", err)
 	}
+	if len(shells) == 0 {
+		l.Logger.Error("No shells loaded")
+		return &model{
+			shellsList:     list.New([]list.Item{}, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height),
+			selected:       make(map[int]struct{}),
+			windowSize:     windowSize,
+			viewChanger:    viewChanger,
+			loadedProfiles: profiles,
+		}
+	}
 	// Load shell items based on profiles
 	var items []list.Item
 	for _, shell := range shells {
+		l.Logger.Info("Processing shell", "shell", shell.ItemTitle)
 		// get the profiles that use this shell
 		var profilesForShell []string
 		for _, profile := range profiles {
-			for _, shortName := range shell.GetShortName() {
-				if profile.Shell == shortName {
+			l.Logger.Info("Processing profile", "profile", profile.ItemTitle)
+			for _, shortName := range shell.ShortName {
+				l.Logger.Info("Processing short name", "shortName", shortName)
+				profileShell := utils.NormalizeString(profile.Shell)
+				shortNameTrimmed := utils.NormalizeString(shortName)
+				l.Logger.Info("Comparing", "profile.Shell", profileShell, "shortName", shortNameTrimmed)
+				if profileShell == shortNameTrimmed {
+					l.Logger.Info("Profile uses shell", "profile", profile.ItemTitle, "shell", shortNameTrimmed)
 					profilesForShell = append(profilesForShell, profile.Path)
 					break
 				}
 			}
 		}
+		l.Logger.Info("Profiles for shell", "shell", shell.ItemTitle, "profilesForShell", profilesForShell)
 		shellItem := types.ShellItem{
-			ItemTitle:       shell.GetName(),
-			ItemDescription: shell.Description() + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
-			ShortName:       shell.GetShortName(),
+			ItemTitle:       shell.ItemTitle,
+			ItemDescription: shell.ItemDescription + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
+			Name:            shell.Name,
+			ShortName:       shell.ShortName,
+			Path:            shell.Path,
 			ProfilePaths:    profilesForShell,
 		}
 		items = append(items, shellItem)
@@ -65,15 +85,14 @@ func (m *model) Init() tea.Cmd {
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	l.Logger.Info("Update called", "msg", msg)
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
 		m.shellsList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "enter":
-			// Launch the selected shell with the profiles that use it
+		case "backspace":
+			return m, m.viewChanger.ChangeView(nil, false)
 		}
 	}
 

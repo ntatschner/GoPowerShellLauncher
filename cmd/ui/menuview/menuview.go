@@ -63,7 +63,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			switch item.PageName() {
 			case "profilesView":
 				l.Logger.Info("Changing view to profile selector")
-				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize))
+				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize), true)
 			case "shortcutsView":
 				l.Logger.Info("Changing view to shortcut selector")
 				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))

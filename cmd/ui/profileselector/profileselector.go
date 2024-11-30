@@ -130,7 +130,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			// open shellview with profiles selected
 			l.Logger.Info("Selected profiles", "profiles", selectedProfiles)
-			return m, m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger))
+			return m, m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger), true)
 		case "v":
 			// view profile content
 			i := m.profilesList.Index()
@@ -139,7 +139,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				break
 			}
 			item := m.profilesList.Items()[i].(types.ProfileItem)
-			return m, m.viewChanger.ChangeView(codeviewerview.New(item.Path, m.windowSize, m.viewChanger))
+			return m, m.viewChanger.ChangeView(codeviewerview.New(item.Path, m.windowSize, m.viewChanger), true)
 		}
 	}
 
@@ -151,3 +151,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m *model) View() string {
 	return m.profilesList.View()
 }
+
+func (m *model) ClearSelectedItems() {
+	m.selected = make(map[int]struct{})
+}
+
+// Ensure model implements view.Clearable
+var _ view.Clearable = (*model)(nil)

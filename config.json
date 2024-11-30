@@ -1,3 +1,8 @@
 {
-    "csv_path": "C:\\nerd_stuff\\git_repos\\GoPowerShellLauncher\\profiles.csv"
+    "csv_path": "C:\\nerd_stuff\\git_repos\\GoPowerShellLauncher\\profiles.csv",
+    "logging": {
+        "log_path": "",
+        "log_file": "GoPowerShellLauncher.log",
+        "log_level": "DEBUG"
+    }
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/launcher"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
@@ -91,8 +92,42 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.shellsList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
-		case "backspace":
-			return m, m.viewChanger.ChangeView(nil, false)
+		case " ":
+			i := m.shellsList.Index()
+			if i < 0 || i >= len(m.shellsList.Items()) {
+				l.Logger.Error("Invalid index", "index", i)
+				break
+			}
+			if _, ok := m.selected[i]; ok {
+				delete(m.selected, i)
+				l.Logger.Info("Deselected shell", "index", i)
+			} else {
+				m.selected[i] = struct{}{}
+				l.Logger.Info("Selected shell", "index", i)
+			}
+
+		case "enter":
+			i := m.shellsList.Index()
+			if i < 0 || i >= len(m.shellsList.Items()) {
+				l.Logger.Error("Invalid index", "index", i)
+				break
+			}
+			if len(m.selected) >= 1 {
+				l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
+				for i := range m.selected {
+					merged := launcher.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
+					tempFilePath, err := launcher.CreateTempFile(merged)
+					if err != nil {
+						l.Logger.Error("Failed to create temp file", "Error", err)
+						continue
+					}
+					item := m.shellsList.Items()[i].(types.ShellItem)
+					err = launcher.ExecutePowerShellProcess(tempFilePath, item.Path)
+					if err != nil {
+						l.Logger.Error("Failed to execute PowerShell process", "Error", err)
+					}
+				}
+			}
 		}
 	}
 

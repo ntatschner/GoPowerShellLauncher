@@ -90,7 +90,7 @@ func validateDescription(description string) error {
 	return nil
 }
 
-func getProfileContent(path string) (string, error) {
+func GetProfileContent(path string) (string, error) {
 	l.Logger.Info("Getting profile content", "Path", path)
 	file, err := os.Open(path)
 	if err != nil {
@@ -103,20 +103,6 @@ func getProfileContent(path string) (string, error) {
 		return "", err
 	}
 	return string(content), nil
-}
-
-func MergeSelectedProfiles(selected []string) string {
-	l.Logger.Info("Merging selected profiles", "Selected", selected)
-	var merged string
-	for i := range selected {
-		content, err := getProfileContent(selected[i])
-		if err != nil {
-			l.Logger.Warn("Error reading profile content", "Error", err)
-			continue
-		}
-		merged += content + "\n"
-	}
-	return merged
 }
 
 func LoadProfileContent(profilePath string) (string, error) {

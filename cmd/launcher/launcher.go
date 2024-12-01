@@ -54,6 +54,7 @@ func ExecutePowerShellProcess(scriptPath string, shellPath string) error {
 	}
 
 	err := cmd.Start()
+	cmd.Wait()
 	if err != nil {
 		l.Logger.Error("Failed to start PowerShell process", "Error", err)
 		return err

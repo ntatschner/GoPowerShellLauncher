@@ -123,3 +123,12 @@ func LoadProfileContent(profilePath string) (string, error) {
 func NormalizeString(s string) string {
 	return strings.ToLower(strings.TrimSpace(s))
 }
+
+func EncodeCommand(command string) (string, error) {
+	// base64 encode string
+	encoded := hex.EncodeToString([]byte(command))
+	if encoded == "" {
+		return "", fmt.Errorf("failed to encode command")
+	}
+	return encoded, nil
+}

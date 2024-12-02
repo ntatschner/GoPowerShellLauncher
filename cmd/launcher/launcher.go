@@ -44,19 +44,20 @@ func CreateTempFile(merged string) (string, error) {
 	return tempFile.Name(), nil
 }
 
-func ExecutePowerShellProcess(scriptPath string, shellPath string) error {
-	l.Logger.Info("Executing PowerShell process", "ScriptPath", scriptPath, "ShellPath", shellPath)
-	cmd := exec.Command("cmd", "/C", "start", "/wait", shellPath, "-NoExit", "-File", scriptPath)
+func ExecutePowerShellProcess(encodedCommand string, shellPath string) error {
+	l.Logger.Info("Executing PowerShell process", "ShellPath", shellPath)
+	command := "Start-Process -FilePath " + shellPath + " -ArgumentList '-NoExit -EncodedCommand '" + encodedCommand + "''" + " -Wait" + " -NoNewWindow"
+	l.Logger.Info("PowerShell command", "Command", command)
+	cmd := exec.Command("cmd", "/C", "start", "/wait", shellPath, "-NoExit", "-Command", command)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
 
-	err := cmd.Start()
+	err := cmd.Run()
+	l.Logger.Info("PowerShell process started", "PID", cmd.Process.Pid)
 	if err != nil {
 		l.Logger.Error("Failed to start PowerShell process", "Error", err)
 		return err
 	}
-	cmd.Wait()
-
 	l.Logger.Info("PowerShell process started successfully")
 	return nil
 }

@@ -43,3 +43,273 @@
 5:43PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
 5:43PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
 5:43PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3
+5:48PM INFO <logger/logger.go:50> GoPowerShellLauncher 🤖:: Logger initialized
+5:48PM INFO <GoPowerShellLauncher/main.go:28> GoPowerShellLauncher 🤖:: Starting..
+5:48PM INFO <cmd/root.go:38> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:48PM INFO <cmd/root.go:21> GoPowerShellLauncher 🤖:: Getting terminal size Width=120 Height=30
+5:48PM INFO <mainview/mainview.go:17> GoPowerShellLauncher 🤖:: Creating a new main view
+5:48PM DEBU <menuview/menuview.go:30> GoPowerShellLauncher 🤖:: Initializing main menu
+5:48PM DEBU <menuview/menuview.go:66> GoPowerShellLauncher 🤖:: Changing view to profile selector
+5:48PM DEBU <profileselector/profileselector.go:26> GoPowerShellLauncher 🤖:: Initializing profile list
+5:48PM DEBU <profileselector/profileselector.go:28> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+5:48PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Loaded configuration file config="&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv Logging:{LogPath: LogFile:GoPowerShellLauncher.log LogLevel:DEBUG}}"
+5:48PM INFO <utils/profiles.go:78> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+5:48PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 All Test Profile 1]"
+5:48PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+5:48PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+5:48PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3 Hash2=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3
+5:48PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+5:48PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+5:48PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+5:48PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 1"
+5:48PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:48PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:48PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:48PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 All Test Profile 2]"
+5:48PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+5:48PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+5:48PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822 Hash2=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822
+5:48PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+5:48PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+5:48PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+5:48PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 2"
+5:48PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:48PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:48PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:48PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Naa  Test Profile 3]"
+5:48PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+5:48PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+5:48PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09 Hash2=5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a
+5:48PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate hash error="hash mismatch: expected 953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09, got 5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a"
+5:48PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=Naa
+5:48PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate shell version error="invalid shell version: naa"
+5:48PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description=" Test Profile 3"
+5:48PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:48PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+5:48PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+5:48PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3
+5:52PM INFO <logger/logger.go:50> GoPowerShellLauncher 🤖:: Logger initialized
+5:52PM INFO <GoPowerShellLauncher/main.go:28> GoPowerShellLauncher 🤖:: Starting..
+5:52PM INFO <cmd/root.go:38> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:52PM INFO <cmd/root.go:21> GoPowerShellLauncher 🤖:: Getting terminal size Width=120 Height=30
+5:52PM INFO <mainview/mainview.go:17> GoPowerShellLauncher 🤖:: Creating a new main view
+5:52PM DEBU <menuview/menuview.go:30> GoPowerShellLauncher 🤖:: Initializing main menu
+5:52PM DEBU <menuview/menuview.go:66> GoPowerShellLauncher 🤖:: Changing view to profile selector
+5:52PM DEBU <profileselector/profileselector.go:26> GoPowerShellLauncher 🤖:: Initializing profile list
+5:52PM DEBU <profileselector/profileselector.go:28> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+5:52PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Loaded configuration file config="&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv Logging:{LogPath: LogFile:GoPowerShellLauncher.log LogLevel:DEBUG}}"
+5:52PM INFO <utils/profiles.go:78> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+5:52PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 All Test Profile 1]"
+5:52PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+5:52PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+5:52PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3 Hash2=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3
+5:52PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+5:52PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+5:52PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+5:52PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 1"
+5:52PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:52PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:52PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:52PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 All Test Profile 2]"
+5:52PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+5:52PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+5:52PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822 Hash2=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822
+5:52PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+5:52PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+5:52PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+5:52PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 2"
+5:52PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:52PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:52PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:52PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Naa  Test Profile 3]"
+5:52PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+5:52PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+5:52PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09 Hash2=5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a
+5:52PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate hash error="hash mismatch: expected 953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09, got 5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a"
+5:52PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=Naa
+5:52PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate shell version error="invalid shell version: naa"
+5:52PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description=" Test Profile 3"
+5:52PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:52PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+5:52PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+5:52PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3
+5:53PM INFO <logger/logger.go:50> GoPowerShellLauncher 🤖:: Logger initialized
+5:53PM INFO <GoPowerShellLauncher/main.go:28> GoPowerShellLauncher 🤖:: Starting..
+5:53PM INFO <cmd/root.go:38> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+5:53PM INFO <cmd/root.go:21> GoPowerShellLauncher 🤖:: Getting terminal size Width=120 Height=30
+5:53PM INFO <mainview/mainview.go:17> GoPowerShellLauncher 🤖:: Creating a new main view
+5:53PM DEBU <menuview/menuview.go:30> GoPowerShellLauncher 🤖:: Initializing main menu
+5:53PM DEBU <menuview/menuview.go:66> GoPowerShellLauncher 🤖:: Changing view to profile selector
+5:53PM DEBU <profileselector/profileselector.go:26> GoPowerShellLauncher 🤖:: Initializing profile list
+5:53PM DEBU <profileselector/profileselector.go:28> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+5:53PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Loaded configuration file config="&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv Logging:{LogPath: LogFile:GoPowerShellLauncher.log LogLevel:DEBUG}}"
+5:53PM INFO <utils/profiles.go:78> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+5:53PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 All Test Profile 1]"
+5:53PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+5:53PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+5:53PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3 Hash2=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3
+5:53PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+5:53PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+5:53PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+5:53PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 1"
+5:53PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:53PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:53PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:53PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 All Test Profile 2]"
+5:53PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+5:53PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+5:53PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822 Hash2=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822
+5:53PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+5:53PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+5:53PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+5:53PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 2"
+5:53PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:53PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:53PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+5:53PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Naa  Test Profile 3]"
+5:53PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+5:53PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+5:53PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09 Hash2=5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a
+5:53PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate hash error="hash mismatch: expected 953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09, got 5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a"
+5:53PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=Naa
+5:53PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate shell version error="invalid shell version: naa"
+5:53PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description=" Test Profile 3"
+5:53PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+5:53PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+5:53PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+5:53PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3
+6:03PM INFO <logger/logger.go:50> GoPowerShellLauncher 🤖:: Logger initialized
+6:03PM INFO <GoPowerShellLauncher/main.go:28> GoPowerShellLauncher 🤖:: Starting..
+6:03PM INFO <cmd/root.go:38> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:03PM INFO <cmd/root.go:21> GoPowerShellLauncher 🤖:: Getting terminal size Width=120 Height=30
+6:03PM INFO <mainview/mainview.go:17> GoPowerShellLauncher 🤖:: Creating a new main view
+6:03PM DEBU <menuview/menuview.go:30> GoPowerShellLauncher 🤖:: Initializing main menu
+6:03PM DEBU <menuview/menuview.go:66> GoPowerShellLauncher 🤖:: Changing view to profile selector
+6:03PM DEBU <profileselector/profileselector.go:26> GoPowerShellLauncher 🤖:: Initializing profile list
+6:03PM DEBU <profileselector/profileselector.go:28> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+6:03PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Loaded configuration file config="&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv Logging:{LogPath: LogFile:GoPowerShellLauncher.log LogLevel:DEBUG}}"
+6:03PM INFO <utils/profiles.go:78> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+6:03PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 All Test Profile 1]"
+6:03PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+6:03PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+6:03PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3 Hash2=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3
+6:03PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+6:03PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+6:03PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+6:03PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 1"
+6:03PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:03PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:03PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:03PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 All Test Profile 2]"
+6:03PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+6:03PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+6:03PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822 Hash2=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822
+6:03PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+6:03PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+6:03PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+6:03PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 2"
+6:03PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:03PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:03PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:03PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Naa  Test Profile 3]"
+6:03PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+6:03PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+6:03PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09 Hash2=5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a
+6:03PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate hash error="hash mismatch: expected 953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09, got 5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a"
+6:03PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=Naa
+6:03PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate shell version error="invalid shell version: naa"
+6:03PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description=" Test Profile 3"
+6:03PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:03PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+6:03PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+6:03PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3
+6:04PM INFO <logger/logger.go:50> GoPowerShellLauncher 🤖:: Logger initialized
+6:04PM INFO <GoPowerShellLauncher/main.go:28> GoPowerShellLauncher 🤖:: Starting..
+6:04PM INFO <cmd/root.go:38> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:04PM INFO <cmd/root.go:21> GoPowerShellLauncher 🤖:: Getting terminal size Width=120 Height=30
+6:04PM INFO <mainview/mainview.go:17> GoPowerShellLauncher 🤖:: Creating a new main view
+6:04PM DEBU <menuview/menuview.go:30> GoPowerShellLauncher 🤖:: Initializing main menu
+6:04PM DEBU <menuview/menuview.go:66> GoPowerShellLauncher 🤖:: Changing view to profile selector
+6:04PM DEBU <profileselector/profileselector.go:26> GoPowerShellLauncher 🤖:: Initializing profile list
+6:04PM DEBU <profileselector/profileselector.go:28> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+6:04PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Loaded configuration file config="&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv Logging:{LogPath: LogFile:GoPowerShellLauncher.log LogLevel:DEBUG}}"
+6:04PM INFO <utils/profiles.go:78> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+6:04PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 All Test Profile 1]"
+6:04PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+6:04PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+6:04PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3 Hash2=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3
+6:04PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+6:04PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+6:04PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+6:04PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 1"
+6:04PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:04PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 All Test Profile 2]"
+6:04PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+6:04PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+6:04PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822 Hash2=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822
+6:04PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+6:04PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+6:04PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+6:04PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 2"
+6:04PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:04PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Naa  Test Profile 3]"
+6:04PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+6:04PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+6:04PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09 Hash2=5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a
+6:04PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate hash error="hash mismatch: expected 953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09, got 5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a"
+6:04PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=Naa
+6:04PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate shell version error="invalid shell version: naa"
+6:04PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description=" Test Profile 3"
+6:04PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:04PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3
+6:04PM INFO <logger/logger.go:50> GoPowerShellLauncher 🤖:: Logger initialized
+6:04PM INFO <GoPowerShellLauncher/main.go:28> GoPowerShellLauncher 🤖:: Starting..
+6:04PM INFO <cmd/root.go:38> GoPowerShellLauncher 🤖:: Launching PowerShell Launcher UI
+6:04PM INFO <cmd/root.go:21> GoPowerShellLauncher 🤖:: Getting terminal size Width=120 Height=30
+6:04PM INFO <mainview/mainview.go:17> GoPowerShellLauncher 🤖:: Creating a new main view
+6:04PM DEBU <menuview/menuview.go:30> GoPowerShellLauncher 🤖:: Initializing main menu
+6:04PM DEBU <menuview/menuview.go:66> GoPowerShellLauncher 🤖:: Changing view to profile selector
+6:04PM DEBU <profileselector/profileselector.go:26> GoPowerShellLauncher 🤖:: Initializing profile list
+6:04PM DEBU <profileselector/profileselector.go:28> GoPowerShellLauncher 🤖:: Getting working directory path=C:\nerd_stuff\git_repos\GoPowerShellLauncher
+6:04PM INFO <profileselector/profileselector.go:37> GoPowerShellLauncher 🤖:: Loaded configuration file config="&{CsvPath:C:\nerd_stuff\git_repos\GoPowerShellLauncher\profiles.csv Logging:{LogPath: LogFile:GoPowerShellLauncher.log LogLevel:DEBUG}}"
+6:04PM INFO <utils/profiles.go:78> GoPowerShellLauncher 🤖:: Loaded 3 records from CSV file
+6:04PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 All Test Profile 1]"
+6:04PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+6:04PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1
+6:04PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3 Hash2=922723be0c7e13028b06a666f6e2772b9f488000e606230bfd2c821ef17108b3
+6:04PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+6:04PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+6:04PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+6:04PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 1"
+6:04PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:04PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test1.ps1 ItemDescription:Test Profile 1 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test1.ps1 Hash:922723BE0C7E13028B06A666F6E2772B9F488000E606230BFD2C821EF17108B3 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 All Test Profile 2]"
+6:04PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+6:04PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1
+6:04PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822 Hash2=8034d9e2c8e38758070aab6b48caaf009433dbe75fd19fbf162fab6ddad47822
+6:04PM INFO <utils/tools.go:40> GoPowerShellLauncher 🤖:: Hashes match
+6:04PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=All
+6:04PM INFO <utils/tools.go:80> GoPowerShellLauncher 🤖:: Shell version is valid
+6:04PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description="Test Profile 2"
+6:04PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:04PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test2.ps1 ItemDescription:Test Profile 2 Valid: IsValid:true Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test2.ps1 Hash:8034D9E2C8E38758070AAB6B48CAAF009433DBE75FD19FBF162FAB6DDAD47822 Shell:All Name: ShellVersion: IsValidHash:true IsValidPath:true IsValidShellVersion:true IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:27> GoPowerShellLauncher 🤖:: Loading profile line="[C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Naa  Test Profile 3]"
+6:04PM INFO <utils/tools.go:19> GoPowerShellLauncher 🤖:: Validating path Path=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+6:04PM INFO <utils/tools.go:45> GoPowerShellLauncher 🤖:: Validating hash ExpectedHash=953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 FilePath=C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1
+6:04PM INFO <utils/tools.go:31> GoPowerShellLauncher 🤖:: Comparing hashes Hash1=953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09 Hash2=5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a
+6:04PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate hash error="hash mismatch: expected 953080ab2538e54361c054d1d8a95c4f075de8cd858003f41cc1e62fbd928b09, got 5e69b0f4ae843c9c9e4435cbe59d1ebe93c0f238fe157f3ee91c051f2adb582a"
+6:04PM INFO <utils/tools.go:76> GoPowerShellLauncher 🤖:: Validating shell version ShellVersion=Naa
+6:04PM ERRO <utils/profiles.go:14> GoPowerShellLauncher 🤖:: Failed to validate shell version error="invalid shell version: naa"
+6:04PM INFO <utils/tools.go:88> GoPowerShellLauncher 🤖:: Validating description Description=" Test Profile 3"
+6:04PM INFO <utils/tools.go:93> GoPowerShellLauncher 🤖:: Description is valid
+6:04PM INFO <utils/profiles.go:86> GoPowerShellLauncher 🤖:: Processing profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:88> GoPowerShellLauncher 🤖:: Added profile: {ItemTitle:test3.ps1 ItemDescription: Test Profile 3 Valid: IsValid:false Path:C:\nerd_stuff\git_repos\GoPowerShellLauncher\test3.ps1 Hash:953080AB2538E54361C054D1D8A95C4F075DE8CD858003F41CC1E62FBD928B09 Shell:Naa Name: ShellVersion: IsValidHash:false IsValidPath:true IsValidShellVersion:false IsValidDescription:true}
+6:04PM INFO <utils/profiles.go:90> GoPowerShellLauncher 🤖:: Total profiles loaded: 3

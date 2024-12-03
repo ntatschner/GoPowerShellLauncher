@@ -64,6 +64,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	itemDelegate, delerr := styles.NewItemDelegate(delegateKeyMap)
 	if delerr != nil {
 		l.Logger.Fatal("Failed to create item delegate", "error", delerr)
+		return nil
 	}
 	profilesList := list.New(items, itemDelegate, windowSize.Width, windowSize.Height)
 	profilesList.Title = "Available PowerShell Profiles"

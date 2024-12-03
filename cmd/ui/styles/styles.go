@@ -101,6 +101,11 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 	}
 	d := ProfileItemDelegate{}
 
+	d.Styles.NormalTitle = NormalTitle
+	d.Styles.FilterMatch = Match
+
+	d.Styles.SelectedTitle = SelectedTitle
+
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
 
@@ -138,7 +143,7 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 	d.FullHelpFunc = func() [][]key.Binding {
 		return [][]key.Binding{help}
 	}
-
+	l.Logger.Debug("Created item delegate", "delegate", d)
 	return d, nil
 }
 

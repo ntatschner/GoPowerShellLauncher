@@ -1,6 +1,7 @@
 package launcher
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"syscall"
@@ -46,9 +47,9 @@ func CreateTempFile(merged string) (string, error) {
 
 func ExecutePowerShellProcess(encodedCommand string, shellPath string) error {
 	l.Logger.Info("Executing PowerShell process", "ShellPath", shellPath)
-	command := "Start-Process -FilePath " + shellPath + " -ArgumentList '-NoExit -EncodedCommand '" + encodedCommand + "''" + " -Wait" + " -NoNewWindow"
+	command := fmt.Sprintf("Start-Process -FilePath %s -ArgumentList \"-NoProfile -NoExit -EncodedCommand %s\"", shellPath, encodedCommand)
 	l.Logger.Info("PowerShell command", "Command", command)
-	cmd := exec.Command("cmd", "/C", "start", "/wait", shellPath, "-NoExit", "-Command", command)
+	cmd := exec.Command("cmd", "/C", "start", "/wait", "powershell", "-NoExit", "-Command", command)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
 

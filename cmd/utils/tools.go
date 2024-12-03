@@ -1,12 +1,16 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/sha256"
+	"encoding/base64"
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
 	"io"
 	"os"
 	"strings"
+	"unicode/utf16"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
@@ -125,8 +129,17 @@ func NormalizeString(s string) string {
 }
 
 func EncodeCommand(command string) (string, error) {
-	// base64 encode string
-	encoded := hex.EncodeToString([]byte(command))
+	// Convert the string to UTF-16LE
+	utf16LE := utf16.Encode([]rune(command))
+	buf := new(bytes.Buffer)
+	for _, r := range utf16LE {
+		if err := binary.Write(buf, binary.LittleEndian, r); err != nil {
+			return "", fmt.Errorf("failed to encode command to UTF-16LE: %v", err)
+		}
+	}
+
+	// Base64 encode the UTF-16LE bytes
+	encoded := base64.StdEncoding.EncodeToString(buf.Bytes())
 	if encoded == "" {
 		return "", fmt.Errorf("failed to encode command")
 	}

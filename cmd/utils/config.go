@@ -2,32 +2,29 @@ package utils
 
 import (
 	"encoding/json"
-	"io"
 	"os"
-
-	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 type Config struct {
 	CsvPath string `json:"csv_path"`
+	Logging struct {
+		LogPath  string `json:"log_path"`
+		LogFile  string `json:"log_file"`
+		LogLevel string `json:"log_level"`
+	} `json:"logging"`
 }
 
 func LoadConfig(filePath string) (*Config, error) {
-	l.Logger.Info("Loading configuration file", "Path", filePath)
 	file, err := os.Open(filePath)
 	if err != nil {
-		l.Logger.Error("Failed to open configuration file 😢:", "path", filePath, "error", err)
 		return nil, err
 	}
 	defer file.Close()
 
-	bytes, err := io.ReadAll(file)
-	if err != nil {
-		return nil, err
-	}
-
 	var config Config
-	if err := json.Unmarshal(bytes, &config); err != nil {
+	decoder := json.NewDecoder(file)
+	err = decoder.Decode(&config)
+	if err != nil {
 		return nil, err
 	}
 

@@ -1,12 +1,10 @@
 package profileselector
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/codeviewerview"
@@ -53,7 +51,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 		}
 		item := types.ProfileItem{
 			ItemTitle:       p.ItemTitle,
-			ItemDescription: fmt.Sprintf("%s\n%s\n%s\n%s\n%s", p.GetDescription(), valid, p.GetPath(), p.GetHash(), p.GetShell()),
+			ItemDescription: p.ItemDescription,
 			Valid:           valid,
 			IsValid:         p.IsValid,
 			Path:            p.Path,
@@ -63,11 +61,10 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 		items = append(items, item)
 	}
 
-	profilesList := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
-	profilesList.Title = "Available Profiles"
+	profilesList := list.New(items, styles.NewItemDelegate(styles.NewDelegateKeyMap()), windowSize.Width, windowSize.Height)
+	profilesList.Title = "Available PowerShell Profiles"
 	profilesList.Styles.Title = styles.TitleStyle
 	profilesList.Styles.PaginationStyle = styles.PaginationStyle
-	profilesList.Styles.Title.Align(lipgloss.Center)
 	profilesList.Styles.HelpStyle = styles.HelpStyle
 	profilesList.SetFilteringEnabled(true)
 	profilesList.SetShowStatusBar(true)
@@ -91,6 +88,9 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.windowSize = msg
 		m.profilesList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
+		if m.profilesList.FilterState() == list.Filtering {
+			break
+		}
 		switch msg.String() {
 		case " ":
 			i := m.profilesList.Index()

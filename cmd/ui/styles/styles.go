@@ -1,8 +1,16 @@
 package styles
 
 import (
+	"fmt"
+	"io"
+	"strings"
+
+	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/list"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
 
 var (
@@ -33,3 +41,139 @@ var (
 		return ViewPortTitleStyle.BorderStyle(b)
 	}()
 )
+
+// ProfileSelector delegates and styles
+
+var (
+	NormalTitle = lipgloss.NewStyle().Padding(0, 0, 0, 2).Foreground(lipgloss.Color("#78a8f5"))
+	NormalDesc  = lipgloss.NewStyle().Foreground(lipgloss.Color("#0043b0"))
+
+	SelectedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Bold(true)
+	SelectedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Bold(true)
+
+	DimmedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Faint(true)
+	DimmedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Faint(true)
+
+	Match = lipgloss.NewStyle().Inherit(NormalTitle).Underline(true)
+
+	StatusMessageStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#507fcc")).Bold(true).Render
+)
+
+// ProfileSelectorItemStyles defines styling for a profile selector item.
+
+type ProfileItemDelegate struct {
+	*list.DefaultDelegate
+}
+
+func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(types.ProfileItem)
+	if !ok {
+		l.Logger.Errorf("Expected types.ProfileItem but got %T", listItem)
+		return
+	}
+
+	msg := "Valid: "
+	valid := msg + "❌"
+	if i.IsValid {
+		valid = msg + "✅"
+	}
+
+	title := fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
+	desc := i.GetDescription()
+	outString := fmt.Sprintf("%s\n%s", title, desc)
+	fn := NormalTitle.Render
+	if index == m.Index() {
+		fn = func(s ...string) string {
+			return SelectedTitle.Render("👉 " + strings.Join(s, " "))
+		}
+	}
+
+	fmt.Fprint(w, fn(outString))
+}
+
+func (pd ProfileItemDelegate) Height() int  { return 1 }
+func (pd ProfileItemDelegate) Spacing() int { return 0 }
+
+func NewItemDelegate(keys *delegateKeyMap) list.ItemDelegate {
+	if keys == nil {
+		l.Logger.Error("keys is nil")
+		panic("keys is nil")
+	}
+	d := ProfileItemDelegate{}
+
+	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
+		var title string
+
+		if i, ok := m.SelectedItem().(types.ProfileItem); ok {
+			title = i.GetName()
+		} else {
+			return nil
+		}
+
+		switch msg := msg.(type) {
+		case tea.KeyMsg:
+			switch {
+			case key.Matches(msg, keys.choose):
+				return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
+
+			case key.Matches(msg, keys.remove):
+				index := m.Index()
+				m.RemoveItem(index)
+				if len(m.Items()) == 0 {
+					keys.remove.SetEnabled(false)
+				}
+				return m.NewStatusMessage(StatusMessageStyle("Removed: " + title))
+			}
+		}
+
+		return nil
+	}
+
+	help := []key.Binding{keys.choose, keys.remove}
+
+	d.ShortHelpFunc = func() []key.Binding {
+		return help
+	}
+
+	d.FullHelpFunc = func() [][]key.Binding {
+		return [][]key.Binding{help}
+	}
+
+	return d
+}
+
+type delegateKeyMap struct {
+	choose key.Binding
+	remove key.Binding
+}
+
+func (d delegateKeyMap) ShortHelp() []key.Binding {
+	return []key.Binding{
+		d.choose,
+		d.remove,
+	}
+}
+
+// Additional full help entries. This satisfies the help.KeyMap interface and
+// is entirely optional.
+func (d delegateKeyMap) FullHelp() [][]key.Binding {
+	return [][]key.Binding{
+		{
+			d.choose,
+			d.remove,
+		},
+	}
+}
+
+func NewDelegateKeyMap() *delegateKeyMap {
+	return &delegateKeyMap{
+		choose: key.NewBinding(
+			key.WithKeys(" "),
+			key.WithHelp(" ", "Select Profile"),
+		),
+		remove: key.NewBinding(
+			key.WithKeys("delete", " "),
+			key.WithHelp("delete", "Deselect Profile"),
+		),
+	}
+}

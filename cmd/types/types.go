@@ -23,7 +23,7 @@ type ProfileItem struct {
 
 func (p ProfileItem) Title() string       { return p.ItemTitle }
 func (p ProfileItem) Description() string { return p.ItemDescription }
-func (p ProfileItem) FilterValue() string { return p.ItemDescription }
+func (p ProfileItem) FilterValue() string { return p.Name }
 
 func (p ProfileItem) GetPath() string { return p.Path }
 func (p ProfileItem) GetName() string {

@@ -25,9 +25,9 @@ type model struct {
 }
 
 func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
-	l.Logger.Info("Initializing profile list")
+	l.Logger.Debug("Initializing profile list")
 	path, err := os.Getwd()
-	l.Logger.Info("Getting working directory", "path", path)
+	l.Logger.Debug("Getting working directory", "path", path)
 	if err != nil {
 		l.Logger.Error("Failed to get working directory", "error", err)
 	}
@@ -89,8 +89,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
-		h, v := styles.AppStyle.GetFrameSize()
-		m.profilesList.SetSize(msg.Width-h, msg.Height-v)
+		m.profilesList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case " ":
@@ -105,17 +104,17 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				if _, ok := m.selected[i]; ok {
 					delete(m.selected, i)
-					l.Logger.Info("Deselected profile", "index", i)
+					l.Logger.Debug("Deselected profile", "index", i)
 				} else {
 					m.selected[i] = struct{}{}
-					l.Logger.Info("Selected profile", "index", i)
+					l.Logger.Debug("Selected profile", "index", i)
 				}
 			}
 		case "enter":
 			// load selected profiles
 			var selectedProfiles []types.ProfileItem
 			if len(m.selected) == 0 {
-				l.Logger.Info("No Profiles selected, using currently highlighted profile")
+				l.Logger.Warn("No Profiles selected, using currently highlighted profile")
 				i := m.profilesList.Index()
 				if i < 0 || i >= len(m.profilesList.Items()) {
 					l.Logger.Error("Invalid index", "index", i)

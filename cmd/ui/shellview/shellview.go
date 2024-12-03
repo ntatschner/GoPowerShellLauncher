@@ -107,28 +107,31 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case "enter":
-			i := m.shellsList.Index()
-			if i < 0 || i >= len(m.shellsList.Items()) {
-				l.Logger.Error("Invalid index", "index", i)
-				break
+			if len(m.selected) == 0 {
+				l.Logger.Warn("No shell selected, using currently highlighted.")
+				i := m.shellsList.Index()
+				if i < 0 || i >= len(m.shellsList.Items()) {
+					l.Logger.Error("Invalid index", "index", i)
+					break
+				}
+				m.selected[i] = struct{}{}
 			}
-			if len(m.selected) >= 1 {
-				l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
-				for i := range m.selected {
-					merged := launcher.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
-					// tempFilePath, err := launcher.CreateTempFile(merged)
-					encodedCommand, err := utils.EncodeCommand(merged)
-					if err != nil {
-						l.Logger.Error("Failed to encode profiles", "Error", err)
-						continue
-					}
-					item := m.shellsList.Items()[i].(types.ShellItem)
-					err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)
-					if err != nil {
-						l.Logger.Error("Failed to execute PowerShell process", "Error", err)
-					}
+			l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
+			for i := range m.selected {
+				merged := launcher.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
+				// tempFilePath, err := launcher.CreateTempFile(merged)
+				encodedCommand, err := utils.EncodeCommand(merged)
+				if err != nil {
+					l.Logger.Error("Failed to encode profiles", "Error", err)
+					continue
+				}
+				item := m.shellsList.Items()[i].(types.ShellItem)
+				err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)
+				if err != nil {
+					l.Logger.Error("Failed to execute PowerShell process", "Error", err)
 				}
 			}
+
 		}
 	}
 

@@ -27,7 +27,7 @@ type model struct {
 }
 
 func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
-	l.Logger.Info("Initializing main menu")
+	l.Logger.Debug("Initializing main menu")
 	items := []list.Item{
 		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", pageName: "profilesView"},
 		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", pageName: "shortcutsView"},
@@ -36,6 +36,8 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 
 	list := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
 	list.Title = "Main Menu"
+	list.Styles.Title = styles.TitleStyle
+	list.Styles.HelpStyle = styles.HelpStyle
 	list.SetFilteringEnabled(false)
 
 	return &model{
@@ -53,8 +55,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
-		h, v := styles.AppStyle.GetFrameSize()
-		m.menuList.SetSize(msg.Width-h, msg.Height-v)
+		m.menuList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "enter":
@@ -62,10 +63,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			item := m.menuList.Items()[i].(menuItem)
 			switch item.PageName() {
 			case "profilesView":
-				l.Logger.Info("Changing view to profile selector")
+				l.Logger.Debug("Changing view to profile selector")
 				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize), true)
 			case "shortcutsView":
-				l.Logger.Info("Changing view to shortcut selector")
+				l.Logger.Debug("Changing view to shortcut selector")
 				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))
 			case "exit":
 				l.Logger.Info("Exiting application")

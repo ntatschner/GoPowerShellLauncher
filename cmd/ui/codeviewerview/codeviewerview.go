@@ -69,7 +69,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
 		m.codeviewer.Width = msg.Width
-		m.codeviewer.Height = msg.Height - m.codeviewer.YPosition - 1
+		m.codeviewer.Height = msg.Height - m.codeviewer.YPosition
 	}
 	var cmd tea.Cmd
 	m.codeviewer, cmd = m.codeviewer.Update(msg)
@@ -80,7 +80,7 @@ func (m model) View() string {
 	title := styles.TitleStyle.Render(m.profilePath)
 	line := strings.Repeat("─", max(0, m.codeviewer.Width-lipgloss.Width(title)))
 	header := lipgloss.JoinHorizontal(lipgloss.Center, title, line)
-	finfo := styles.ViewPortTitleStyle.Render(fmt.Sprintf("%3.f%%", m.codeviewer.ScrollPercent()*100))
+	finfo := styles.ViewPortInfoStyle.Render(fmt.Sprintf("%3.f%%", m.codeviewer.ScrollPercent()*100))
 	fline := strings.Repeat("─", max(0, m.codeviewer.Width-lipgloss.Width(finfo)))
 	footer := lipgloss.JoinVertical(lipgloss.Left, lipgloss.JoinHorizontal(lipgloss.Center, fline, finfo), m.help)
 	return lipgloss.JoinVertical(lipgloss.Left, header, m.codeviewer.View(), footer)

@@ -94,10 +94,10 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 func (pd ProfileItemDelegate) Height() int  { return 1 }
 func (pd ProfileItemDelegate) Spacing() int { return 0 }
 
-func NewItemDelegate(keys *delegateKeyMap) list.ItemDelegate {
+func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 	if keys == nil {
 		l.Logger.Error("keys is nil")
-		panic("keys is nil")
+		return nil, fmt.Errorf("keys is nil")
 	}
 	d := ProfileItemDelegate{}
 
@@ -139,7 +139,7 @@ func NewItemDelegate(keys *delegateKeyMap) list.ItemDelegate {
 		return [][]key.Binding{help}
 	}
 
-	return d
+	return d, nil
 }
 
 type delegateKeyMap struct {

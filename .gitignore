@@ -1,0 +1,8 @@
+# Ignore log files
+*.log
+
+# Ignore PowerShell script files
+*.ps1
+
+# Ignore CSV files
+*.csv

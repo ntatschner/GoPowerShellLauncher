@@ -115,7 +115,7 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 		}
 	}
 
-	fmt.Fprint(w, fn(outString))
+	fmt.Fprint(w, fn(title, desc))
 }
 
 func (pd ProfileItemDelegate) Height() int  { return 2 }

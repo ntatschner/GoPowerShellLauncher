@@ -45,17 +45,6 @@ var (
 // ProfileSelector delegates and styles
 
 var (
-	NormalTitle = lipgloss.NewStyle().Padding(0, 0, 3, 0).Foreground(lipgloss.Color("#78a8f5"))
-	NormalDesc  = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#0043b0"))
-
-	SelectedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Bold(true)
-	SelectedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Bold(true)
-
-	DimmedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Faint(true)
-	DimmedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Faint(true)
-
-	Match = lipgloss.NewStyle().Inherit(NormalTitle).Underline(true)
-
 	StatusMessageStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#507fcc")).Bold(true).Render
 )
 
@@ -154,13 +143,7 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	d := &ProfileItemDelegate{}
 	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
  d.ShowDescription = true
-	d.Styles.NormalTitle = NormalTitle
-	d.Styles.NormalDesc = NormalDesc
-	d.Styles.SelectedTitle = SelectedTitle
-	d.Styles.SelectedDesc = SelectedDesc
-	d.Styles.DimmedTitle = DimmedTitle
-	d.Styles.DimmedDesc = DimmedDesc
-	d.Styles.FilterMatch = Match
+	d.Styles = NewDefaultProfileStyles()
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string

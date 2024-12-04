@@ -45,7 +45,7 @@ var (
 // ProfileSelector delegates and styles
 
 var (
-	NormalTitle = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#78a8f5"))
+	NormalTitle = lipgloss.NewStyle().Padding(0, 0, 3, 0).Foreground(lipgloss.Color("#78a8f5"))
 	NormalDesc  = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#0043b0"))
 
 	SelectedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Bold(true)
@@ -82,7 +82,9 @@ type ProfileItemDelegate struct {
 	Styles        DefaultItemStyles
 	UpdateFunc    func(msg tea.Msg, m *list.Model) tea.Cmd
 	ShortHelpFunc func() []key.Binding
+	ShortHelp     func() []key.Binding
 	FullHelpFunc  func() [][]key.Binding
+	FullHelp      func() [][]key.Binding
 }
 
 func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
@@ -100,7 +102,7 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 
 	title := fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
 	desc := i.GetDescription()
-	outString := fmt.Sprintf("%s\n%s", title, desc)
+
 	fn := NormalTitle.Render
 	if index == m.Index() {
 		fn = func(s ...string) string {
@@ -108,7 +110,7 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 		}
 	} else if index != m.Index() && m.FilterState() != list.Filtering {
 		fn = func(s ...string) string {
-			return SelectedTitle.Render("  " + strings.Join(s, " "))
+			return SelectedTitle.Render("    " + strings.Join(s, " "))
 		}
 	}
 
@@ -184,7 +186,8 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	d.FullHelpFunc = func() [][]key.Binding {
 		return [][]key.Binding{help}
 	}
-
+	d.ShortHelp = d.ShortHelpFunc
+	d.FullHelp = d.FullHelpFunc
 	l.Logger.Debug("Created item delegate", "delegate", d)
 	return d, nil
 }

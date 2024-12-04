@@ -74,6 +74,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	profilesList.Title = "Available PowerShell Profiles"
 	profilesList.Styles.Title = styles.TitleStyle
 	profilesList.Styles.PaginationStyle = styles.PaginationStyle
+	profilesList.StatusMessageLifetime = 3
 	profilesList.SetFilteringEnabled(true)
 	profilesList.SetShowStatusBar(true)
 	profilesList.SetShowTitle(true)

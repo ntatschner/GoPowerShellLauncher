@@ -129,6 +129,21 @@ func (pd ProfileItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
 
 type StatusBarUpdate bool
 
+func NewDefaultProfileStyles() (s DefaultItemStyles) {
+ s.NormalTitle = lipgloss.NewStyle().Padding(0, 0, 3, 0).Foreground(lipgloss.Color("#78a8f5"))
+	s.NormalDesc  = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#0043b0"))
+
+	s.SelectedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Bold(true)
+	s.SelectedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Bold(true)
+
+	s.DimmedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Faint(true)
+	s.DimmedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Faint(true)
+
+	s.Match = lipgloss.NewStyle().Inherit(NormalTitle).Underline(true)
+
+ return s
+}
+
 func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	l.Logger.Debug("Creating item delegate", "keys", keys)
 	if keys == nil {

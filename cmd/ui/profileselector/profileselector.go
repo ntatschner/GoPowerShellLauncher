@@ -72,9 +72,6 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	}
 	profilesList := list.New(items, itemDelegate, windowSize.Width, windowSize.Height)
 	profilesList.Title = "Available PowerShell Profiles"
-	profilesList.Styles.Title = styles.TitleStyle
-	profilesList.Styles.PaginationStyle = styles.PaginationStyle
-	profilesList.Styles.HelpStyle = styles.HelpStyle
 	profilesList.SetFilteringEnabled(true)
 	profilesList.SetShowStatusBar(true)
 
@@ -98,9 +95,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.windowSize = msg
 		m.profilesList.SetSize(msg.Width, msg.Height)
 	case tea.KeyMsg:
-		if m.profilesList.FilterState() == list.Filtering {
-			break
-		}
 		switch msg.String() {
 		case " ":
 			i := m.profilesList.Index()
@@ -170,6 +164,10 @@ func (m *model) View() string {
 
 func (m *model) ClearSelectedItems() {
 	m.selected = make(map[int]struct{})
+}
+
+func (m *model) FilterState() list.FilterState {
+	return m.profilesList.FilterState()
 }
 
 // Ensure model implements view.Clearable

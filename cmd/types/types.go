@@ -42,45 +42,6 @@ func (p ProfileItem) IsValidProfile() bool {
 	return p.IsValidPath && p.IsValidHash && p.IsValidShellVersion && p.IsValidDescription
 }
 
-// type ProfileSelectorItemDelegate struct{}
-
-// func (pd ProfileSelectorItemDelegate) Height() int  { return 1 }
-// func (pd ProfileSelectorItemDelegate) Spacing() int { return 0 }
-// func (pd ProfileSelectorItemDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd {
-// 	if pd.UpdateFunc != nil {
-// 		return pd.UpdateFunc
-// 	}
-// 	return nil
-// }
-
-// func (pd ProfileSelectorItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-// 	var title string
-
-// 	if i, ok := m.SelectedItem().(ProfileItem); ok {
-// 		title = i.GetName()
-// 	} else {
-// 		return nil
-// 	}
-
-// 	switch msg := msg.(type) {
-// 	case tea.KeyMsg:
-// 		switch {
-// 		case key.Matches(msg, keys.choose):
-// 			return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
-
-// 		case key.Matches(msg, keys.remove):
-// 			index := m.Index()
-// 			m.RemoveItem(index)
-// 			if len(m.Items()) == 0 {
-// 				keys.remove.SetEnabled(false)
-// 			}
-// 			return m.NewStatusMessage(StatusMessageStyle("Removed: " + title))
-// 		}
-// 	}
-
-// 	return nil
-// }
-
 // ShellItem represents a shell item in the list
 
 type ShellItem struct {

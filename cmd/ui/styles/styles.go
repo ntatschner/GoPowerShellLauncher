@@ -45,8 +45,8 @@ var (
 // ProfileSelector delegates and styles
 
 var (
-	NormalTitle = lipgloss.NewStyle().Padding(0, 0, 0, 2).Foreground(lipgloss.Color("#78a8f5"))
-	NormalDesc  = lipgloss.NewStyle().Foreground(lipgloss.Color("#0043b0"))
+	NormalTitle = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#78a8f5"))
+	NormalDesc  = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#0043b0"))
 
 	SelectedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Bold(true)
 	SelectedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Bold(true)
@@ -59,10 +59,30 @@ var (
 	StatusMessageStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#507fcc")).Bold(true).Render
 )
 
+type DefaultItemStyles struct {
+	// The Normal state.
+	NormalTitle lipgloss.Style
+	NormalDesc  lipgloss.Style
+
+	// The selected item state.
+	SelectedTitle lipgloss.Style
+	SelectedDesc  lipgloss.Style
+
+	// The dimmed state, for when the filter input is initially activated.
+	DimmedTitle lipgloss.Style
+	DimmedDesc  lipgloss.Style
+
+	// Characters matching the current filter, if any.
+	FilterMatch lipgloss.Style
+}
+
 // ProfileSelectorItemStyles defines styling for a profile selector item.
 
 type ProfileItemDelegate struct {
-	*list.DefaultDelegate
+	Styles        DefaultItemStyles
+	UpdateFunc    func(msg tea.Msg, m *list.Model) tea.Cmd
+	ShortHelpFunc func() []key.Binding
+	FullHelpFunc  func() [][]key.Binding
 }
 
 func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
@@ -97,16 +117,23 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 
 func (pd ProfileItemDelegate) Height() int  { return 1 }
 func (pd ProfileItemDelegate) Spacing() int { return 0 }
+func (pd ProfileItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
+	if pd.UpdateFunc != nil {
+		return pd.UpdateFunc(msg, m)
+	}
+	return nil
+}
 
 type StatusBarUpdate bool
 
-func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
+func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	l.Logger.Debug("Creating item delegate", "keys", keys)
 	if keys == nil {
 		l.Logger.Error("keys is nil")
 		return nil, fmt.Errorf("keys is nil")
 	}
-	d := list.NewDefaultDelegate()
+	//d := list.NewDefaultDelegate()
+	d := &ProfileItemDelegate{}
 	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
 
 	d.Styles.NormalTitle = NormalTitle

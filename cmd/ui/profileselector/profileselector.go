@@ -92,10 +92,15 @@ func (m *model) Init() tea.Cmd {
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
 		m.profilesList.SetSize(msg.Width, msg.Height)
+	case utils.StatusBarUpdate:
+		l.Logger.Debug("Got Statusbar Update Msg", "Msg", msg)
+		m.profilesList, cmd = m.profilesList.Update(msg)
+		return m, cmd
 	case tea.KeyMsg:
 		if m.profilesList.FilterState() == list.Filtering {
 			break
@@ -114,9 +119,11 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				if _, ok := m.selected[i]; ok {
 					delete(m.selected, i)
 					l.Logger.Debug("Deselected profile", "index", i)
+					return m, utils.StatusBarMessage(m.profilesList, "Unselected: "+item.Name, styles.StatusMessageStyle)
 				} else {
 					m.selected[i] = struct{}{}
 					l.Logger.Debug("Selected profile", "index", i)
+					return m, utils.StatusBarMessage(m.profilesList, "Selected: "+item.Name, styles.StatusMessageStyle)
 				}
 			}
 		case "enter":
@@ -151,7 +158,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	var cmd tea.Cmd
 	m.profilesList, cmd = m.profilesList.Update(msg)
 	return m, cmd
 }

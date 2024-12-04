@@ -32,7 +32,8 @@ func InitLogger(logPath, logFileName, logLevel string) error {
 		return err
 	}
 	// Create a multi-writer to write logs to both the file and the standard output
-	writer := io.MultiWriter(os.Stdout, logFile)
+	//writer := io.MultiWriter(os.Stdout, logFile)
+	writer := io.Writer(logFile)
 
 	// Create a new logger and set its output to the multi-writer
 	Logger = log.New(writer)

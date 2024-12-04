@@ -86,6 +86,10 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 		fn = func(s ...string) string {
 			return SelectedTitle.Render("👉 " + strings.Join(s, " "))
 		}
+	} else if index != m.Index() && m.FilterState() != list.Filtering {
+		fn = func(s ...string) string {
+			return SelectedTitle.Render("  " + strings.Join(s, " "))
+		}
 	}
 
 	fmt.Fprint(w, fn(outString))
@@ -100,7 +104,7 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 		l.Logger.Error("keys is nil")
 		return nil, fmt.Errorf("keys is nil")
 	}
-	d := ProfileItemDelegate{}
+	d := list.NewDefaultDelegate()
 	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
 
 	d.Styles.NormalTitle = NormalTitle
@@ -124,15 +128,14 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 		case tea.KeyMsg:
 			switch {
 			case key.Matches(msg, keys.choose):
-				return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
+				if _, ok := m.selected[i]; ok {
+					return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
+				} else {
+					return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
+				}
 
 			case key.Matches(msg, keys.remove):
-				index := m.Index()
-				m.RemoveItem(index)
-				if len(m.Items()) == 0 {
-					keys.remove.SetEnabled(false)
-				}
-				return m.NewStatusMessage(StatusMessageStyle("Removed: " + title))
+				return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
 			}
 		}
 
@@ -183,7 +186,7 @@ func NewDelegateKeyMap() (*delegateKeyMap, error) {
 	d := &delegateKeyMap{
 		choose: key.NewBinding(
 			key.WithKeys(" "),
-			key.WithHelp(" ", "Select Profile"),
+			key.WithHelp("space", "Select Profile"),
 		),
 		remove: key.NewBinding(
 			key.WithKeys("delete", " "),

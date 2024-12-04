@@ -128,7 +128,7 @@ func NewDefaultProfileStyles() (s DefaultItemStyles) {
 	s.DimmedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Faint(true)
 	s.DimmedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Faint(true)
 
-	s.Match = lipgloss.NewStyle().Inherit(NormalTitle).Underline(true)
+	s.FilterMatch = lipgloss.NewStyle().Inherit(NormalTitle).Underline(true)
 
  return s
 }

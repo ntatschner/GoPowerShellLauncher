@@ -80,6 +80,7 @@ type DefaultItemStyles struct {
 
 type ProfileItemDelegate struct {
 	Styles        DefaultItemStyles
+ ShowDescription bool
 	UpdateFunc    func(msg tea.Msg, m *list.Model) tea.Cmd
 	ShortHelpFunc func() []key.Binding
 	ShortHelp     func() []key.Binding
@@ -137,7 +138,7 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	//d := list.NewDefaultDelegate()
 	d := &ProfileItemDelegate{}
 	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
-
+ d.ShowDescription = true
 	d.Styles.NormalTitle = NormalTitle
 	d.Styles.NormalDesc = NormalDesc
 	d.Styles.SelectedTitle = SelectedTitle

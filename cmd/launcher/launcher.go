@@ -54,9 +54,7 @@ func ExecutePowerShellProcess(encodedCommand string, shellPath string) error {
 	l.Logger.Info("PowerShell command", "Command", command)
 	cmd := exec.Command("cmd", "/C", "start", "/b", "/wait", "powershell", "-Command", command)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
-		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP,
-		HideWindow:    true,
-	}
+		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
 
 	err := cmd.Run()
 	if err != nil {

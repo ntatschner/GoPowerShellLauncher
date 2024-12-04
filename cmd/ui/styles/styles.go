@@ -98,6 +98,8 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 func (pd ProfileItemDelegate) Height() int  { return 1 }
 func (pd ProfileItemDelegate) Spacing() int { return 0 }
 
+type StatusBarUpdate bool
+
 func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 	l.Logger.Debug("Creating item delegate", "keys", keys)
 	if keys == nil {
@@ -127,14 +129,16 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 		switch msg := msg.(type) {
 		case tea.KeyMsg:
 			switch {
-			case key.Matches(msg, keys.choose):
-				if _, ok := m.selected[i]; ok {
-					return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
-				} else {
-					return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
-				}
+			case key.Matches(msg, keys.selected):
+				return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
 
-			case key.Matches(msg, keys.remove):
+			case key.Matches(msg, keys.unselected):
+				return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
+			}
+		case StatusBarUpdate:
+			if bool(msg) {
+				return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
+			} else {
 				return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
 			}
 		}
@@ -143,7 +147,7 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 	}
 	l.Logger.Debug("Created item delegate UpdateFunc")
 
-	help := []key.Binding{keys.choose, keys.remove}
+	help := []key.Binding{keys.selected, keys.unselected}
 	l.Logger.Debug("Created item delegate help", "help", help)
 
 	d.ShortHelpFunc = func() []key.Binding {
@@ -160,14 +164,14 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 }
 
 type delegateKeyMap struct {
-	choose key.Binding
-	remove key.Binding
+	selected   key.Binding
+	unselected key.Binding
 }
 
 func (d delegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
-		d.choose,
-		d.remove,
+		d.selected,
+		d.unselected,
 	}
 }
 
@@ -176,26 +180,22 @@ func (d delegateKeyMap) ShortHelp() []key.Binding {
 func (d delegateKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{
-			d.choose,
-			d.remove,
+			d.selected,
+			d.unselected,
 		},
 	}
 }
 
 func NewDelegateKeyMap() (*delegateKeyMap, error) {
 	d := &delegateKeyMap{
-		choose: key.NewBinding(
+		selected: key.NewBinding(
 			key.WithKeys(" "),
 			key.WithHelp("space", "Select Profile"),
 		),
-		remove: key.NewBinding(
+		unselected: key.NewBinding(
 			key.WithKeys("delete", " "),
 			key.WithHelp("delete", "Deselect Profile"),
 		),
-	}
-	if d == nil {
-		l.Logger.Error("Failed to create delegate key map")
-		return nil, fmt.Errorf("Failed to create delegate key map")
 	}
 	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)
 	return d, nil

@@ -95,16 +95,21 @@ func (pd ProfileItemDelegate) Height() int  { return 1 }
 func (pd ProfileItemDelegate) Spacing() int { return 0 }
 
 func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
+	l.Logger.Debug("Creating item delegate", "keys", keys)
 	if keys == nil {
 		l.Logger.Error("keys is nil")
 		return nil, fmt.Errorf("keys is nil")
 	}
 	d := ProfileItemDelegate{}
+	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
 
 	d.Styles.NormalTitle = NormalTitle
+	l.Logger.Debug("Created item delegate style NormalTitle", "NormalTitle", NormalTitle)
 	d.Styles.FilterMatch = Match
+	l.Logger.Debug("Created item delegate style Match", "Match", Match)
 
 	d.Styles.SelectedTitle = SelectedTitle
+	l.Logger.Debug("Created item delegate style SelectedTitle", "SelectedTitle", SelectedTitle)
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
@@ -133,16 +138,20 @@ func NewItemDelegate(keys *delegateKeyMap) (list.ItemDelegate, error) {
 
 		return nil
 	}
+	l.Logger.Debug("Created item delegate UpdateFunc")
 
 	help := []key.Binding{keys.choose, keys.remove}
+	l.Logger.Debug("Created item delegate help", "help", help)
 
 	d.ShortHelpFunc = func() []key.Binding {
 		return help
 	}
+	l.Logger.Debug("Created item delegate ShortHelpFunc")
 
 	d.FullHelpFunc = func() [][]key.Binding {
 		return [][]key.Binding{help}
 	}
+	l.Logger.Debug("Created item delegate FullHelpFunc")
 	l.Logger.Debug("Created item delegate", "delegate", d)
 	return d, nil
 }
@@ -170,8 +179,8 @@ func (d delegateKeyMap) FullHelp() [][]key.Binding {
 	}
 }
 
-func NewDelegateKeyMap() *delegateKeyMap {
-	return &delegateKeyMap{
+func NewDelegateKeyMap() (*delegateKeyMap, error) {
+	d := &delegateKeyMap{
 		choose: key.NewBinding(
 			key.WithKeys(" "),
 			key.WithHelp(" ", "Select Profile"),
@@ -181,4 +190,10 @@ func NewDelegateKeyMap() *delegateKeyMap {
 			key.WithHelp("delete", "Deselect Profile"),
 		),
 	}
+	if d == nil {
+		l.Logger.Error("Failed to create delegate key map")
+		return nil, fmt.Errorf("Failed to create delegate key map")
+	}
+	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)
+	return d, nil
 }

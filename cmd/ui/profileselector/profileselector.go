@@ -60,7 +60,11 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 		}
 		items = append(items, item)
 	}
-	delegateKeyMap := styles.NewDelegateKeyMap()
+	delegateKeyMap, err := styles.NewDelegateKeyMap()
+	if err != nil {
+		l.Logger.Fatal("Failed to create delegate key map", "error", err)
+		return nil
+	}
 	itemDelegate, delerr := styles.NewItemDelegate(delegateKeyMap)
 	if delerr != nil {
 		l.Logger.Fatal("Failed to create item delegate", "error", delerr)

@@ -115,8 +115,8 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 	fmt.Fprint(w, fn(outString))
 }
 
-func (pd ProfileItemDelegate) Height() int  { return 1 }
-func (pd ProfileItemDelegate) Spacing() int { return 0 }
+func (pd ProfileItemDelegate) Height() int  { return 2 }
+func (pd ProfileItemDelegate) Spacing() int { return 1 }
 func (pd ProfileItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
 	if pd.UpdateFunc != nil {
 		return pd.UpdateFunc(msg, m)
@@ -137,12 +137,12 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
 
 	d.Styles.NormalTitle = NormalTitle
-	l.Logger.Debug("Created item delegate style NormalTitle", "NormalTitle", NormalTitle)
-	d.Styles.FilterMatch = Match
-	l.Logger.Debug("Created item delegate style Match", "Match", Match)
-
+	d.Styles.NormalDesc = NormalDesc
 	d.Styles.SelectedTitle = SelectedTitle
-	l.Logger.Debug("Created item delegate style SelectedTitle", "SelectedTitle", SelectedTitle)
+	d.Styles.SelectedDesc = SelectedDesc
+	d.Styles.DimmedTitle = DimmedTitle
+	d.Styles.DimmedDesc = DimmedDesc
+	d.Styles.FilterMatch = Match
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
@@ -180,12 +180,11 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	d.ShortHelpFunc = func() []key.Binding {
 		return help
 	}
-	l.Logger.Debug("Created item delegate ShortHelpFunc")
 
 	d.FullHelpFunc = func() [][]key.Binding {
 		return [][]key.Binding{help}
 	}
-	l.Logger.Debug("Created item delegate FullHelpFunc")
+
 	l.Logger.Debug("Created item delegate", "delegate", d)
 	return d, nil
 }

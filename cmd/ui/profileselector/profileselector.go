@@ -72,8 +72,11 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	}
 	profilesList := list.New(items, itemDelegate, windowSize.Width, windowSize.Height)
 	profilesList.Title = "Available PowerShell Profiles"
+	profilesList.Styles.Title = styles.TitleStyle
+	profilesList.Styles.PaginationStyle = styles.PaginationStyle
 	profilesList.SetFilteringEnabled(true)
 	profilesList.SetShowStatusBar(true)
+	profilesList.SetShowTitle(true)
 
 	return &model{
 		profilesList: profilesList,

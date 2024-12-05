@@ -9,6 +9,7 @@ import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/x/ansi"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
@@ -65,6 +66,8 @@ type DefaultItemStyles struct {
 	FilterMatch lipgloss.Style
 }
 
+const ellipsis = "…"
+
 // ProfileSelectorItemStyles defines styling for a profile selector item.
 
 type ProfileItemDelegate struct {
@@ -79,10 +82,16 @@ type ProfileItemDelegate struct {
 	spacing         int
 }
 
-func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
-	i, ok := listItem.(types.ProfileItem)
+func (d ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, item list.Item) {
+	var (
+		title, desc  string
+		matchedRunes []int
+		s            = &d.Styles
+	)
+
+	i, ok := item.(types.ProfileItem)
 	if !ok {
-		l.Logger.Errorf("Expected types.ProfileItem but got %T", listItem)
+		l.Logger.Errorf("Expected types.ProfileItem but got %T", item)
 		return
 	}
 
@@ -92,21 +101,67 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 		valid = msg + "✅"
 	}
 
-	title := fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
-	desc := i.GetDescription()
-
-	fn := pd.Styles.NormalTitle.Render
-	if index == m.Index() {
-		fn = func(s ...string) string {
-			return pd.Styles.SelectedTitle.Render("👉 " + strings.Join(s, " "))
-		}
-	} else if index != m.Index() && m.FilterState() != list.Filtering {
-		fn = func(s ...string) string {
-			return pd.Styles.SelectedTitle.Render("    " + strings.Join(s, " "))
-		}
+	if i, ok := item.(types.ProfileItem); ok {
+		title = fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
+		desc = i.GetDescription()
+	} else {
+		return
 	}
 
-	fmt.Fprint(w, fn(title, desc))
+	if m.Width() <= 0 {
+		// short-circuit
+		return
+	}
+
+	// Prevent text from exceeding list width
+	textwidth := m.Width() - s.NormalTitle.GetPaddingLeft() - s.NormalTitle.GetPaddingRight()
+	title = ansi.Truncate(title, textwidth, ellipsis)
+	if d.ShowDescription {
+		var lines []string
+		for i, line := range strings.Split(desc, "\n") {
+			if i >= d.height-1 {
+				break
+			}
+			lines = append(lines, ansi.Truncate(line, textwidth, ellipsis))
+		}
+		desc = strings.Join(lines, "\n")
+	}
+
+	// Conditions
+	var (
+		isSelected  = index == m.Index()
+		emptyFilter = m.FilterState() == list.Filtering && m.FilterValue() == ""
+		isFiltered  = m.FilterState() == list.Filtering || m.FilterState() == list.FilterApplied
+	)
+
+	if emptyFilter {
+		title = s.DimmedTitle.Render("   " + title)
+		desc = s.DimmedDesc.Render("   " + desc)
+	} else if isSelected && m.FilterState() != list.Filtering {
+		if isFiltered {
+			// Highlight matches
+			unmatched := s.SelectedTitle.Inline(true)
+			matched := unmatched.Inherit(s.FilterMatch)
+			title = lipgloss.StyleRunes(title, matchedRunes, matched, unmatched)
+		}
+		title = s.SelectedTitle.Render("👉 " + title)
+		desc = s.SelectedDesc.Render("   " + desc)
+	} else {
+		if isFiltered {
+			// Highlight matches
+			unmatched := s.NormalTitle.Inline(true)
+			matched := unmatched.Inherit(s.FilterMatch)
+			title = lipgloss.StyleRunes(title, matchedRunes, matched, unmatched)
+		}
+		title = s.NormalTitle.Render("  " + title)
+		desc = s.NormalDesc.Render("  " + desc)
+	}
+
+	if d.ShowDescription {
+		fmt.Fprintf(w, "%s\n%s", title, desc) //nolint: errcheck
+		return
+	}
+	fmt.Fprintf(w, "%s", title) //nolint: errcheck
 }
 
 type StatusBarUpdate bool

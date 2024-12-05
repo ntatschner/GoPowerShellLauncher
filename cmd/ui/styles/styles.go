@@ -47,7 +47,7 @@ var (
 // ProfileSelector delegates and styles
 
 var (
-	StatusMessageStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#507fcc")).Bold(true).Render
+	StatusMessageStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF94F4")).Bold(true).Render
 )
 
 type DefaultItemStyles struct {
@@ -223,16 +223,24 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 		case tea.KeyMsg:
 			switch {
 			case key.Matches(msg, keys.selected):
-				return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
+				statusMsgText := "Selected: " + title
+				m.SetWidth(150)
+				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 
 			case key.Matches(msg, keys.unselected):
-				return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
+				statusMsgText := "Unselected: " + title
+				m.SetWidth(150)
+				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 			}
 		case StatusBarUpdate:
 			if bool(msg) {
-				return m.NewStatusMessage(StatusMessageStyle("Selected: " + title))
+				statusMsgText := "Selected: " + title
+				m.SetWidth(150)
+				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 			} else {
-				return m.NewStatusMessage(StatusMessageStyle("Unselected: " + title))
+				statusMsgText := "Unselected: " + title
+				m.SetWidth(150)
+				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 			}
 		}
 

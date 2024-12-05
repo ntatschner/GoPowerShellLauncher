@@ -153,8 +153,8 @@ func (d ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, item l
 			matched := unmatched.Inherit(s.FilterMatch)
 			title = lipgloss.StyleRunes(title, matchedRunes, matched, unmatched)
 		}
-		title = s.NormalTitle.Render("  " + title)
-		desc = s.NormalDesc.Render("  " + desc)
+		title = s.NormalTitle.Render("   " + title)
+		desc = s.NormalDesc.Render("   " + desc)
 	}
 
 	if d.ShowDescription {

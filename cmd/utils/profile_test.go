@@ -5,6 +5,8 @@ import (
 	"encoding/base64"
 	"os"
 	"testing"
+
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
 
 func createTempFileWithContent(content string) (string, error) {
@@ -50,76 +52,104 @@ func TestLoadProfile(t *testing.T) {
 	tests := []struct {
 		name     string
 		line     []string
-		expected profile
+		expected types.ProfileItem
 	}{
 		{
 			name: "Valid profile",
 			line: []string{file1Path, hash1, "pwsh", "A valid description"},
-			expected: profile{
-				path:                file1Path,
-				hash:                hash1,
-				shellVersion:        "pwsh",
-				description:         "A valid description",
-				isValidPath:         true,
-				isValidHash:         true,
-				isValidShellVersion: true,
-				isValidDescription:  true,
+			expected: types.ProfileItem{
+				Path:                file1Path,
+				Hash:                hash1,
+				Shell:               "pwsh",
+				ItemDescription:     "A valid description",
+				IsValidPath:         true,
+				IsValidHash:         true,
+				IsValidShellVersion: true,
+				IsValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid path",
 			line: []string{"", hash1, "pwsh", "A valid description"},
-			expected: profile{
-				path:                "",
-				hash:                hash1,
-				shellVersion:        "pwsh",
-				description:         "A valid description",
-				isValidPath:         false,
-				isValidHash:         false,
-				isValidShellVersion: true,
-				isValidDescription:  true,
+			expected: types.ProfileItem{
+				Path:                "",
+				Hash:                hash1,
+				Shell:               "pwsh",
+				ItemDescription:     "A valid description",
+				IsValidPath:         false,
+				IsValidHash:         false,
+				IsValidShellVersion: true,
+				IsValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid hash",
 			line: []string{file1Path, "", "pwsh", "A valid description"},
-			expected: profile{
-				path:                file1Path,
-				hash:                "",
-				shellVersion:        "pwsh",
-				description:         "A valid description",
-				isValidPath:         true,
-				isValidHash:         false,
-				isValidShellVersion: true,
-				isValidDescription:  true,
+			expected: types.ProfileItem{
+				Path:                file1Path,
+				Hash:                "",
+				Shell:               "pwsh",
+				ItemDescription:     "A valid description",
+				IsValidPath:         true,
+				IsValidHash:         false,
+				IsValidShellVersion: true,
+				IsValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid shell version",
 			line: []string{file2Path, hash2, "invalidShell", "A valid description"},
-			expected: profile{
-				path:                file2Path,
-				hash:                hash2,
-				shellVersion:        "invalidShell",
-				description:         "A valid description",
-				isValidPath:         true,
-				isValidHash:         true,
-				isValidShellVersion: false,
-				isValidDescription:  true,
+			expected: types.ProfileItem{
+				Path:                file2Path,
+				Hash:                hash2,
+				Shell:               "invalidShell",
+				ItemDescription:     "A valid description",
+				IsValidPath:         true,
+				IsValidHash:         true,
+				IsValidShellVersion: false,
+				IsValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid description",
 			line: []string{file2Path, hash2, "pwsh", "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid."},
-			expected: profile{
-				path:                file2Path,
-				hash:                hash2,
-				shellVersion:        "pwsh",
-				description:         "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid.",
-				isValidPath:         true,
-				isValidHash:         true,
-				isValidShellVersion: true,
-				isValidDescription:  false,
+			expected: types.ProfileItem{
+				Path:                file2Path,
+				Hash:                hash2,
+				Shell:               "pwsh",
+				ItemDescription:     "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid.",
+				IsValidPath:         true,
+				IsValidHash:         true,
+				IsValidShellVersion: true,
+				IsValidDescription:  false,
+			},
+		},
+		{
+			name: "Empty profile",
+			line: []string{"", "", "", ""},
+			expected: types.ProfileItem{
+				Path:                "",
+				Hash:                "",
+				Shell:               "",
+				ItemDescription:     "",
+				IsValidPath:         false,
+				IsValidHash:         false,
+				IsValidShellVersion: false,
+				IsValidDescription:  false,
+			},
+		},
+		{
+			name: "Valid profile with different shell",
+			line: []string{file1Path, hash1, "bash", "Another valid description"},
+			expected: types.ProfileItem{
+				Path:                file1Path,
+				Hash:                hash1,
+				Shell:               "bash",
+				ItemDescription:     "Another valid description",
+				IsValidPath:         true,
+				IsValidHash:         true,
+				IsValidShellVersion: true,
+				IsValidDescription:  true,
 			},
 		},
 	}
@@ -127,29 +157,29 @@ func TestLoadProfile(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := LoadProfile(tt.line)
-			if result.path != tt.expected.path {
-				t.Errorf("LoadProfile().path = %v, expected %v", result.path, tt.expected.path)
+			if result.Path != tt.expected.Path {
+				t.Errorf("LoadProfile().Path = %v, expected %v", result.Path, tt.expected.Path)
 			}
-			if result.hash != tt.expected.hash {
-				t.Errorf("LoadProfile().hash = %v, expected %v", result.hash, tt.expected.hash)
+			if result.Hash != tt.expected.Hash {
+				t.Errorf("LoadProfile().Hash = %v, expected %v", result.Hash, tt.expected.Hash)
 			}
-			if result.shellVersion != tt.expected.shellVersion {
-				t.Errorf("LoadProfile().shellVersion = %v, expected %v", result.shellVersion, tt.expected.shellVersion)
+			if result.Shell != tt.expected.Shell {
+				t.Errorf("LoadProfile().Shell = %v, expected %v", result.Shell, tt.expected.Shell)
 			}
-			if result.description != tt.expected.description {
-				t.Errorf("LoadProfile().description = %v, expected %v", result.description, tt.expected.description)
+			if result.ItemDescription != tt.expected.ItemDescription {
+				t.Errorf("LoadProfile().ItemDescription = %v, expected %v", result.ItemDescription, tt.expected.ItemDescription)
 			}
-			if result.isValidPath != tt.expected.isValidPath {
-				t.Errorf("LoadProfile().isValidPath = %v, expected %v", result.isValidPath, tt.expected.isValidPath)
+			if result.IsValidPath != tt.expected.IsValidPath {
+				t.Errorf("LoadProfile().IsValidPath = %v, expected %v", result.IsValidPath, tt.expected.IsValidPath)
 			}
-			if result.isValidHash != tt.expected.isValidHash {
-				t.Errorf("LoadProfile().isValidHash = %v, expected %v", result.isValidHash, tt.expected.isValidHash)
+			if result.IsValidHash != tt.expected.IsValidHash {
+				t.Errorf("LoadProfile().IsValidHash = %v, expected %v", result.IsValidHash, tt.expected.IsValidHash)
 			}
-			if result.isValidShellVersion != tt.expected.isValidShellVersion {
-				t.Errorf("LoadProfile().isValidShellVersion = %v, expected %v", result.isValidShellVersion, tt.expected.isValidShellVersion)
+			if result.IsValidShellVersion != tt.expected.IsValidShellVersion {
+				t.Errorf("LoadProfile().IsValidShellVersion = %v, expected %v", result.IsValidShellVersion, tt.expected.IsValidShellVersion)
 			}
-			if result.isValidDescription != tt.expected.isValidDescription {
-				t.Errorf("LoadProfile().isValidDescription = %v, expected %v", result.isValidDescription, tt.expected.isValidDescription)
+			if result.IsValidDescription != tt.expected.IsValidDescription {
+				t.Errorf("LoadProfile().IsValidDescription = %v, expected %v", result.IsValidDescription, tt.expected.IsValidDescription)
 			}
 		})
 	}

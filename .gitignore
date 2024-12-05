@@ -6,3 +6,6 @@
 
 # Ignore CSV files
 **.csv
+
+# Ignore config file
+config.json

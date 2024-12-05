@@ -82,7 +82,7 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 }
 
 func (m *model) Init() tea.Cmd {
-	return nil
+	return tea.SetWindowTitle("Select Shell")
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

@@ -89,7 +89,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 }
 
 func (m *model) Init() tea.Cmd {
-	return nil
+	return tea.SetWindowTitle("Profile Selection")
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

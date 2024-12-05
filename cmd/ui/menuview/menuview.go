@@ -63,7 +63,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 }
 
 func (m *model) Init() tea.Cmd {
-	return nil
+	return tea.SetWindowTitle("PowerShell Profile Launcher")
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -83,6 +83,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "shortcutsView":
 				l.Logger.Debug("Changing view to shortcut selector")
 				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))
+				m.menuList.NewStatusMessage(styles.StatusMessageStyle("Shortcut Menu Not implemented yet"))
 			case "exit":
 				l.Logger.Info("Exiting application")
 				return m, tea.Quit

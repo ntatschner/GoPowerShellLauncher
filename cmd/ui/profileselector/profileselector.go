@@ -70,7 +70,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 		l.Logger.Fatal("Failed to create item delegate", "error", delerr)
 		return nil
 	}
-	profilesList := list.New(items, itemDelegate, windowSize.Width, windowSize.Height)
+	profilesList := list.New(items, itemDelegate, windowSize.Width+50, windowSize.Height)
 	profilesList.Title = "Available PowerShell Profiles"
 	profilesList.Styles.Title = styles.TitleStyle
 	profilesList.Styles.PaginationStyle = styles.PaginationStyle

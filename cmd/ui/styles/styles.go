@@ -224,22 +224,22 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 			switch {
 			case key.Matches(msg, keys.selected):
 				statusMsgText := "Selected: " + title
-				m.SetWidth(150)
+
 				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 
 			case key.Matches(msg, keys.unselected):
 				statusMsgText := "Unselected: " + title
-				m.SetWidth(150)
+
 				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 			}
 		case StatusBarUpdate:
 			if bool(msg) {
 				statusMsgText := "Selected: " + title
-				m.SetWidth(150)
+
 				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 			} else {
 				statusMsgText := "Unselected: " + title
-				m.SetWidth(150)
+
 				return m.NewStatusMessage(StatusMessageStyle(statusMsgText))
 			}
 		}

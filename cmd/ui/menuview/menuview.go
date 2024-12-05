@@ -3,6 +3,7 @@ package menuview
 import (
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
@@ -34,7 +35,21 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 		menuItem{title: "Exit", description: "Exit the application.", pageName: "exit"},
 	}
 
-	list := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
+	delegate := list.NewDefaultDelegate()
+	delegate.Styles.NormalTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light: "#008A74", Dark: "#40C1AC"}).
+		Padding(0, 0, 0, 2)
+	delegate.Styles.NormalDesc = delegate.Styles.NormalTitle.
+		Foreground(lipgloss.AdaptiveColor{Light: "#A49FA5", Dark: "#777777"})
+	delegate.Styles.SelectedTitle = lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder(), false, false, false, true).
+		BorderForeground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#FF94F4"}).
+		Foreground(lipgloss.AdaptiveColor{Light: "#FF94F4", Dark: "#FF94F4"}).
+		Padding(0, 0, 0, 1)
+	delegate.Styles.SelectedDesc = delegate.Styles.SelectedTitle.
+		Foreground(lipgloss.AdaptiveColor{Light: "#A49FA5", Dark: "#777777"})
+
+	list := list.New(items, delegate, windowSize.Width, windowSize.Height)
 	list.Title = "Main Menu"
 	list.Styles.Title = styles.TitleStyle
 	list.Styles.HelpStyle = styles.HelpStyle

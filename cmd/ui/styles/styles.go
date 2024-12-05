@@ -18,7 +18,8 @@ var (
 	AppStyle = lipgloss.NewStyle().Padding(1, 2)
 )
 var (
-	TitleStyle        = lipgloss.NewStyle().MarginLeft(2).BorderStyle(lipgloss.RoundedBorder()).Align(lipgloss.Left)
+	TitleStyle = lipgloss.NewStyle().MarginLeft(2).BorderStyle(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("#40C1AC")).Align(lipgloss.Left)
 	ItemStyle         = lipgloss.NewStyle().PaddingLeft(4)
 	SelectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
 	PaginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)

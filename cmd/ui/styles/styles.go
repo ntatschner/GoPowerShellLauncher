@@ -68,13 +68,15 @@ type DefaultItemStyles struct {
 // ProfileSelectorItemStyles defines styling for a profile selector item.
 
 type ProfileItemDelegate struct {
-	Styles        DefaultItemStyles
- ShowDescription bool
-	UpdateFunc    func(msg tea.Msg, m *list.Model) tea.Cmd
-	ShortHelpFunc func() []key.Binding
-	ShortHelp     func() []key.Binding
-	FullHelpFunc  func() [][]key.Binding
-	FullHelp      func() [][]key.Binding
+	Styles          DefaultItemStyles
+	ShowDescription bool
+	UpdateFunc      func(msg tea.Msg, m *list.Model) tea.Cmd
+	ShortHelpFunc   func() []key.Binding
+	ShortHelp       func() []key.Binding
+	FullHelpFunc    func() [][]key.Binding
+	FullHelp        func() [][]key.Binding
+	height          int
+	spacing         int
 }
 
 func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
@@ -93,44 +95,49 @@ func (pd ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, listI
 	title := fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
 	desc := i.GetDescription()
 
-	fn := NormalTitle.Render
+	fn := pd.Styles.NormalTitle.Render
 	if index == m.Index() {
 		fn = func(s ...string) string {
-			return SelectedTitle.Render("👉 " + strings.Join(s, " "))
+			return pd.Styles.SelectedTitle.Render("👉 " + strings.Join(s, " "))
 		}
 	} else if index != m.Index() && m.FilterState() != list.Filtering {
 		fn = func(s ...string) string {
-			return SelectedTitle.Render("    " + strings.Join(s, " "))
+			return pd.Styles.SelectedTitle.Render("    " + strings.Join(s, " "))
 		}
 	}
 
 	fmt.Fprint(w, fn(title, desc))
 }
 
-func (pd ProfileItemDelegate) Height() int  { return 2 }
-func (pd ProfileItemDelegate) Spacing() int { return 1 }
-func (pd ProfileItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
-	if pd.UpdateFunc != nil {
-		return pd.UpdateFunc(msg, m)
-	}
-	return nil
-}
-
 type StatusBarUpdate bool
 
 func NewDefaultProfileStyles() (s DefaultItemStyles) {
- s.NormalTitle = lipgloss.NewStyle().Padding(0, 0, 3, 0).Foreground(lipgloss.Color("#78a8f5"))
-	s.NormalDesc  = lipgloss.NewStyle().Padding(0, 0, 2, 0).Foreground(lipgloss.Color("#0043b0"))
+	s.NormalTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light: "#1a1a1a", Dark: "#dddddd"}).
+		Padding(0, 0, 0, 2) //nolint:mnd
 
-	s.SelectedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Bold(true)
-	s.SelectedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Bold(true)
+	s.NormalDesc = s.NormalTitle.
+		Foreground(lipgloss.AdaptiveColor{Light: "#A49FA5", Dark: "#777777"})
 
-	s.DimmedTitle = lipgloss.NewStyle().Inherit(NormalTitle).Faint(true)
-	s.DimmedDesc  = lipgloss.NewStyle().Inherit(NormalDesc).Faint(true)
+	s.SelectedTitle = lipgloss.NewStyle().
+		Border(lipgloss.NormalBorder(), false, false, false, true).
+		BorderForeground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#AD58B4"}).
+		Foreground(lipgloss.AdaptiveColor{Light: "#EE6FF8", Dark: "#EE6FF8"}).
+		Padding(0, 0, 0, 1)
 
-	s.FilterMatch = lipgloss.NewStyle().Inherit(NormalTitle).Underline(true)
+	s.SelectedDesc = s.SelectedTitle.
+		Foreground(lipgloss.AdaptiveColor{Light: "#F793FF", Dark: "#AD58B4"})
 
- return s
+	s.DimmedTitle = lipgloss.NewStyle().
+		Foreground(lipgloss.AdaptiveColor{Light: "#A49FA5", Dark: "#777777"}).
+		Padding(0, 0, 0, 2) //nolint:mnd
+
+	s.DimmedDesc = s.DimmedTitle.
+		Foreground(lipgloss.AdaptiveColor{Light: "#C2B8C2", Dark: "#4D4D4D"})
+
+	s.FilterMatch = lipgloss.NewStyle().Underline(true)
+
+	return s
 }
 
 func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
@@ -142,8 +149,10 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	//d := list.NewDefaultDelegate()
 	d := &ProfileItemDelegate{}
 	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
- d.ShowDescription = true
+	d.ShowDescription = true
 	d.Styles = NewDefaultProfileStyles()
+	d.height = 2
+	d.spacing = 1
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
@@ -227,4 +236,33 @@ func NewDelegateKeyMap() (*delegateKeyMap, error) {
 	}
 	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)
 	return d, nil
+}
+
+func (pd ProfileItemDelegate) Height() int {
+	if pd.ShowDescription {
+		return pd.height
+	}
+	return 1
+}
+
+// SetSpacing sets the delegate's spacing.
+func (pd *ProfileItemDelegate) SetSpacing(i int) {
+	pd.spacing = i
+}
+
+// Spacing returns the delegate's spacing.
+func (pd ProfileItemDelegate) Spacing() int {
+	return pd.spacing
+}
+
+// Update checks whether the delegate's UpdateFunc is set and calls it.
+func (pd ProfileItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
+	if pd.UpdateFunc == nil {
+		return nil
+	}
+	return pd.UpdateFunc(msg, m)
+}
+
+func (pd *ProfileItemDelegate) SetHeight(i int) {
+	pd.height = i
 }

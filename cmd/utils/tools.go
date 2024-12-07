@@ -22,10 +22,10 @@ type HashValidator interface {
 type DefaultHashValidator struct{}
 
 func (d DefaultHashValidator) ValidateHash(expectedHash, filePath string) (bool, error) {
-	return validateHash(expectedHash, filePath)
+	return ValidateHash(expectedHash, filePath)
 }
 
-func validatePath(path string) (bool, error) {
+func ValidatePath(path string) (bool, error) {
 	l.Logger.Info("Validating path", "Path", path)
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
@@ -37,7 +37,7 @@ func validatePath(path string) (bool, error) {
 	return true, nil
 }
 
-func compareHashes(hash1, hash2 []byte) (bool, error) {
+func CompareHashes(hash1, hash2 []byte) (bool, error) {
 	l.Logger.Info("Comparing hashes", "Hash1", hex.EncodeToString(hash1), "Hash2", hex.EncodeToString(hash2))
 	if len(hash1) != len(hash2) {
 		return false, fmt.Errorf("hashes have different lengths")
@@ -51,7 +51,7 @@ func compareHashes(hash1, hash2 []byte) (bool, error) {
 	return true, nil
 }
 
-func validateHash(expectedHash, filePath string) (bool, error) {
+func ValidateHash(expectedHash, filePath string) (bool, error) {
 	l.Logger.Info("Validating hash", "ExpectedHash", expectedHash, "FilePath", filePath)
 
 	// Decode the expected hash from hex
@@ -75,7 +75,7 @@ func validateHash(expectedHash, filePath string) (bool, error) {
 	computedHash := hasher.Sum(nil)
 
 	// Compare the computed hash with the expected hash
-	_, err = compareHashes(expectedHashBytes, computedHash)
+	_, err = CompareHashes(expectedHashBytes, computedHash)
 	if err != nil {
 		return false, fmt.Errorf("hash mismatch: expected %x, got %x", expectedHashBytes, computedHash)
 	}
@@ -83,7 +83,7 @@ func validateHash(expectedHash, filePath string) (bool, error) {
 	return true, nil
 }
 
-func validateShellVersion(shellVersion string) (bool, error) {
+func ValidateShellVersion(shellVersion string) (bool, error) {
 	l.Logger.Info("Validating shell version", "ShellVersion", shellVersion)
 	shellVersion = strings.ToLower(shellVersion)
 	switch shellVersion {
@@ -94,7 +94,7 @@ func validateShellVersion(shellVersion string) (bool, error) {
 	return false, fmt.Errorf("invalid shell version: %s", shellVersion)
 }
 
-func validateDescription(description string) (bool, error) {
+func ValidateDescription(description string) (bool, error) {
 	l.Logger.Info("Validating description", "Description", description)
 	if len(description) > 100 {
 		return false, fmt.Errorf("description is too long (max 100 characters)")

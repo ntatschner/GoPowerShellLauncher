@@ -15,7 +15,7 @@ import (
 // line: a slice of strings containing the profile data.
 // Returns:
 // - ProfileItem: a ProfileItem struct with the loaded and validated data.
-func LoadProfile(line []string, hashValidator HashValidator) types.ProfileItem {
+func LoadProfile(line []string) types.ProfileItem {
 	l.Logger.Info("Loading profile", "line", line)
 	p := types.ProfileItem{
 		Path:            line[0],
@@ -24,22 +24,22 @@ func LoadProfile(line []string, hashValidator HashValidator) types.ProfileItem {
 		ItemDescription: line[3],
 	}
 	p.ItemTitle = p.GetName()
-	isValidPath, patherr := validatePath(p.Path)
+	isValidPath, patherr := ValidatePath(p.Path)
 	if patherr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate path %s", p.Path), "error", patherr)
 	}
 	p.IsValidPath = isValidPath
-	isValidHash, hasherr := hashValidator.ValidateHash(p.Hash, p.Path)
+	isValidHash, hasherr := ValidateHash(p.Hash, p.Path)
 	if hasherr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate hash for path %s", p.Path), "error", hasherr)
 	}
 	p.IsValidHash = isValidHash
-	isValidShell, shellerr := validateShellVersion(p.Shell)
+	isValidShell, shellerr := ValidateShellVersion(p.Shell)
 	if shellerr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate shell version %s", p.Shell), "error", shellerr)
 	}
 	p.IsValidShellVersion = isValidShell
-	isValidDescription, descerr := validateDescription(p.ItemDescription)
+	isValidDescription, descerr := ValidateDescription(p.ItemDescription)
 	if descerr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate description %s", p.ItemDescription), "error", descerr)
 	}
@@ -85,13 +85,12 @@ func LoadProfiles(filePath string) ([]types.ProfileItem, error) {
 
 	l.Logger.Info(fmt.Sprintf("Loaded %d records from CSV file", len(records)-1))
 	var profiles []types.ProfileItem
-	var hashValidator HashValidator
 	for i, record := range records[1:] {
 		if len(record) != len(expectedHeaders) {
 			l.Logger.Error("Wrong number of fields", "line", i+2, "record", record)
 			continue
 		}
-		profile := LoadProfile(record, hashValidator)
+		profile := LoadProfile(record)
 		l.Logger.Info(fmt.Sprintf("Processing profile: %+v", profile))
 		profiles = append(profiles, profile)
 		l.Logger.Info(fmt.Sprintf("Added profile: %+v", profile))

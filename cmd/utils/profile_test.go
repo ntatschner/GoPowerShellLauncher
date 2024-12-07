@@ -82,7 +82,6 @@ func TestLoadProfile(t *testing.T) {
 				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         true,
-				IsValidHash:         true,
 				IsValidShellVersion: true,
 				IsValidDescription:  true,
 			},
@@ -96,21 +95,6 @@ func TestLoadProfile(t *testing.T) {
 				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         false,
-				IsValidHash:         true,
-				IsValidShellVersion: true,
-				IsValidDescription:  true,
-			},
-		},
-		{
-			name: "Invalid hash",
-			line: []string{file1Path, "", "powershell", "A valid description"},
-			expected: types.ProfileItem{
-				Path:                file1Path,
-				Hash:                "",
-				Shell:               "powershell",
-				ItemDescription:     "A valid description",
-				IsValidPath:         true,
-				IsValidHash:         false,
 				IsValidShellVersion: true,
 				IsValidDescription:  true,
 			},
@@ -124,7 +108,6 @@ func TestLoadProfile(t *testing.T) {
 				Shell:               "invalidShell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         true,
-				IsValidHash:         true,
 				IsValidShellVersion: false,
 				IsValidDescription:  true,
 			},
@@ -138,7 +121,6 @@ func TestLoadProfile(t *testing.T) {
 				Shell:               "powershell",
 				ItemDescription:     "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid.",
 				IsValidPath:         true,
-				IsValidHash:         true,
 				IsValidShellVersion: true,
 				IsValidDescription:  false,
 			},
@@ -152,7 +134,6 @@ func TestLoadProfile(t *testing.T) {
 				Shell:               "",
 				ItemDescription:     "",
 				IsValidPath:         false,
-				IsValidHash:         false,
 				IsValidShellVersion: false,
 				IsValidDescription:  true,
 			},
@@ -166,7 +147,6 @@ func TestLoadProfile(t *testing.T) {
 				Shell:               "bash",
 				ItemDescription:     "Another valid description",
 				IsValidPath:         true,
-				IsValidHash:         true,
 				IsValidShellVersion: false,
 				IsValidDescription:  true,
 			},
@@ -175,7 +155,7 @@ func TestLoadProfile(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := LoadProfile(tt.line, MockHashValidator{})
+			result := LoadProfile(tt.line)
 			if result.Path != tt.expected.Path {
 				t.Errorf("LoadProfile().Path = %v, expected %v", result.Path, tt.expected.Path)
 			}
@@ -190,9 +170,6 @@ func TestLoadProfile(t *testing.T) {
 			}
 			if result.IsValidPath != tt.expected.IsValidPath {
 				t.Errorf("LoadProfile().IsValidPath = %v, expected %v", result.IsValidPath, tt.expected.IsValidPath)
-			}
-			if result.IsValidHash != tt.expected.IsValidHash {
-				t.Errorf("LoadProfile().IsValidHash = %v, expected %v", result.IsValidHash, tt.expected.IsValidHash)
 			}
 			if result.IsValidShellVersion != tt.expected.IsValidShellVersion {
 				t.Errorf("LoadProfile().IsValidShellVersion = %v, expected %v", result.IsValidShellVersion, tt.expected.IsValidShellVersion)

@@ -1,5 +1,5 @@
 # PowerShell Profile Launcher
-[![Pipeline](https://github.com/ntatschner/GoPowerShellLauncher/actions/workflows/pipeline.yml/badge.svg?branch=main)](https://github.com/ntatschner/GoPowerShellLauncher/actions/workflows/pipeline.yml)
+[![Pipeline](https://github.com/ntatschner/GoPowerShellLauncher/actions/workflows/pipeline.yml/badge.svg)](https://github.com/ntatschner/GoPowerShellLauncher/actions/workflows/pipeline.yml)
 
 PowerShell Profile Launcher is a tool designed to manage and launch different PowerShell profiles. It allows users to easily switch between various profiles, each configured with specific settings and scripts, to streamline their workflow.
 

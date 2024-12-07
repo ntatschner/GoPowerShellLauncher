@@ -34,18 +34,19 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-
+    
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.23'
-
+      
     - name: Test
       run: go test -v ./...
-
+      
   linter_tests:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
     - name: Super-Linter
       uses: super-linter/super-linter@v7.2.0
       with:

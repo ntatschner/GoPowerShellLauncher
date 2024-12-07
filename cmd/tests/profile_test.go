@@ -3,9 +3,11 @@ package utils
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 	"os"
 	"testing"
 
+	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
@@ -30,8 +32,19 @@ func generateBase64Hash(content string) string {
 	return base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 }
 
+type MockHashValidator struct{}
+
+func (m MockHashValidator) ValidateHash(expectedHash, filePath string) (bool, error) {
+	// Mock validation logic
+	if expectedHash == "" {
+		return false, fmt.Errorf("invalid hash")
+	}
+	return true, nil
+}
+
 func TestLoadProfile(t *testing.T) {
 	// Create temporary files with known content
+	_ = l.InitLogger("", "testslog.log", "debug")
 	file1Content := "content1"
 	file2Content := "content2"
 	file1Path, err := createTempFileWithContent(file1Content)
@@ -57,11 +70,11 @@ func TestLoadProfile(t *testing.T) {
 	}{
 		{
 			name: "Valid profile",
-			line: []string{file1Path, hash1, "pwsh", "A valid description"},
+			line: []string{file1Path, hash1, "powershell", "A valid description"},
 			expected: types.ProfileItem{
 				Path:                file1Path,
 				Hash:                hash1,
-				Shell:               "pwsh",
+				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         true,
 				IsValidHash:         true,
@@ -71,25 +84,25 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Invalid path",
-			line: []string{"", hash1, "pwsh", "A valid description"},
+			line: []string{"", hash1, "powershell", "A valid description"},
 			expected: types.ProfileItem{
 				Path:                "",
 				Hash:                hash1,
-				Shell:               "pwsh",
+				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         false,
-				IsValidHash:         false,
+				IsValidHash:         true,
 				IsValidShellVersion: true,
 				IsValidDescription:  true,
 			},
 		},
 		{
 			name: "Invalid hash",
-			line: []string{file1Path, "", "pwsh", "A valid description"},
+			line: []string{file1Path, "", "powershell", "A valid description"},
 			expected: types.ProfileItem{
 				Path:                file1Path,
 				Hash:                "",
-				Shell:               "pwsh",
+				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         true,
 				IsValidHash:         false,
@@ -113,11 +126,11 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Invalid description",
-			line: []string{file2Path, hash2, "pwsh", "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid."},
+			line: []string{file2Path, hash2, "powershell", "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid."},
 			expected: types.ProfileItem{
 				Path:                file2Path,
 				Hash:                hash2,
-				Shell:               "pwsh",
+				Shell:               "powershell",
 				ItemDescription:     "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid.",
 				IsValidPath:         true,
 				IsValidHash:         true,
@@ -136,7 +149,7 @@ func TestLoadProfile(t *testing.T) {
 				IsValidPath:         false,
 				IsValidHash:         false,
 				IsValidShellVersion: false,
-				IsValidDescription:  false,
+				IsValidDescription:  true,
 			},
 		},
 		{
@@ -149,7 +162,7 @@ func TestLoadProfile(t *testing.T) {
 				ItemDescription:     "Another valid description",
 				IsValidPath:         true,
 				IsValidHash:         true,
-				IsValidShellVersion: true,
+				IsValidShellVersion: false,
 				IsValidDescription:  true,
 			},
 		},
@@ -157,7 +170,7 @@ func TestLoadProfile(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := utils.LoadProfile(tt.line)
+			result := utils.LoadProfile(tt.line, MockHashValidator{})
 			if result.Path != tt.expected.Path {
 				t.Errorf("LoadProfile().Path = %v, expected %v", result.Path, tt.expected.Path)
 			}

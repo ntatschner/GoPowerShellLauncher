@@ -24,6 +24,8 @@ func LoadProfile(line []string) types.ProfileItem {
 		ItemDescription: line[3],
 	}
 	p.ItemTitle = p.GetName()
+	p.Name = p.GetName()
+	p.IsSelected = false
 	isValidPath, patherr := ValidatePath(p.Path)
 	if patherr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate path %s", p.Path), "error", patherr)

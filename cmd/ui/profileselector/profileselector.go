@@ -44,19 +44,14 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 
 	var items []list.Item
 	for _, p := range profiles {
-		msg := "Validated Import:"
-		valid := msg + "❌"
-		if p.IsValid {
-			valid = msg + "✅"
-		}
 		item := types.ProfileItem{
 			ItemTitle:       p.ItemTitle,
 			ItemDescription: p.ItemDescription,
-			Valid:           valid,
 			IsValid:         p.IsValid,
 			Path:            p.Path,
 			Hash:            p.Hash,
 			Shell:           p.Shell,
+			Name:            p.Name,
 		}
 		items = append(items, item)
 	}
@@ -72,10 +67,12 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	}
 	profilesList := list.New(items, itemDelegate, windowSize.Width+50, windowSize.Height)
 	profilesList.Title = "Available PowerShell Profiles"
+
 	profilesList.Styles.Title = styles.TitleStyle
 	profilesList.Styles.PaginationStyle = styles.PaginationStyle
 
 	profilesList.SetFilteringEnabled(true)
+	profilesList.FilterValue()
 	profilesList.SetShowStatusBar(true)
 	profilesList.SetShowTitle(true)
 
@@ -101,12 +98,13 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case " ":
+			items := m.profilesList.Items()
 			i := m.profilesList.Index()
 			if i < 0 || i >= len(m.profilesList.Items()) {
 				l.Logger.Error("Invalid index", "index", i)
 				break
 			}
-			item := m.profilesList.Items()[i].(types.ProfileItem)
+			item := items[i].(types.ProfileItem)
 			if !item.IsValid {
 				l.Logger.Warn("Selected item is not valid")
 			} else {
@@ -116,6 +114,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					cmd = tea.Batch(func() tea.Msg {
 						return styles.StatusBarUpdate(false)
 					})
+					item.IsSelected = false
+					items[i] = item
 					return m, cmd
 				} else {
 					m.selected[i] = struct{}{}
@@ -123,6 +123,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					cmd = tea.Batch(func() tea.Msg {
 						return styles.StatusBarUpdate(true)
 					})
+					item.IsSelected = true
+					items[i] = item
 					return m, cmd
 				}
 			}

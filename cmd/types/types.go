@@ -8,7 +8,6 @@ import (
 type ProfileItem struct {
 	ItemTitle           string
 	ItemDescription     string
-	Valid               string
 	IsValid             bool
 	Path                string
 	Hash                string
@@ -19,6 +18,7 @@ type ProfileItem struct {
 	IsValidPath         bool
 	IsValidShellVersion bool
 	IsValidDescription  bool
+	IsSelected          bool
 }
 
 func (p ProfileItem) Title() string       { return p.ItemTitle }
@@ -41,6 +41,7 @@ func (p ProfileItem) GetIsValidShellVersion() bool { return p.IsValidShellVersio
 func (p ProfileItem) IsValidProfile() bool {
 	return p.IsValidPath && p.IsValidHash && p.IsValidShellVersion && p.IsValidDescription
 }
+func (p ProfileItem) IsSelectedProfile() bool { return p.IsSelected }
 
 // ShellItem represents a shell item in the list
 

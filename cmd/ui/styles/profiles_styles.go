@@ -29,6 +29,7 @@ type DefaultItemStyles struct {
 
 	// Characters matching the current filter, if any.
 	FilterMatch lipgloss.Style
+	Checked     lipgloss.Style
 }
 
 const ellipsis = "…"
@@ -63,6 +64,15 @@ func (d ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, item l
 	if i.IsValid {
 		valid = msg + "✅"
 	}
+
+	var selectedProfile string
+	if i.IsSelectedProfile() {
+		selectedProfile = "✓"
+	} else {
+		selectedProfile = ""
+	}
+
+	selectedProfile = s.Checked.Render(selectedProfile)
 
 	if i, ok := item.(types.ProfileItem); ok {
 		title = fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
@@ -121,10 +131,10 @@ func (d ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, item l
 	}
 
 	if d.ShowDescription {
-		fmt.Fprintf(w, "%s\n%s", title, desc) //nolint: errcheck
+		fmt.Fprintf(w, "%s %s\n%s", title, selectedProfile, desc) //nolint: errcheck
 		return
 	}
-	fmt.Fprintf(w, "%s", title) //nolint: errcheck
+	fmt.Fprintf(w, "%s %s", title, selectedProfile) //nolint: errcheck
 }
 
 type StatusBarUpdate bool
@@ -155,6 +165,8 @@ func NewDefaultProfileStyles() (s DefaultItemStyles) {
 
 	s.FilterMatch = lipgloss.NewStyle().Underline(true)
 
+	s.Checked = lipgloss.NewStyle().Foreground(lipgloss.Color("#FF94F4")).Bold(true)
+
 	return s
 }
 
@@ -174,7 +186,6 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
-
 		if i, ok := m.SelectedItem().(types.ProfileItem); ok {
 			title = i.GetName()
 		} else {

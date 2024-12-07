@@ -50,9 +50,9 @@ jobs:
     - name: Super-Linter
       uses: super-linter/super-linter@v7.2.0
       env:
-        github_token: ${{ secrets.RELEASER }}
-        validate_json: true
-        validate_go: true
+        GITHUB_TOKEN: ${{ secrets.RELEASER }}
+        VALIDATE_JSON: true
+        VALIDATE_GO: true
          
 
   release:

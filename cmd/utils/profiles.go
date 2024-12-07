@@ -24,7 +24,7 @@ func LoadProfile(line []string, hashValidator HashValidator) types.ProfileItem {
 		ItemDescription: line[3],
 	}
 	p.ItemTitle = p.GetName()
-	isValidPath, patherr := validatePath(p.Path)
+	isValidPath, patherr := ValidatePath(p.Path)
 	if patherr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate path %s", p.Path), "error", patherr)
 	}
@@ -34,12 +34,12 @@ func LoadProfile(line []string, hashValidator HashValidator) types.ProfileItem {
 		l.Logger.Error(fmt.Sprintf("Failed to validate hash for path %s", p.Path), "error", hasherr)
 	}
 	p.IsValidHash = isValidHash
-	isValidShell, shellerr := validateShellVersion(p.Shell)
+	isValidShell, shellerr := ValidateShellVersion(p.Shell)
 	if shellerr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate shell version %s", p.Shell), "error", shellerr)
 	}
 	p.IsValidShellVersion = isValidShell
-	isValidDescription, descerr := validateDescription(p.ItemDescription)
+	isValidDescription, descerr := ValidateDescription(p.ItemDescription)
 	if descerr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate description %s", p.ItemDescription), "error", descerr)
 	}

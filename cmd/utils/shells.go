@@ -15,7 +15,7 @@ func LoadShells() ([]types.ShellItem, error) {
 	}
 	for s := range items {
 		l.Logger.Info("Processing shell", "shell", items[s])
-		_, err := validatePath(items[s].Path)
+		_, err := ValidatePath(items[s].Path)
 		if err != nil {
 			l.Logger.Warn("Invalid shell path", "Error", err)
 		}

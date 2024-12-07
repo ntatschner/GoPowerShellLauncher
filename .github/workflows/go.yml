@@ -25,7 +25,7 @@ jobs:
       run: Compress-Archive -Path .\PowerShellProfileLauncher.exe, .\profiles.csv.tmpl, .\config.json.tmpl -DestinationPath .\PowerShellProfileLauncher.zip
 
     - name: Upload Build Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: PowerShellProfileLauncher
         path: PowerShellProfileLauncher.zip

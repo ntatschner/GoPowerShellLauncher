@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
 
 func createTempFileWithContent(content string) (string, error) {
@@ -156,7 +157,7 @@ func TestLoadProfile(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			result := LoadProfile(tt.line)
+			result := utils.LoadProfile(tt.line)
 			if result.Path != tt.expected.Path {
 				t.Errorf("LoadProfile().Path = %v, expected %v", result.Path, tt.expected.Path)
 			}

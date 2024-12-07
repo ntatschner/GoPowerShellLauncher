@@ -3,6 +3,8 @@ package utils
 import (
 	"os"
 	"testing"
+
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
 
 func createTempConfigFile(content string) (string, error) {
@@ -23,13 +25,13 @@ func TestLoadConfig(t *testing.T) {
 	tests := []struct {
 		name        string
 		fileContent string
-		expected    *Config
+		expected    *utils.Config
 		expectError bool
 	}{
 		{
 			name:        "Valid config",
 			fileContent: `{"csv_path": "/path/to/csv"}`,
-			expected:    &Config{CsvPath: "/path/to/csv"},
+			expected:    &utils.Config{CsvPath: "/path/to/csv"},
 			expectError: false,
 		},
 		{
@@ -41,7 +43,7 @@ func TestLoadConfig(t *testing.T) {
 		{
 			name:        "Empty config",
 			fileContent: `{}`,
-			expected:    &Config{CsvPath: ""},
+			expected:    &utils.Config{CsvPath: ""},
 			expectError: false,
 		},
 	}
@@ -54,7 +56,7 @@ func TestLoadConfig(t *testing.T) {
 			}
 			defer os.Remove(filePath)
 
-			config, err := LoadConfig(filePath)
+			config, err := utils.LoadConfig(filePath)
 			if (err != nil) != tt.expectError {
 				t.Errorf("loadConfig() error = %v, expectError %v", err, tt.expectError)
 				return

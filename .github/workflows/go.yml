@@ -31,7 +31,7 @@ jobs:
         path: PowerShellProfileLauncher.zip
 
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
@@ -52,7 +52,7 @@ jobs:
          
 
   release:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: [build, test]
     if: startsWith(github.ref, 'refs/tags/')
     steps:

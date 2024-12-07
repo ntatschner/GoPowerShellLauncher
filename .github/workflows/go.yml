@@ -55,6 +55,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.RELEASER }}
         VALIDATE_JSON: true
         VALIDATE_GO: true
+        GO_GOLANGCI_LINT_CLI_LINT_MODE: project 
          
 
   release:

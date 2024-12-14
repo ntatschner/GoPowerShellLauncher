@@ -221,7 +221,7 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 	}
 	l.Logger.Debug("Created item delegate UpdateFunc")
 
-	help := []key.Binding{keys.selected, keys.unselected}
+	help := []key.Binding{keys.selected, keys.unselected, keys.view}
 	l.Logger.Debug("Created item delegate help", "help", help)
 
 	d.ShortHelpFunc = func() []key.Binding {
@@ -238,12 +238,13 @@ func NewItemDelegate(keys *delegateKeyMap) (*ProfileItemDelegate, error) {
 type delegateKeyMap struct {
 	selected   key.Binding
 	unselected key.Binding
+	view       key.Binding
 }
 
 func (d delegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
 		d.selected,
-		d.unselected,
+		d.view,
 	}
 }
 
@@ -254,6 +255,7 @@ func (d delegateKeyMap) FullHelp() [][]key.Binding {
 		{
 			d.selected,
 			d.unselected,
+			d.view,
 		},
 	}
 }
@@ -264,9 +266,9 @@ func NewDelegateKeyMap() (*delegateKeyMap, error) {
 			key.WithKeys(" "),
 			key.WithHelp("space", "(De)Select Profile"),
 		),
-		unselected: key.NewBinding(
-			key.WithKeys("delete", " "),
-			key.WithHelp("delete", "Deselect Profile"),
+		view: key.NewBinding(
+			key.WithKeys("v"),
+			key.WithHelp("v", "View Profile"),
 		),
 	}
 	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)

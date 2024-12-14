@@ -9,3 +9,6 @@
 
 # Ignore config file
 config.json
+
+# Ignore executable files
+**.exe

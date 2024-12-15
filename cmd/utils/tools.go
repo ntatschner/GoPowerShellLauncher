@@ -15,6 +15,7 @@ import (
 	"unicode/utf16"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"golang.org/x/term"
 )
 
 type HashValidator interface {
@@ -183,4 +184,16 @@ func ExecuteCommandWithPowershell(encodedCmd string) error {
 	l.Logger.Debug("PowerShell process started", "PID", cmd.Process.Pid)
 	l.Logger.Info("PowerShell process started successfully")
 	return nil
+}
+
+// Get size of the terminal window
+
+func GetWindowSize() (int, int) {
+	width, height, err := term.GetSize(int(os.Stdout.Fd()))
+	l.Logger.Info("Getting terminal size", "Width", width, "Height", height)
+	if err != nil {
+		l.Logger.Error("Error getting terminal size", "Error", err)
+		return 0, 0
+	}
+	return width, height
 }

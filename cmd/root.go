@@ -8,23 +8,11 @@ import (
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/mainview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
-	"golang.org/x/term"
 )
-
-// Get size of the terminal window
-
-func GetWindowSize() (int, int) {
-	width, height, err := term.GetSize(int(os.Stdout.Fd()))
-	l.Logger.Info("Getting terminal size", "Width", width, "Height", height)
-	if err != nil {
-		l.Logger.Error("Error getting terminal size", "Error", err)
-		return 0, 0
-	}
-	return width, height
-}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -36,7 +24,7 @@ var rootCmd = &cobra.Command{
 	You can create shortcuts to your favorite PowerShell Profile scripts, and launch them.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		l.Logger.Info("Launching PowerShell Launcher UI")
-		w, h := GetWindowSize()
+		w, h := utils.GetWindowSize()
 		tprogram := tea.NewProgram(mainview.NewMainModel(tea.WindowSizeMsg{Width: w, Height: h}), tea.WithAltScreen(), tea.WithFPS(120))
 		if _, err := tprogram.Run(); err != nil {
 			l.Logger.Error("Error starting the program", "Error", err)

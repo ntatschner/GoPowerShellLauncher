@@ -18,9 +18,10 @@ type model struct {
 	windowSize     tea.WindowSizeMsg
 	viewChanger    view.ViewChanger
 	loadedProfiles []types.ProfileItem
+	shortcut       bool
 }
 
-func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger view.ViewChanger) *model {
+func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger view.ViewChanger, createShortcut bool) *model {
 	l.Logger.Info("Initializing shell list", "profiles", profiles)
 	shells, err := utils.LoadShells()
 	if err != nil {
@@ -34,6 +35,7 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 			windowSize:     windowSize,
 			viewChanger:    viewChanger,
 			loadedProfiles: profiles,
+			shortcut:       createShortcut,
 		}
 	}
 	// Load shell items based on profiles

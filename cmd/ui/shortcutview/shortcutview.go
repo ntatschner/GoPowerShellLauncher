@@ -146,7 +146,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			// open shellview with profiles selected
 			l.Logger.Info("Selected profiles", "profiles", selectedProfiles)
-			return m, m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger), true)
+			return m, m.viewChanger.ChangeView(shellview.New(selectedProfiles, m.windowSize, m.viewChanger, true), true)
 		case "v":
 			// view profile content
 			i := m.profilesList.Index()

@@ -8,6 +8,7 @@ import (
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/launcher"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/filepicker"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
@@ -120,12 +121,13 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.selected[i] = struct{}{}
 			}
 			if m.shortcut {
-				l.Logger.Info("Creating shortcut", "selected", m.selected, "profiles", m.loadedProfiles)
-
-				err := utils.CreateShortcut(m.shellsList.Items()[0].(types.ShellItem).ProfilePaths, "test", "c:\\nerd_stuff")
-				if err != nil {
-					l.Logger.Error("Failed to create shortcut", "Error", err)
-				}
+				return m, m.viewChanger.ChangeView(filepicker.New(m.viewChanger, m.windowSize), false)
+				// l.Logger.Info("Creating shortcut", "selected", m.selected, "profiles", m.loadedProfiles)
+				// //
+				// err := utils.CreateShortcut(m.shellsList.Items()[0].(types.ShellItem).ProfilePaths, "test", "c:\\nerd_stuff")
+				// if err != nil {
+				// 	l.Logger.Error("Failed to create shortcut", "Error", err)
+				// }
 
 			} else {
 				l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)

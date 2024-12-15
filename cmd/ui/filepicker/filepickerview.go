@@ -3,6 +3,7 @@ package filepicker
 import (
 	"errors"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/charmbracelet/bubbles/filepicker"
@@ -12,7 +13,7 @@ import (
 
 type model struct {
 	filepicker   filepicker.Model
-	selectedFile string
+	selectedPath string
 	windowSize   tea.WindowSizeMsg
 	viewChanger  view.ViewChanger
 	err          error
@@ -22,12 +23,13 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	fp := filepicker.New()
 	fp.DirAllowed = true
 	fp.FileAllowed = false
+	fp.AutoHeight = true
+	fp.ShowPermissions = true
 	fp.CurrentDirectory, _ = os.UserHomeDir()
 	return &model{
-		filepicker:   fp,
-		selectedFile: "",
-		windowSize:   windowSize,
-		viewChanger:  viewChanger,
+		filepicker:  fp,
+		windowSize:  windowSize,
+		viewChanger: viewChanger,
 	}
 }
 
@@ -48,7 +50,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
-		m.filepicker.Width = msg.Width
 		m.filepicker.Height = msg.Height
 	case clearErrorMsg:
 		m.err = nil
@@ -59,7 +60,8 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	// Did the user select a file?
 	if didSelect, path := m.filepicker.DidSelectFile(msg); didSelect {
 		// Get the path of the selected file.
-		m.selectedFile = path
+		m.selectedPath = path
+
 	}
 
 	// Did the user select a disabled file?
@@ -67,12 +69,22 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if didSelect, path := m.filepicker.DidSelectDisabledFile(msg); didSelect {
 		// Let's clear the selectedFile and display an error.
 		m.err = errors.New(path + " is not valid.")
-		m.selectedFile = ""
+		m.selectedPath = ""
 		return m, tea.Batch(cmd, clearErrorAfter(2*time.Second))
 	}
 	return m, cmd
 }
 
 func (m *model) View() string {
-	return m.filepicker.View()
+	var s strings.Builder
+	s.WriteString("\n  ")
+	if m.err != nil {
+		s.WriteString(m.filepicker.Styles.DisabledFile.Render(m.err.Error()))
+	} else if m.selectedPath == "" {
+		s.WriteString("Pick a file:")
+	} else {
+		s.WriteString("Selected file: " + m.filepicker.Styles.Selected.Render(m.selectedPath))
+	}
+	s.WriteString("\n\n" + m.filepicker.View() + "\n")
+	return s.String()
 }

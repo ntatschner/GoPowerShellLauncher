@@ -64,10 +64,6 @@ func TestLoadProfile(t *testing.T) {
 	}
 	defer os.Remove(file2Path)
 
-	// Generate base64-encoded hashes for the files
-	hash1 := generateBase64Hash(file1Content)
-	hash2 := generateBase64Hash(file2Content)
-
 	tests := []struct {
 		name     string
 		line     []string
@@ -75,10 +71,9 @@ func TestLoadProfile(t *testing.T) {
 	}{
 		{
 			name: "Valid profile",
-			line: []string{file1Path, hash1, "powershell", "A valid description"},
+			line: []string{file1Path, "powershell", "A valid description"},
 			expected: types.ProfileItem{
 				Path:                file1Path,
-				Hash:                hash1,
 				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         true,
@@ -88,10 +83,9 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Invalid path",
-			line: []string{"", hash1, "powershell", "A valid description"},
+			line: []string{"", "powershell", "A valid description"},
 			expected: types.ProfileItem{
 				Path:                "",
-				Hash:                hash1,
 				Shell:               "powershell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         false,
@@ -101,10 +95,9 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Invalid shell version",
-			line: []string{file2Path, hash2, "invalidShell", "A valid description"},
+			line: []string{file2Path, "invalidShell", "A valid description"},
 			expected: types.ProfileItem{
 				Path:                file2Path,
-				Hash:                hash2,
 				Shell:               "invalidShell",
 				ItemDescription:     "A valid description",
 				IsValidPath:         true,
@@ -114,10 +107,9 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Invalid description",
-			line: []string{file2Path, hash2, "powershell", "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid."},
+			line: []string{file2Path, "powershell", "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid."},
 			expected: types.ProfileItem{
 				Path:                file2Path,
-				Hash:                hash2,
 				Shell:               "powershell",
 				ItemDescription:     "A very long description that exceeds the maximum allowed length of 100 characters. This description should be considered invalid.",
 				IsValidPath:         true,
@@ -127,10 +119,9 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Empty profile",
-			line: []string{"", "", "", ""},
+			line: []string{"", "", ""},
 			expected: types.ProfileItem{
 				Path:                "",
-				Hash:                "",
 				Shell:               "",
 				ItemDescription:     "",
 				IsValidPath:         false,
@@ -140,10 +131,9 @@ func TestLoadProfile(t *testing.T) {
 		},
 		{
 			name: "Valid profile with different shell",
-			line: []string{file1Path, hash1, "bash", "Another valid description"},
+			line: []string{file1Path, "bash", "Another valid description"},
 			expected: types.ProfileItem{
 				Path:                file1Path,
-				Hash:                hash1,
 				Shell:               "bash",
 				ItemDescription:     "Another valid description",
 				IsValidPath:         true,
@@ -158,9 +148,6 @@ func TestLoadProfile(t *testing.T) {
 			result := LoadProfile(tt.line)
 			if result.Path != tt.expected.Path {
 				t.Errorf("LoadProfile().Path = %v, expected %v", result.Path, tt.expected.Path)
-			}
-			if result.Hash != tt.expected.Hash {
-				t.Errorf("LoadProfile().Hash = %v, expected %v", result.Hash, tt.expected.Hash)
 			}
 			if result.Shell != tt.expected.Shell {
 				t.Errorf("LoadProfile().Shell = %v, expected %v", result.Shell, tt.expected.Shell)

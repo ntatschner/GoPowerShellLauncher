@@ -19,7 +19,6 @@ func LoadProfile(line []string) types.ProfileItem {
 	l.Logger.Info("Loading profile", "line", line)
 	p := types.ProfileItem{
 		Path:            line[0],
-		Hash:            line[1],
 		Shell:           line[2],
 		ItemDescription: line[3],
 	}
@@ -31,11 +30,6 @@ func LoadProfile(line []string) types.ProfileItem {
 		l.Logger.Error(fmt.Sprintf("Failed to validate path %s", p.Path), "error", patherr)
 	}
 	p.IsValidPath = isValidPath
-	isValidHash, hasherr := ValidateHash(p.Hash, p.Path)
-	if hasherr != nil {
-		l.Logger.Error(fmt.Sprintf("Failed to validate hash for path %s", p.Path), "error", hasherr)
-	}
-	p.IsValidHash = isValidHash
 	isValidShell, shellerr := ValidateShellVersion(p.Shell)
 	if shellerr != nil {
 		l.Logger.Error(fmt.Sprintf("Failed to validate shell version %s", p.Shell), "error", shellerr)
@@ -46,7 +40,7 @@ func LoadProfile(line []string) types.ProfileItem {
 		l.Logger.Error(fmt.Sprintf("Failed to validate description %s", p.ItemDescription), "error", descerr)
 	}
 	p.IsValidDescription = isValidDescription
-	p.IsValid = p.IsValidPath && p.IsValidHash && p.IsValidShellVersion && p.IsValidDescription
+	p.IsValid = p.IsValidPath && p.IsValidShellVersion && p.IsValidDescription
 	l.Logger.Info("Profile loaded", "profile", p)
 	return p
 }

@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"strings"
+	"syscall"
 	"unicode/utf16"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
@@ -154,4 +156,31 @@ func EncodeCommand(command string) (string, error) {
 		return "", fmt.Errorf("failed to encode command")
 	}
 	return encoded, nil
+}
+
+func ExecuteCommandWithPowershell(encodedCmd string) error {
+	l.Logger.Debug("Executing command with PowerShell")
+	// Get path of powershell.exe
+	powershellPath, err := exec.LookPath("powershell")
+	if err != nil {
+		l.Logger.Error("Failed to find PowerShell executable", "Error", err)
+		return err
+	}
+	l.Logger.Debug("PowerShell executable found", "Path", powershellPath)
+	command := fmt.Sprintf(
+		"Start-Process -FilePath \"%s\" -ArgumentList \"-NoProfile -NonInteractive -WindowStyle Hidden -EncodedCommand %s\"",
+		powershellPath, encodedCmd,
+	)
+	l.Logger.Debug("PowerShell command", "Command", command)
+	cmd := exec.Command("cmd", "/C", "start", "/b", "/wait", "powershell", "-EncodedCommand", command)
+	cmd.SysProcAttr = &syscall.SysProcAttr{
+		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
+	exerr := cmd.Run()
+	if exerr != nil {
+		l.Logger.Error("Failed to start PowerShell process", "Error", err)
+		return err
+	}
+	l.Logger.Debug("PowerShell process started", "PID", cmd.Process.Pid)
+	l.Logger.Info("PowerShell process started successfully")
+	return nil
 }

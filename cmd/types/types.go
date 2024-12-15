@@ -10,11 +10,9 @@ type ProfileItem struct {
 	ItemDescription     string
 	IsValid             bool
 	Path                string
-	Hash                string
 	Shell               string
 	Name                string
 	ShellVersion        string
-	IsValidHash         bool
 	IsValidPath         bool
 	IsValidShellVersion bool
 	IsValidDescription  bool
@@ -32,14 +30,12 @@ func (p ProfileItem) GetName() string {
 	return p.Name
 }
 func (p ProfileItem) GetDescription() string       { return strings.TrimLeft(p.ItemDescription, " ") }
-func (p ProfileItem) GetHash() string              { return p.Hash }
 func (p ProfileItem) GetShell() string             { return strings.ToLower(p.Shell) }
-func (p ProfileItem) GetIsValidHash() bool         { return p.IsValidHash }
 func (p ProfileItem) GetIsValidPath() bool         { return p.IsValidPath }
 func (p ProfileItem) GetIsValidDescription() bool  { return p.IsValidDescription }
 func (p ProfileItem) GetIsValidShellVersion() bool { return p.IsValidShellVersion }
 func (p ProfileItem) IsValidProfile() bool {
-	return p.IsValidPath && p.IsValidHash && p.IsValidShellVersion && p.IsValidDescription
+	return p.IsValidPath && p.IsValidShellVersion && p.IsValidDescription
 }
 func (p ProfileItem) IsSelectedProfile() bool { return p.IsSelected }
 

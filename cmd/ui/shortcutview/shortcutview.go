@@ -1,4 +1,4 @@
-package profileselector
+package shortcutview
 
 import (
 	"os"

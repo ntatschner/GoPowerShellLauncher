@@ -6,6 +6,7 @@ import (
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shortcutview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 )
@@ -82,8 +83,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize), true)
 			case "shortcutsView":
 				l.Logger.Debug("Changing view to shortcut selector")
-				// m.viewChanger.ChangeView(shortcutselector.New(m.viewChanger))
-				m.menuList.NewStatusMessage(styles.StatusMessageStyle("Shortcut Menu Not implemented yet"))
+				m.viewChanger.ChangeView(shortcutview.New(m.viewChanger, m.windowSize), true)
 			case "exit":
 				l.Logger.Info("Exiting application")
 				return m, tea.Quit

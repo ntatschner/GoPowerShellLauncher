@@ -61,7 +61,7 @@ func ExecutePowerShellProcess(encodedCommand string, shellPath string) error {
 		l.Logger.Error("Failed to start PowerShell process", "Error", err)
 		return err
 	}
-	l.Logger.Info("PowerShell process started", "PID", cmd.Process.Pid)
+	l.Logger.Debug("PowerShell process started", "PID", cmd.Process.Pid)
 	l.Logger.Info("PowerShell process started successfully")
 	return nil
 }

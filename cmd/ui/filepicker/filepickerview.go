@@ -22,8 +22,7 @@ type model struct {
 func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	fp := filepicker.New()
 	fp.DirAllowed = true
-	fp.FileAllowed = false
-	fp.AutoHeight = true
+	fp.FileAllowed = true
 	fp.ShowPermissions = true
 	fp.CurrentDirectory, _ = os.UserHomeDir()
 	return &model{

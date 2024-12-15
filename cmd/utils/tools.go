@@ -172,7 +172,7 @@ func ExecuteCommandWithPowershell(encodedCmd string) error {
 		powershellPath, encodedCmd,
 	)
 	l.Logger.Debug("PowerShell command", "Command", command)
-	cmd := exec.Command("cmd", "/C", "start", "/b", "/wait", "powershell", "-EncodedCommand", command)
+	cmd := exec.Command("cmd", "/C", "start", "/b", "/wait", "powershell", "-Command", command)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
 	exerr := cmd.Run()

@@ -83,7 +83,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize), true)
 			case "shortcutsView":
 				l.Logger.Debug("Changing view to shortcut selector")
-				m.viewChanger.ChangeView(shortcutview.New(m.viewChanger, m.windowSize), true)
+				return m, m.viewChanger.ChangeView(shortcutview.New(m.viewChanger, m.windowSize), true)
 			case "exit":
 				l.Logger.Info("Exiting application")
 				return m, tea.Quit

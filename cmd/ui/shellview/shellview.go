@@ -80,6 +80,7 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 		windowSize:     windowSize,
 		viewChanger:    viewChanger,
 		loadedProfiles: profiles,
+		shortcut:       createShortcut,
 	}
 }
 
@@ -118,22 +119,31 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.selected[i] = struct{}{}
 			}
-			l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
-			for i := range m.selected {
-				merged := launcher.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
-				// tempFilePath, err := launcher.CreateTempFile(merged)
-				encodedCommand, err := utils.EncodeCommand(merged)
+			if m.shortcut {
+				l.Logger.Info("Creating shortcut", "selected", m.selected, "profiles", m.loadedProfiles)
+
+				err := utils.CreateShortcut(m.shellsList.Items()[0].(types.ShellItem).ProfilePaths, "test", "c:\\nerd_stuff")
 				if err != nil {
-					l.Logger.Error("Failed to encode profiles", "Error", err)
-					continue
+					l.Logger.Error("Failed to create shortcut", "Error", err)
 				}
-				item := m.shellsList.Items()[i].(types.ShellItem)
-				err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)
-				if err != nil {
-					l.Logger.Error("Failed to execute PowerShell process", "Error", err)
+
+			} else {
+				l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
+				for i := range m.selected {
+					merged := launcher.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
+					// tempFilePath, err := launcher.CreateTempFile(merged)
+					encodedCommand, err := utils.EncodeCommand(merged)
+					if err != nil {
+						l.Logger.Error("Failed to encode profiles", "Error", err)
+						continue
+					}
+					item := m.shellsList.Items()[i].(types.ShellItem)
+					err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)
+					if err != nil {
+						l.Logger.Error("Failed to execute PowerShell process", "Error", err)
+					}
 				}
 			}
-
 		}
 	}
 

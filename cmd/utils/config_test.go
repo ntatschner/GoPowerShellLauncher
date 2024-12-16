@@ -28,20 +28,20 @@ func TestLoadConfig(t *testing.T) {
 	}{
 		{
 			name:        "Valid config",
-			fileContent: `{"csv_path": "/path/to/csv"}`,
-			expected:    &Config{CsvPath: "/path/to/csv"},
+			fileContent: `{"profile_path": "/path/to/csv"}`,
+			expected:    &Config{ProfilePath: "/path/to/csv"},
 			expectError: false,
 		},
 		{
 			name:        "Invalid JSON",
-			fileContent: `{"csv_path": "/path/to/csv"`,
+			fileContent: `{"profile_path": "/path/to/csv"`,
 			expected:    nil,
 			expectError: true,
 		},
 		{
 			name:        "Empty config",
 			fileContent: `{}`,
-			expected:    &Config{CsvPath: ""},
+			expected:    &Config{ProfilePath: ""},
 			expectError: false,
 		},
 	}
@@ -54,7 +54,7 @@ func TestLoadConfig(t *testing.T) {
 			}
 			defer os.Remove(filePath)
 
-			config, err := LoadConfig(filePath)
+			config, err := LoadConfig()
 			if (err != nil) != tt.expectError {
 				t.Errorf("loadConfig() error = %v, expectError %v", err, tt.expectError)
 				return

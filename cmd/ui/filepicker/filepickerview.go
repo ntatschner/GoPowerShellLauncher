@@ -58,7 +58,7 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	fp.AutoHeight = true
 	_, height := utils.GetWindowSize()
 	fp.Height = height - 10
-	fp.KeyMap = NewKeyMap()
+	fp.KeyMap = filepicker.DefaultKeyMap()
 	return &model{
 		filepicker:  fp,
 		windowSize:  windowSize,

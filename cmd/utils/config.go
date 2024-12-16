@@ -3,18 +3,22 @@ package utils
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 )
 
 type Config struct {
-	CsvPath string `json:"csv_path"`
-	Logging struct {
+	ProfilePath string `json:"profile_path"`
+	Recursive   bool   `json:"recursive"`
+	Logging     struct {
 		LogPath  string `json:"log_path"`
 		LogFile  string `json:"log_file"`
 		LogLevel string `json:"log_level"`
 	} `json:"logging"`
 }
 
-func LoadConfig(filePath string) (*Config, error) {
+func LoadConfig() (*Config, error) {
+	cwd, _ := os.Getwd()
+	filePath := filepath.Join(cwd, "config.json")
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err

@@ -1,26 +1,88 @@
 package utils
 
 import (
-	"encoding/csv"
 	"fmt"
 	"os"
+	"path/filepath"
+	"regexp"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
 
-// LoadProfile loads a profile from a CSV line.
-// It validates the path, hash, shell version, and description of the profile.
-// Parameters:
-// line: a slice of strings containing the profile data.
-// Returns:
-// - ProfileItem: a ProfileItem struct with the loaded and validated data.
-func LoadProfile(line []string) types.ProfileItem {
-	l.Logger.Info("Loading profile", "line", line)
+func LoadProfilesFromDir() ([]types.ProfileItem, error) {
+	var profiles []types.ProfileItem
+	configData, _ := LoadConfig()
+	directory := configData.ProfilePath
+	l.Logger.Info("Loading profiles from config directory", "dir", directory)
+	recursive := configData.Recursive
+	l.Logger.Info("Recursive search", "recursive", recursive)
+	// Get .ps1 files from directory that match the pattern *.Profiles.ps1
+	files, err := os.ReadDir(directory)
+	if err != nil {
+		l.Logger.Error("Failed to read directory", "dir", directory, "error", err)
+		return nil, err
+	}
+	var processedFiles []string
+	for _, file := range files {
+		l.Logger.Info("Processing file", "file", file.Name())
+		match, _ := filepath.Match("*.Profile.ps1", file.Name())
+		if !file.IsDir() && match {
+			fullPath := filepath.Join(directory, file.Name())
+			processedFiles = append(processedFiles, fullPath)
+			l.Logger.Info("File processed", "file", fullPath)
+		}
+	}
+	for _, file := range processedFiles {
+		l.Logger.Info("Loading file", "file", file)
+		profile, profileerr := GetProfileProperties(file)
+		if profileerr != nil {
+			l.Logger.Error("Failed to get profile properties", "error", profileerr)
+		}
+		l.Logger.Info("Profile loaded", "profile", profile)
+		profiles = append(profiles, profile)
+	}
+	return profiles, nil
+}
+
+func ExtractString(input string, pattern string) (string, error) {
+	// Compile the regex pattern
+	re := regexp.MustCompile(pattern)
+
+	// Find the submatch
+	matches := re.FindStringSubmatch(input)
+	if len(matches) < 2 {
+		return "", fmt.Errorf("no match found")
+	}
+
+	// Return the extracted string
+	return matches[1], nil
+}
+
+func GetProfileProperties(path string) (types.ProfileItem, error) {
+	l.Logger.Info("Getting profile properties", "path", path)
+	// Get the .Profile.ps1 content, parse the file to get the required SHELL and DESCRIPTION using regex with these patterns:
+	// ### SHELL:<SHELL>:SHELL ### and ### DESCRIPTION:<DESCRIPTION>:DESCRIPTION ###
+	// Read the file content
+	content, readerr := os.ReadFile(path)
+	if readerr != nil {
+		l.Logger.Error("Failed to read file", "path", path, "error", readerr)
+		return types.ProfileItem{}, readerr
+	}
+	shell, shellerr := ExtractString(string(content), `### SHELL:(.*):SHELL ###`)
+	if shellerr != nil {
+		l.Logger.Error("Failed to extract shell", "error", shellerr)
+		shell = "InvalidShell"
+	}
+	description, descerr := ExtractString(string(content), `### DESCRIPTION:(.*):DESCRIPTION ###`)
+	if descerr != nil {
+		l.Logger.Error("Failed to extract description", "error", descerr)
+		description = ""
+	}
 	p := types.ProfileItem{
-		Path:            line[0],
-		Shell:           line[2],
-		ItemDescription: line[3],
+		Path:            path,
+		Shell:           shell,
+		ItemDescription: description,
 	}
 	p.ItemTitle = p.GetName()
 	p.Name = p.GetName()
@@ -42,55 +104,5 @@ func LoadProfile(line []string) types.ProfileItem {
 	p.IsValidDescription = isValidDescription
 	p.IsValid = p.IsValidPath && p.IsValidShellVersion && p.IsValidDescription
 	l.Logger.Info("Profile loaded", "profile", p)
-	return p
-}
-
-func validateHeaders(headers []string, expectedHeaders []string) error {
-	if len(headers) != len(expectedHeaders) {
-		return fmt.Errorf("invalid number of headers: got %d, expected %d", len(headers), len(expectedHeaders))
-	}
-	for i, header := range headers {
-		if header != expectedHeaders[i] {
-			return fmt.Errorf("invalid header: got %s, expected %s", header, expectedHeaders[i])
-		}
-	}
-	return nil
-}
-
-func LoadProfiles(filePath string) ([]types.ProfileItem, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		l.Logger.Error("Failed to open CSV file", "path", filePath, "error", err)
-		return nil, err
-	}
-	defer file.Close()
-
-	reader := csv.NewReader(file)
-	records, err := reader.ReadAll()
-	if err != nil {
-		l.Logger.Error("Failed to read CSV file", "error", err)
-		return nil, err
-	}
-
-	// Validate csv headers
-	expectedHeaders := []string{"path", "hash", "shellversion", "description"}
-	if err := validateHeaders(records[0], expectedHeaders); err != nil {
-		l.Logger.Error("Invalid CSV headers", "error", err)
-		return nil, err
-	}
-
-	l.Logger.Info(fmt.Sprintf("Loaded %d records from CSV file", len(records)-1))
-	var profiles []types.ProfileItem
-	for i, record := range records[1:] {
-		if len(record) != len(expectedHeaders) {
-			l.Logger.Error("Wrong number of fields", "line", i+2, "record", record)
-			continue
-		}
-		profile := LoadProfile(record)
-		l.Logger.Info(fmt.Sprintf("Processing profile: %+v", profile))
-		profiles = append(profiles, profile)
-		l.Logger.Info(fmt.Sprintf("Added profile: %+v", profile))
-	}
-	l.Logger.Info(fmt.Sprintf("Total profiles loaded: %d", len(profiles)))
-	return profiles, nil
+	return p, nil
 }

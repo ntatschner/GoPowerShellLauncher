@@ -1,8 +1,6 @@
 package shortcutview
 
 import (
-	"os"
-
 	"github.com/charmbracelet/bubbles/list"
 	tea "github.com/charmbracelet/bubbletea"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
@@ -17,27 +15,20 @@ import (
 type model struct {
 	profilesList list.Model
 	selected     map[int]struct{}
-	csvPath      string
 	windowSize   tea.WindowSizeMsg
 	viewChanger  view.ViewChanger
 }
 
 func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	l.Logger.Debug("Initializing profile list")
-	path, err := os.Getwd()
-	l.Logger.Debug("Getting working directory", "path", path)
-	if err != nil {
-		l.Logger.Error("Failed to get working directory", "error", err)
-	}
-	path = path + string(os.PathSeparator) + "config.json"
-	loadConfig, err := utils.LoadConfig(path)
+	loadConfig, err := utils.LoadConfig()
 	if err != nil {
 		l.Logger.Error("Failed to load configuration file", "error", err)
 	} else {
 		l.Logger.Info("Loaded configuration file", "config", loadConfig)
 	}
 
-	profiles, err := utils.LoadProfiles(loadConfig.CsvPath)
+	profiles, err := utils.LoadProfilesFromDir()
 	if err != nil {
 		l.Logger.Error("Failed to load profiles", "error", err)
 	}
@@ -78,7 +69,6 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	return &model{
 		profilesList: profilesList,
 		selected:     make(map[int]struct{}),
-		csvPath:      loadConfig.CsvPath,
 		viewChanger:  viewChanger,
 		windowSize:   windowSize,
 	}

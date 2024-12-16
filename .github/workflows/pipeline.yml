@@ -22,7 +22,7 @@ jobs:
       run: go build -v -o PowerShellProfileLauncher.exe
 
     - name: Compress Artifact to Zip
-      run: Compress-Archive -Path .\PowerShellProfileLauncher.exe, .\profiles.csv.tmpl, .\config.json.tmpl -DestinationPath .\PowerShellProfileLauncher.zip
+      run: Compress-Archive -Path .\PowerShellProfileLauncher.exe, .\awesome_profile.Profile.tmpl, .\config.json.tmpl -DestinationPath .\PowerShellProfileLauncher.zip
 
     - name: Upload Build Artifact
       uses: actions/upload-artifact@v4.4.3

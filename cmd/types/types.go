@@ -2,7 +2,27 @@ package types
 
 import (
 	"strings"
+
+	"github.com/charmbracelet/lipgloss"
 )
+
+type DefaultItemStyles struct {
+	// The Normal state.
+	NormalTitle lipgloss.Style
+	NormalDesc  lipgloss.Style
+
+	// The selected item state.
+	SelectedTitle lipgloss.Style
+	SelectedDesc  lipgloss.Style
+
+	// The dimmed state, for when the filter input is initially activated.
+	DimmedTitle lipgloss.Style
+	DimmedDesc  lipgloss.Style
+
+	// Characters matching the current filter, if any.
+	FilterMatch lipgloss.Style
+	Checked     lipgloss.Style
+}
 
 // ProfileItem represents a profile item in the list
 type ProfileItem struct {
@@ -49,6 +69,7 @@ type ShellItem struct {
 	ShortName       string
 	ShortNames      []string
 	ProfilePaths    []string
+	IsSelected      bool
 }
 
 // Implement the list.Item interface for ShellItem
@@ -69,6 +90,7 @@ func (m ShellItem) GetShortNames() []string {
 func (m ShellItem) GetShortName() string {
 	return strings.ToLower(m.ShortName)
 }
-func (m ShellItem) Title() string       { return m.ItemTitle }
-func (m ShellItem) Description() string { return m.ItemTitle }
-func (m ShellItem) FilterValue() string { return m.ItemTitle }
+func (m ShellItem) IsSelectedShell() bool { return m.IsSelected }
+func (m ShellItem) Title() string         { return m.ItemTitle }
+func (m ShellItem) Description() string   { return m.ShortName }
+func (m ShellItem) FilterValue() string   { return m.ItemTitle }

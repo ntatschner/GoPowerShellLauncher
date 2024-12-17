@@ -9,6 +9,7 @@ import (
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shortcutconfigview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
@@ -65,13 +66,23 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 			ItemDescription: shell.ItemDescription + ": loaded profiles: " + strconv.Itoa(len(profilesForShell)),
 			Name:            shell.Name,
 			ShortName:       shell.ShortName,
+			ShortNames:      shell.ShortNames,
 			Path:            shell.Path,
 			ProfilePaths:    profilesForShell,
 		}
 		items = append(items, shellItem)
 	}
-
-	shellsList := list.New(items, list.NewDefaultDelegate(), windowSize.Width, windowSize.Height)
+	delegateKeyMap, err := styles.NewShellDelegateKeyMap()
+	if err != nil {
+		l.Logger.Fatal("Failed to create delegate key map", "error", err)
+		return nil
+	}
+	itemDelegate, delerr := styles.NewShellItemDelegate(delegateKeyMap)
+	if delerr != nil {
+		l.Logger.Fatal("Failed to create item delegate", "error", delerr)
+		return nil
+	}
+	shellsList := list.New(items, itemDelegate, windowSize.Width, windowSize.Height)
 	shellsList.Title = "Available Shells"
 	shellsList.SetFilteringEnabled(false)
 	shellsList.SetShowStatusBar(true)
@@ -90,6 +101,7 @@ func (m *model) Init() tea.Cmd {
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
@@ -97,19 +109,32 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case " ":
+			items := m.shellsList.Items()
 			i := m.shellsList.Index()
 			if i < 0 || i >= len(m.shellsList.Items()) {
 				l.Logger.Error("Invalid index", "index", i)
 				break
 			}
+			item := items[i].(types.ShellItem)
 			if _, ok := m.selected[i]; ok {
 				delete(m.selected, i)
-				l.Logger.Info("Deselected shell", "index", i)
+				l.Logger.Debug("Deselected shell", "index", i)
+				cmd = tea.Batch(func() tea.Msg {
+					return styles.StatusBarUpdate(false)
+				})
+				item.IsSelected = false
+				items[i] = item
+				return m, cmd
 			} else {
 				m.selected[i] = struct{}{}
-				l.Logger.Info("Selected shell", "index", i)
+				l.Logger.Debug("Selected shelli", "index", i)
+				cmd = tea.Batch(func() tea.Msg {
+					return styles.StatusBarUpdate(true)
+				})
+				item.IsSelected = true
+				items[i] = item
+				return m, cmd
 			}
-
 		case "enter":
 			if len(m.selected) == 0 {
 				l.Logger.Warn("No shell selected, using currently highlighted.")
@@ -147,7 +172,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	var cmd tea.Cmd
 	m.shellsList, cmd = m.shellsList.Update(msg)
 	return m, cmd
 }

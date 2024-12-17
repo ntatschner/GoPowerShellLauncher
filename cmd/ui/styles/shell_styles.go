@@ -14,7 +14,7 @@ import (
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
 )
 
-type ProfileItemDelegate struct {
+type ShellItemDelegate struct {
 	ShowDescription bool
 	Styles          types.DefaultItemStyles
 	UpdateFunc      func(msg tea.Msg, m *list.Model) tea.Cmd
@@ -24,37 +24,31 @@ type ProfileItemDelegate struct {
 	spacing         int
 }
 
-func (d ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, item list.Item) {
+func (d ShellItemDelegate) Render(w io.Writer, m list.Model, index int, item list.Item) {
 	var (
 		title, desc  string
 		matchedRunes []int
 		s            = &d.Styles
 	)
 
-	i, ok := item.(types.ProfileItem)
+	i, ok := item.(types.ShellItem)
 	if !ok {
-		l.Logger.Errorf("Expected types.ProfileItem but got %T", item)
+		l.Logger.Errorf("Expected types.ShellItem but got %T", item)
 		return
 	}
 
-	msg := "Valid: "
-	valid := msg + "❌"
-	if i.IsValid {
-		valid = msg + "✅"
-	}
-
-	var selectedProfile string
-	if i.IsSelectedProfile() {
-		selectedProfile = "✓"
+	var selectedShell string
+	if i.IsSelectedShell() {
+		selectedShell = "✓"
 	} else {
-		selectedProfile = ""
+		selectedShell = ""
 	}
 
-	selectedProfile = s.Checked.Render(selectedProfile)
+	selectedShell = s.Checked.Render(selectedShell)
 
-	if i, ok := item.(types.ProfileItem); ok {
-		title = fmt.Sprintf("%s | %s | Defined Shells: %s", i.GetName(), valid, i.GetShell())
-		desc = i.GetDescription()
+	if i, ok := item.(types.ShellItem); ok {
+		title = fmt.Sprintf("Shell: %s", i.Name)
+		desc = i.Description()
 	} else {
 		return
 	}
@@ -109,13 +103,13 @@ func (d ProfileItemDelegate) Render(w io.Writer, m list.Model, index int, item l
 	}
 
 	if d.ShowDescription {
-		fmt.Fprintf(w, "%s %s\n%s", title, selectedProfile, desc) //nolint: errcheck
+		fmt.Fprintf(w, "%s %s\n%s", title, selectedShell, desc) //nolint: errcheck
 		return
 	}
-	fmt.Fprintf(w, "%s %s", title, selectedProfile) //nolint: errcheck
+	fmt.Fprintf(w, "%s %s", title, selectedShell) //nolint: errcheck
 }
 
-func NewDefaultProfileStyles() (s types.DefaultItemStyles) {
+func NewDefaultShellStyles() (s types.DefaultItemStyles) {
 	s.NormalTitle = lipgloss.NewStyle().
 		Foreground(lipgloss.AdaptiveColor{Light: "#008A74", Dark: "#40C1AC"}).
 		Padding(0, 0, 0, 2) //nolint:mnd
@@ -146,23 +140,23 @@ func NewDefaultProfileStyles() (s types.DefaultItemStyles) {
 	return s
 }
 
-func NewProfileItemDelegate(keys *profiledelegateKeyMap) (*ProfileItemDelegate, error) {
+func NewShellItemDelegate(keys *shelldelegateKeyMap) (*ShellItemDelegate, error) {
 	l.Logger.Debug("Creating item delegate", "keys", keys)
 	if keys == nil {
 		l.Logger.Error("keys is nil")
 		return nil, fmt.Errorf("keys is nil")
 	}
 	//d := list.NewDefaultDelegate()
-	d := &ProfileItemDelegate{}
-	l.Logger.Debug("Created instance of ProfileItemDelegate item delegate", "delegate", d)
+	d := &ShellItemDelegate{}
+	l.Logger.Debug("Created instance of ShellItemDelegate item delegate", "delegate", d)
 	d.ShowDescription = true
-	d.Styles = NewDefaultProfileStyles()
+	d.Styles = NewDefaultShellStyles()
 	d.height = 2
 	d.spacing = 1
 
 	d.UpdateFunc = func(msg tea.Msg, m *list.Model) tea.Cmd {
 		var title string
-		if i, ok := m.SelectedItem().(types.ProfileItem); ok {
+		if i, ok := m.SelectedItem().(types.ShellItem); ok {
 			title = i.GetName()
 		} else {
 			return nil
@@ -197,7 +191,7 @@ func NewProfileItemDelegate(keys *profiledelegateKeyMap) (*ProfileItemDelegate, 
 	}
 	l.Logger.Debug("Created item delegate UpdateFunc")
 
-	help := []key.Binding{keys.selected, keys.unselected, keys.view}
+	help := []key.Binding{keys.selected, keys.unselected}
 	l.Logger.Debug("Created item delegate help", "help", help)
 
 	d.ShortHelpFunc = func() []key.Binding {
@@ -211,47 +205,40 @@ func NewProfileItemDelegate(keys *profiledelegateKeyMap) (*ProfileItemDelegate, 
 	return d, nil
 }
 
-type profiledelegateKeyMap struct {
+type shelldelegateKeyMap struct {
 	selected   key.Binding
 	unselected key.Binding
-	view       key.Binding
 }
 
-func (d profiledelegateKeyMap) ShortHelp() []key.Binding {
+func (d shelldelegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
 		d.selected,
-		d.view,
 	}
 }
 
 // Additional full help entries. This satisfies the help.KeyMap interface and
 // is entirely optional.
-func (d profiledelegateKeyMap) FullHelp() [][]key.Binding {
+func (d shelldelegateKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{
 			d.selected,
 			d.unselected,
-			d.view,
 		},
 	}
 }
 
-func NewProfileDelegateKeyMap() (*profiledelegateKeyMap, error) {
-	d := &profiledelegateKeyMap{
+func NewShellDelegateKeyMap() (*shelldelegateKeyMap, error) {
+	d := &shelldelegateKeyMap{
 		selected: key.NewBinding(
 			key.WithKeys(" "),
-			key.WithHelp("space", "(De)Select Profile"),
-		),
-		view: key.NewBinding(
-			key.WithKeys("v"),
-			key.WithHelp("v", "View Profile"),
+			key.WithHelp("space", "(De)Select Shell"),
 		),
 	}
-	l.Logger.Debug("Created delegate key map", "profiledelegateKeyMap", d)
+	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)
 	return d, nil
 }
 
-func (pd ProfileItemDelegate) Height() int {
+func (pd ShellItemDelegate) Height() int {
 	if pd.ShowDescription {
 		return pd.height
 	}
@@ -259,29 +246,29 @@ func (pd ProfileItemDelegate) Height() int {
 }
 
 // SetSpacing sets the delegate's spacing.
-func (pd *ProfileItemDelegate) SetSpacing(i int) {
+func (pd *ShellItemDelegate) SetSpacing(i int) {
 	pd.spacing = i
 }
 
 // Spacing returns the delegate's spacing.
-func (pd ProfileItemDelegate) Spacing() int {
+func (pd ShellItemDelegate) Spacing() int {
 	return pd.spacing
 }
 
 // Update checks whether the delegate's UpdateFunc is set and calls it.
-func (pd ProfileItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
+func (pd ShellItemDelegate) Update(msg tea.Msg, m *list.Model) tea.Cmd {
 	if pd.UpdateFunc == nil {
 		return nil
 	}
 	return pd.UpdateFunc(msg, m)
 }
 
-func (pd *ProfileItemDelegate) SetHeight(i int) {
+func (pd *ShellItemDelegate) SetHeight(i int) {
 	pd.height = i
 }
 
 // ShortHelp returns the delegate's short help.
-func (d ProfileItemDelegate) ShortHelp() []key.Binding {
+func (d ShellItemDelegate) ShortHelp() []key.Binding {
 	if d.ShortHelpFunc != nil {
 		return d.ShortHelpFunc()
 	}
@@ -289,7 +276,7 @@ func (d ProfileItemDelegate) ShortHelp() []key.Binding {
 }
 
 // FullHelp returns the delegate's full help.
-func (d ProfileItemDelegate) FullHelp() [][]key.Binding {
+func (d ShellItemDelegate) FullHelp() [][]key.Binding {
 	if d.FullHelpFunc != nil {
 		return d.FullHelpFunc()
 	}

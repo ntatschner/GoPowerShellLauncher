@@ -5,6 +5,10 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+const ellipsis = "…"
+
+type StatusBarUpdate bool
+
 var (
 	AppStyle = lipgloss.NewStyle().Padding(1, 2)
 )

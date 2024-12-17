@@ -14,9 +14,9 @@ import (
 func LoadProfilesFromDir() ([]types.ProfileItem, error) {
 	var profiles []types.ProfileItem
 	configData, _ := LoadConfig()
-	directory := configData.ProfilePath
+	directory := configData.Profile.Path
 	l.Logger.Info("Loading profiles from config directory", "dir", directory)
-	recursive := configData.Recursive
+	recursive := configData.Profile.Recursive
 	l.Logger.Info("Recursive search", "recursive", recursive)
 
 	var processedFiles []string

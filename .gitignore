@@ -8,7 +8,7 @@
 **.csv
 
 # Ignore config file
-config.json
+config.yaml
 
 # Ignore executable files
 **.exe

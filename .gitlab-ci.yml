@@ -14,7 +14,7 @@ build:
   image: golang:${GO_VERSION}
   script:
   - go build -v -o PowerShellProfileLauncher.exe
-  - zip PowerShellProfileLauncher.zip PowerShellProfileLauncher.exe profiles.csv.tmpl config.json.tmpl
+  - zip PowerShellProfileLauncher.zip PowerShellProfileLauncher.exe profiles.csv.tmpl config.yaml.tmpl
   artifacts:
     paths:
     - PowerShellProfileLauncher.zip

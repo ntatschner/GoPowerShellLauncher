@@ -15,7 +15,7 @@ func main() {
 		panic(err)
 	}
 	// Initialize the logger
-	err = l.InitLogger(config.Logging.LogPath, config.Logging.LogFile, config.Logging.LogLevel)
+	err = l.InitLogger(config.Logging.Path, config.Logging.File, config.Logging.Level)
 	if err != nil {
 		panic(err)
 	}

@@ -22,7 +22,7 @@ Running the Launcher:
 
 ## Configure the Basic Settings
 
-1. Edit the included `config.json` file, replacing `profile_path` with the location of your profile directory.
-2. Add your profiles to the directory specified in the `config.json` file. Profiles should be `.ps1` files that match the pattern `*.Profiles.ps1`.
+1. Edit the included `config.yaml` file, replacing `profile_path` with the location of your profile directory.
+2. Add your profiles to the directory specified in the `config.yaml` file. Profiles should be `.ps1` files that match the pattern `*.Profile.ps1`.
 
 ### Example Configuration

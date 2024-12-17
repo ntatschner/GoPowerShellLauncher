@@ -1,36 +1,44 @@
 package utils
 
 import (
-	"encoding/json"
-	"os"
-	"path/filepath"
+	"fmt"
+
+	"github.com/spf13/viper"
 )
 
 type Config struct {
-	ProfilePath string `json:"profile_path"`
-	Recursive   bool   `json:"recursive"`
-	Logging     struct {
-		LogPath  string `json:"log_path"`
-		LogFile  string `json:"log_file"`
-		LogLevel string `json:"log_level"`
-	} `json:"logging"`
+	Profile struct {
+		Path      string `mapstructure:"path"`
+		Recursive bool   `mapstructure:"recursive"`
+	} `mapstructure:"profile"`
+	Logging struct {
+		Path  string `mapstructure:"path"`
+		File  string `mapstructure:"file"`
+		Level string `mapstructure:"level"`
+	} `mapstructure:"logging"`
 }
 
+var config *Config
+
 func LoadConfig() (*Config, error) {
-	cwd, _ := os.Getwd()
-	filePath := filepath.Join(cwd, "config.json")
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	var config Config
-	decoder := json.NewDecoder(file)
-	err = decoder.Decode(&config)
-	if err != nil {
-		return nil, err
+	if config != nil {
+		return config, nil
 	}
 
-	return &config, nil
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	viper.AddConfigPath("$HOME\\AppData\\Local\\GoPowerShellLauncher")
+	viper.AddConfigPath("C:\\ProgramData\\GoPowerShellLauncher")
+
+	if err := viper.ReadInConfig(); err != nil {
+		return nil, fmt.Errorf("error reading config file: %w", err)
+	}
+
+	config = &Config{}
+	if err := viper.Unmarshal(config); err != nil {
+		return nil, fmt.Errorf("unable to decode into struct: %w", err)
+	}
+
+	return config, nil
 }

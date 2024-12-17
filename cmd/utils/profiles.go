@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
@@ -19,14 +20,15 @@ func LoadProfilesFromDir() ([]types.ProfileItem, error) {
 	l.Logger.Info("Recursive search", "recursive", recursive)
 
 	var processedFiles []string
+
 	if recursive {
 		err := filepath.WalkDir(directory, func(path string, d os.DirEntry, err error) error {
 			if err != nil {
 				l.Logger.Error("Failed to access path", "path", path, "error", err)
 				return err
 			}
-			if !d.IsDir() && filepath.Ext(d.Name()) == ".Profiles.ps1" {
-				fullPath := filepath.Join(directory, d.Name())
+			if !d.IsDir() && strings.Contains(d.Name(), ".Profile.ps1") {
+				fullPath := path
 				processedFiles = append(processedFiles, fullPath)
 				l.Logger.Info("File processed", "file", fullPath)
 			}
@@ -44,21 +46,23 @@ func LoadProfilesFromDir() ([]types.ProfileItem, error) {
 		}
 		for _, file := range files {
 			l.Logger.Info("Processing file", "file", file.Name())
-			if !file.IsDir() && filepath.Ext(file.Name()) == ".Profiles.ps1" {
+			if !file.IsDir() && strings.Contains(file.Name(), ".Profile.ps1") {
 				fullPath := filepath.Join(directory, file.Name())
 				processedFiles = append(processedFiles, fullPath)
 				l.Logger.Info("File processed", "file", fullPath)
 			}
 		}
 	}
+
 	for _, file := range processedFiles {
 		l.Logger.Info("Loading file", "file", file)
 		profile, profileerr := GetProfileProperties(file)
 		if profileerr != nil {
 			l.Logger.Error("Failed to get profile properties", "error", profileerr)
+		} else {
+			l.Logger.Info("Profile loaded", "profile", profile)
+			profiles = append(profiles, profile)
 		}
-		l.Logger.Info("Profile loaded", "profile", profile)
-		profiles = append(profiles, profile)
 	}
 	return profiles, nil
 }

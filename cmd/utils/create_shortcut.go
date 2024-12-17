@@ -10,12 +10,14 @@ import (
 
 func CreateShortcut(profilepaths []string, name string, path string) error {
 	l.Logger.Info("Creating shortcut", "name", name, "path", path)
-
+	if name == "" {
+		l.Logger.Error("Shortcut name is null")
+		return fmt.Errorf("shortcut name cannot be null")
+	}
 	// Check if the path exists
-	_, err := os.Stat(path)
-	if err != nil {
-		l.Logger.Error("Path doesn't exist", "error", err)
-		return err
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		l.Logger.Error("Destination path is not valid", "destination", path)
+		return fmt.Errorf("destination path is not valid")
 	}
 	l.Logger.Info("Path exists", "path", path)
 

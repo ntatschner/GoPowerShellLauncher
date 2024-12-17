@@ -124,13 +124,6 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				i := m.shellsList.Index()
 				item := m.shellsList.Items()[i].(types.ShellItem)
 				return m, m.viewChanger.ChangeView(shortcutconfigview.New(m.viewChanger, m.windowSize, m.loadedProfiles, item), false)
-				// l.Logger.Info("Creating shortcut", "selected", m.selected, "profiles", m.loadedProfiles)
-				// //
-				// err := utils.CreateShortcut(m.shellsList.Items()[0].(types.ShellItem).ProfilePaths, "test", "c:\\nerd_stuff")
-				// if err != nil {
-				// 	l.Logger.Error("Failed to create shortcut", "Error", err)
-				// }
-
 			} else {
 				l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
 				for i := range m.selected {

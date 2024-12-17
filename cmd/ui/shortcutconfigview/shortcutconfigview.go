@@ -2,6 +2,7 @@ package shortcutconfigview
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/textinput"
@@ -59,6 +60,12 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg, profiles []
 		case 1:
 			t.Placeholder = "Destination Path"
 			t.Prompt = "Destination:"
+			t.Validate = func(s string) error {
+				if _, err := os.Stat(s); os.IsNotExist(err) {
+					return fmt.Errorf("destination Path is not valid")
+				}
+				return nil
+			}
 			t.CharLimit = 64
 		}
 
@@ -77,22 +84,23 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		// Set focus to next input
-		case "tab", "shift+tab", "enter", "up", "down":
+		case "enter", "up", "down":
 			s := msg.String()
 			if s == "enter" && m.focusIndex == len(m.inputs) {
 				name := m.inputs[0].Value()
 				destination := m.inputs[1].Value()
 				l.Logger.Info("Creating shortcut", "name", name, "destination", destination, "profiles", m.shell.ProfilePaths)
-				//
+
 				err := utils.CreateShortcut(m.shell.ProfilePaths, name, destination)
 				if err != nil {
 					l.Logger.Error("Failed to create shortcut", "Error", err)
+					return m, nil
 				}
 				return m, tea.Quit
 			}
 
 			// Cycle indexes
-			if s == "up" || s == "shift+tab" {
+			if s == "up" {
 				m.focusIndex--
 			} else {
 				m.focusIndex++
@@ -141,6 +149,20 @@ func (m *model) updateInputs(msg tea.Msg) tea.Cmd {
 	return tea.Batch(cmds...)
 }
 
+var (
+	titleStyle = lipgloss.NewStyle().
+			BorderStyle(lipgloss.DoubleBorder()).
+			BorderBottom(true).
+			Padding(0, 2).
+			Align(lipgloss.Center).
+			Render
+
+	borderStyle = lipgloss.NewStyle().
+			BorderStyle(lipgloss.RoundedBorder()).
+			Padding(1, 2).
+			Render
+)
+
 func (m *model) View() string {
 	var b strings.Builder
 
@@ -156,5 +178,21 @@ func (m *model) View() string {
 		button = &focusedButton
 	}
 	fmt.Fprintf(&b, "\n\n%s\n\n", *button)
-	return b.String()
+
+	// Get the window size
+	width, height := m.windowSize.Width, m.windowSize.Height
+
+	// Create the title
+	title := titleStyle("Enter Shortcut Details")
+
+	// Combine the title and the content
+	content := lipgloss.JoinVertical(lipgloss.Left, title, b.String())
+
+	// Add a border around the content
+	borderedContent := borderStyle(content)
+
+	// Center the content horizontally and vertically
+	centeredContent := lipgloss.Place(width, height, lipgloss.Center, lipgloss.Center, borderedContent)
+
+	return centeredContent
 }

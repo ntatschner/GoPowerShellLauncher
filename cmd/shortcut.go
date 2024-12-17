@@ -37,11 +37,9 @@ func init() {
 	// flags for the shortcut command
 	shortcutCmd.Flags().StringP("name", "n", "", "The name of the shortcut")
 	shortcutCmd.Flags().StringP("path", "p", "", "The path to the PowerShell script")
-	shortcutCmd.Flags().StringP("shell", "s", "", "The shell to use")
 	// command configs
 	shortcutCmd.MarkFlagRequired("name")
 	shortcutCmd.MarkFlagRequired("path")
-	shortcutCmd.MarkFlagRequired("shell")
 
 	// flags for the profiles command
 	profilesCmd.Flags().StringP("path", "p", "", "The path to the profile")

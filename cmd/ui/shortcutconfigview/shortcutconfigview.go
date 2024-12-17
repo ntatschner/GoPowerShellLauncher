@@ -22,8 +22,8 @@ var (
 	helpStyle           = blurredStyle
 	cursorModeHelpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("244"))
 
-	focusedButton = focusedStyle.Render("[ Submit ]")
-	blurredButton = fmt.Sprintf("[ %s ]", blurredStyle.Render("Submit"))
+	focusedButton = focusedStyle.Render("[ Create ]")
+	blurredButton = fmt.Sprintf("[ %s ]", blurredStyle.Render("Create"))
 )
 
 type model struct {
@@ -53,13 +53,13 @@ func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg, profiles []
 		switch i {
 		case 0:
 			t.Placeholder = "Name of the shortcut"
-			t.Prompt = "Name:"
+			t.Prompt = "Name: "
 			t.Focus()
 			t.PromptStyle = focusedStyle
 			t.TextStyle = focusedStyle
 		case 1:
 			t.Placeholder = "Destination Path"
-			t.Prompt = "Destination:"
+			t.Prompt = "Destination: "
 			t.Validate = func(s string) error {
 				if _, err := os.Stat(s); os.IsNotExist(err) {
 					return fmt.Errorf("destination Path is not valid")
@@ -166,8 +166,12 @@ var (
 func (m *model) View() string {
 	var b strings.Builder
 
+	var errString string
 	for i := range m.inputs {
 		b.WriteString(m.inputs[i].View())
+		if m.inputs[i].Err != nil {
+			errString += m.inputs[i].Err.Error() + " "
+		}
 		if i < len(m.inputs)-1 {
 			b.WriteRune('\n')
 		}
@@ -177,7 +181,8 @@ func (m *model) View() string {
 	if m.focusIndex == len(m.inputs) {
 		button = &focusedButton
 	}
-	fmt.Fprintf(&b, "\n\n%s\n\n", *button)
+
+	fmt.Fprintf(&b, "\n\n%s\n%s\n", *button, errString)
 
 	// Get the window size
 	width, height := m.windowSize.Width, m.windowSize.Height

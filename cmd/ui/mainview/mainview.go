@@ -42,7 +42,7 @@ func (m *mainModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q":
 			return m, tea.Quit
-		case "backspace":
+		case "ctrl+left":
 			if len(m.previousViews) > 0 {
 				previousView := m.previousViews[len(m.previousViews)-1]
 				m.previousViews = m.previousViews[:len(m.previousViews)-1]

@@ -18,6 +18,15 @@ import (
 	"golang.org/x/term"
 )
 
+func ContainsString(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+
 type HashValidator interface {
 	ValidateHash(expectedHash, filePath string) (bool, error)
 }

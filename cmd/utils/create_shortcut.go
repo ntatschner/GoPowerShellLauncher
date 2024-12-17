@@ -8,7 +8,7 @@ import (
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
-func CreateShortcut(profilepaths []string, name string, path string) error {
+func CreateShortcut(profilepaths []string, name string, path string, shell string) error {
 	l.Logger.Info("Creating shortcut", "name", name, "path", path)
 	if name == "" {
 		l.Logger.Error("Shortcut name is null")
@@ -52,8 +52,9 @@ func CreateShortcut(profilepaths []string, name string, path string) error {
 	}
 	l.Logger.Info("Application name", "appName", appName)
 
-	launchCommand := "profiles --path"
-	finalCommand := fmt.Sprintf("%s %s", launchCommand, profilePaths)
+	profilesCommand := "profiles --path"
+	shellCommand := " --shell"
+	finalCommand := fmt.Sprintf("%s %s %s %s", profilesCommand, profilePaths, shellCommand, shell)
 	l.Logger.Info("Final command", "finalCommand", finalCommand)
 
 	_, perr := os.Stat(path)

@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/cobra"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
 
 var (
@@ -29,7 +30,14 @@ var profilesCmd = &cobra.Command{
 	Long:  `This command loads the specified profile directly in the shell denoted by the profile.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		l.Logger.Info("Loading the specified profile")
-		// Do Stuff Here
+		path := cmd.Flag("path").Value.String()
+		shell := cmd.Flag("shell").Value.String()
+		l.Logger.Debug("Profile path", "path", path, "shell", shell)
+		err := utils.LaunchProfilesFromCmd(path, shell)
+		if err != nil {
+			l.Logger.Error("Failed to launch profiles", "error", err)
+		}
+		l.Logger.Info("Profiles loaded successfully")
 	},
 }
 
@@ -43,8 +51,10 @@ func init() {
 
 	// flags for the profiles command
 	profilesCmd.Flags().StringP("path", "p", "", "The path to the profile")
+	profilesCmd.Flags().StringP("shell", "s", "", "The shell to use")
 	// command configs
 	profilesCmd.MarkFlagRequired("path")
+	profilesCmd.MarkFlagRequired("shell")
 	// add the commands to the root command
 	rootCmd.AddCommand(profilesCmd)
 	rootCmd.AddCommand(shortcutCmd)

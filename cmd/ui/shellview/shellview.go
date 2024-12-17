@@ -47,7 +47,7 @@ func New(profiles []types.ProfileItem, windowSize tea.WindowSizeMsg, viewChanger
 		var profilesForShell []string
 		for _, profile := range profiles {
 			l.Logger.Info("Processing profile", "profile", profile.ItemTitle)
-			for _, shortName := range shell.ShortName {
+			for _, shortName := range shell.ShortNames {
 				l.Logger.Info("Processing short name", "shortName", shortName)
 				profileShell := utils.NormalizeString(profile.Shell)
 				shortNameTrimmed := utils.NormalizeString(shortName)
@@ -120,14 +120,17 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 				m.selected[i] = struct{}{}
 			}
-			if m.shortcut {
-				i := m.shellsList.Index()
+			var selectedShells []types.ShellItem
+			for i := range m.selected {
 				item := m.shellsList.Items()[i].(types.ShellItem)
-				return m, m.viewChanger.ChangeView(shortcutconfigview.New(m.viewChanger, m.windowSize, m.loadedProfiles, item), false)
+				selectedShells = append(selectedShells, item)
+			}
+			if m.shortcut {
+				return m, m.viewChanger.ChangeView(shortcutconfigview.New(m.viewChanger, m.windowSize, m.loadedProfiles, selectedShells), false)
 			} else {
 				l.Logger.Info("Launching selected shells", "selected", m.selected, "profiles", m.loadedProfiles)
 				for i := range m.selected {
-					merged := launcher.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
+					merged := utils.MergeSelectedProfiles(m.shellsList.Items()[i].(types.ShellItem).ProfilePaths)
 					// tempFilePath, err := launcher.CreateTempFile(merged)
 					encodedCommand, err := utils.EncodeCommand(merged)
 					if err != nil {

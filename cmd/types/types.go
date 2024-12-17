@@ -46,7 +46,8 @@ type ShellItem struct {
 	Name            string
 	Path            string
 	ItemDescription string
-	ShortName       []string
+	ShortName       string
+	ShortNames      []string
 	ProfilePaths    []string
 }
 
@@ -58,12 +59,15 @@ func (m ShellItem) GetName() string {
 func (m ShellItem) GetPath() string {
 	return m.Path
 }
-func (m ShellItem) GetShortName() []string {
+func (m ShellItem) GetShortNames() []string {
 	lowerShortNames := make([]string, len(m.ShortName))
-	for i, name := range m.ShortName {
+	for i, name := range m.ShortNames {
 		lowerShortNames[i] = strings.ToLower(name)
 	}
 	return lowerShortNames
+}
+func (m ShellItem) GetShortName() string {
+	return strings.ToLower(m.ShortName)
 }
 func (m ShellItem) Title() string       { return m.ItemTitle }
 func (m ShellItem) Description() string { return m.ItemTitle }

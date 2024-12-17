@@ -32,10 +32,10 @@ type model struct {
 	windowSize  tea.WindowSizeMsg
 	viewChanger view.ViewChanger
 	profiles    []types.ProfileItem
-	shell       types.ShellItem
+	shell       []types.ShellItem
 }
 
-func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg, profiles []types.ProfileItem, shell types.ShellItem) *model {
+func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg, profiles []types.ProfileItem, shell []types.ShellItem) *model {
 	m := &model{
 		inputs:      make([]textinput.Model, 2),
 		shell:       shell,
@@ -89,12 +89,27 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if s == "enter" && m.focusIndex == len(m.inputs) {
 				name := m.inputs[0].Value()
 				destination := m.inputs[1].Value()
-				l.Logger.Info("Creating shortcut", "name", name, "destination", destination, "profiles", m.shell.ProfilePaths)
-
-				err := utils.CreateShortcut(m.shell.ProfilePaths, name, destination)
-				if err != nil {
-					l.Logger.Error("Failed to create shortcut", "Error", err)
-					return m, nil
+				l.Logger.Info("Creating shortcut", "name", name, "destination", destination, "profiles", m.profiles)
+				for _, s := range m.shell {
+					l.Logger.Info("Creating shortcut", "name", name)
+					name = name + "_" + s.Name
+					var profilesArray []string
+					for _, p := range m.profiles {
+						l.Logger.Debug("Checking Profile", "profile", p.Name, "shell", s.GetShortName())
+						if p.GetShell() == s.GetShortName() || utils.ContainsString(s.GetShortNames(), "all") {
+							l.Logger.Info("Adding Profile", "profile", p.Name)
+							profilesArray = append(profilesArray, p.Path)
+						}
+					}
+					if len(profilesArray) != 0 {
+						err := utils.CreateShortcut(profilesArray, name, destination, s.GetShortName())
+						if err != nil {
+							l.Logger.Error("Failed to create shortcut", "Error", err)
+							return m, nil
+						}
+					} else {
+						l.Logger.Warn("No profiles found for shell", "shell", s.Name)
+					}
 				}
 				return m, tea.Quit
 			}

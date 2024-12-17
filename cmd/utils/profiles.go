@@ -17,20 +17,38 @@ func LoadProfilesFromDir() ([]types.ProfileItem, error) {
 	l.Logger.Info("Loading profiles from config directory", "dir", directory)
 	recursive := configData.Recursive
 	l.Logger.Info("Recursive search", "recursive", recursive)
-	// Get .ps1 files from directory that match the pattern *.Profiles.ps1
-	files, err := os.ReadDir(directory)
-	if err != nil {
-		l.Logger.Error("Failed to read directory", "dir", directory, "error", err)
-		return nil, err
-	}
+
 	var processedFiles []string
-	for _, file := range files {
-		l.Logger.Info("Processing file", "file", file.Name())
-		match, _ := filepath.Match("*.Profile.ps1", file.Name())
-		if !file.IsDir() && match {
-			fullPath := filepath.Join(directory, file.Name())
-			processedFiles = append(processedFiles, fullPath)
-			l.Logger.Info("File processed", "file", fullPath)
+	if recursive {
+		err := filepath.WalkDir(directory, func(path string, d os.DirEntry, err error) error {
+			if err != nil {
+				l.Logger.Error("Failed to access path", "path", path, "error", err)
+				return err
+			}
+			if !d.IsDir() && filepath.Ext(d.Name()) == ".Profiles.ps1" {
+				fullPath := filepath.Join(directory, d.Name())
+				processedFiles = append(processedFiles, fullPath)
+				l.Logger.Info("File processed", "file", fullPath)
+			}
+			return nil
+		})
+		if err != nil {
+			l.Logger.Error("Failed to walk directory", "dir", directory, "error", err)
+			return nil, err
+		}
+	} else {
+		files, err := os.ReadDir(directory)
+		if err != nil {
+			l.Logger.Error("Failed to read directory", "dir", directory, "error", err)
+			return nil, err
+		}
+		for _, file := range files {
+			l.Logger.Info("Processing file", "file", file.Name())
+			if !file.IsDir() && filepath.Ext(file.Name()) == ".Profiles.ps1" {
+				fullPath := filepath.Join(directory, file.Name())
+				processedFiles = append(processedFiles, fullPath)
+				l.Logger.Info("File processed", "file", fullPath)
+			}
 		}
 	}
 	for _, file := range processedFiles {

@@ -8,7 +8,7 @@ import (
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/launcher"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/filepicker"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shortcutconfigview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
@@ -121,7 +121,9 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.selected[i] = struct{}{}
 			}
 			if m.shortcut {
-				return m, m.viewChanger.ChangeView(filepicker.New(m.viewChanger, m.windowSize), false)
+				i := m.shellsList.Index()
+				item := m.shellsList.Items()[i].(types.ShellItem)
+				return m, m.viewChanger.ChangeView(shortcutconfigview.New(m.viewChanger, m.windowSize, m.loadedProfiles, item), false)
 				// l.Logger.Info("Creating shortcut", "selected", m.selected, "profiles", m.loadedProfiles)
 				// //
 				// err := utils.CreateShortcut(m.shellsList.Items()[0].(types.ShellItem).ProfilePaths, "test", "c:\\nerd_stuff")

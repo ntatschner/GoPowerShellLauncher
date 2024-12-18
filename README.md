@@ -35,3 +35,10 @@ logging:
   path: "C:\\path\\to\\logs"
   file: "launcher.log"
   level: "DEBUG"
+```
+
+### Command-Line Examples
+
+#### Show Help
+
+GoPowerShellLauncher.exe help

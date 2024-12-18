@@ -2,6 +2,9 @@ package utils
 
 import (
 	"fmt"
+	"os"
+	"os/user"
+	"path/filepath"
 
 	"github.com/spf13/viper"
 )
@@ -18,18 +21,49 @@ type Config struct {
 	} `mapstructure:"logging"`
 }
 
+var UserConfigDir string
+
+type ConfigStore struct {
+	Path   string
+	Exists bool
+}
+
+var ConfigStoreData []ConfigStore
+
 var config *Config
 
 func LoadConfig() (*Config, error) {
 	if config != nil {
 		return config, nil
 	}
+	usr, err := user.Current()
+	if err != nil {
+		return nil, fmt.Errorf("error getting current user: %w", err)
+	}
+	UserConfigDir := filepath.Join(usr.HomeDir, "Documents", "GoPowerShellLauncher")
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(".")
-	viper.AddConfigPath("$HOME\\AppData\\Local\\GoPowerShellLauncher")
-	viper.AddConfigPath("C:\\ProgramData\\GoPowerShellLauncher")
+	viper.AddConfigPath(UserConfigDir)
+
+	configPaths := []string{
+		".",
+		UserConfigDir,
+	}
+
+	// Log the configuration files found
+	for _, path := range configPaths {
+		if path == "." {
+			path, _ = os.Getwd()
+		}
+		configFile := filepath.Join(path, "config.yaml")
+		if _, err := os.Stat(configFile); err == nil {
+			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: configFile, Exists: true})
+		} else {
+			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: configFile, Exists: false})
+		}
+	}
 
 	if err := viper.ReadInConfig(); err != nil {
 		return nil, fmt.Errorf("error reading config file: %w", err)

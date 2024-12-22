@@ -5,9 +5,22 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+	"strconv"
 
 	"github.com/spf13/viper"
 )
+
+type Profile struct {
+	Name string `mapstructure:"name"`
+	Path string `mapstructure:"path"`
+}
+
+type Shortcut struct {
+	ID          string    `mapstructure:"id"`
+	Name        string    `mapstructure:"name"`
+	Destination string    `mapstructure:"destination"`
+	Profiles    []Profile `mapstructure:"profiles"`
+}
 
 type Config struct {
 	Profile struct {
@@ -19,6 +32,7 @@ type Config struct {
 		File  string `mapstructure:"file"`
 		Level string `mapstructure:"level"`
 	} `mapstructure:"logging"`
+	Shortcuts []Shortcut `mapstructure:"shortcuts"`
 }
 
 var UserConfigDir string
@@ -75,4 +89,21 @@ func LoadConfig() (*Config, error) {
 	}
 
 	return config, nil
+}
+
+func GenerateUniqueID() string {
+	config, err := LoadConfig()
+	if err != nil {
+		return "1"
+	}
+
+	maxID := 0
+	for _, shortcut := range config.Shortcuts {
+		id, err := strconv.Atoi(shortcut.ID)
+		if err == nil && id > maxID {
+			maxID = id
+		}
+	}
+
+	return strconv.Itoa(maxID + 1)
 }

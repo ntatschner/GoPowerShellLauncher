@@ -198,6 +198,7 @@ func ExecuteCommandWithPowershell(encodedCmd string) error {
 func ExecuteInsideShell(encodedCmd string) error {
 	l.Logger.Debug("Executing command inside shell")
 	// Get caller shell path
+
 	validShells := []string{"powershell", "pwsh"}
 	var shell string
 	for _, s := range validShells {
@@ -207,11 +208,13 @@ func ExecuteInsideShell(encodedCmd string) error {
 			break
 		}
 	}
-	if shell == "" {
+	var shellerr error
+	executable, shellerr := os.Executable()
+	if shellerr != nil || executable != shell {
 		l.Logger.Error("No valid shell found")
 		return fmt.Errorf("no valid shell found")
 	}
-
+	l.Logger.Debug("Shell executable found", "Executable", executable)
 	cmd := exec.Command(fmt.Sprintf("%s -EncodedCommand %s", shell, encodedCmd))
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

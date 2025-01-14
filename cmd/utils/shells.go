@@ -12,6 +12,7 @@ func LoadShells() ([]types.ShellItem, error) {
 	items := []types.ShellItem{
 		{ItemTitle: "PowerShell", ItemDescription: "PowerShell", Name: "PowerShell", ShortName: "powershell", ShortNames: []string{"powershell", "all"}, Path: "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"},
 		{ItemTitle: "PowerShell Core", ItemDescription: "PowerShell Core", Name: "PowerShell Core", ShortName: "pwsh", ShortNames: []string{"pwsh", "all"}, Path: "C:\\Program Files\\PowerShell\\7\\pwsh.exe"},
+		{ItemTitle: "Launch Inline", ItemDescription: "Current Shell", Name: "Current Shell", ShortName: "shell", ShortNames: []string{"shell", "pwsh", "all"}, Path: "shell"},
 	}
 	for s := range items {
 		l.Logger.Info("Processing shell", "shell", items[s])

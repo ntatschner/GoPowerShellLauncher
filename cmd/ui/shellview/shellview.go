@@ -163,7 +163,11 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 						continue
 					}
 					item := m.shellsList.Items()[i].(types.ShellItem)
-					err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)
+					if item.Path == "shell" {
+						err = launcher.ExecuteInsideShell(encodedCommand)
+					} else {
+						err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)
+					}
 					if err != nil {
 						l.Logger.Error("Failed to execute PowerShell process", "Error", err)
 					}

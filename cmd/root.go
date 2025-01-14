@@ -42,5 +42,5 @@ func Execute() {
 }
 
 func init() {
-
+	cobra.MousetrapHelpText = ""
 }

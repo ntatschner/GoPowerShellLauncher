@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
+Copyright © 2024 NAME HERE n
 */
 package main
 
@@ -8,6 +8,8 @@ import (
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
+
+var MousetrapHelpText = ""
 
 func main() {
 	config, err := utils.LoadConfig()

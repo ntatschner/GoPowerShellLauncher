@@ -53,7 +53,7 @@ func ExecuteInsideShell(encodedCmd string) error {
 		return fmt.Errorf("no valid shell found")
 	}
 	l.Logger.Debug("Shell executable found", "Executable", executable)
-	cmd := exec.Command(fmt.Sprintf("%s -EncodedCommand %s", shell, encodedCmd))
+	cmd := exec.Command(executable, "-EncodedCommand", encodedCmd)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin

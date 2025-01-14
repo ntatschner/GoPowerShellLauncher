@@ -195,6 +195,37 @@ func ExecuteCommandWithPowershell(encodedCmd string) error {
 	return nil
 }
 
+func ExecuteInsideShell(encodedCmd string) error {
+	l.Logger.Debug("Executing command inside shell")
+	// Get caller shell path
+	validShells := []string{"powershell", "pwsh"}
+	var shell = nil
+	for _, s := range validShells {
+		if _, err := exec.LookPath(s); err == nil {
+			l.Logger.Debug("Shell found", "Shell", s)
+			shell = s
+			break
+		}
+	}
+	if shell == nil {
+		l.Logger.Error("No valid shell found")
+		return fmt.Errorf("no valid shell found")
+	}
+
+	cmd := fmt.Sprintf(
+		"Start-Process -FilePath \"%s\" -ArgumentList \"-NoProfile -NonInteractive -WindowStyle Hidden -EncodedCommand %s\"",
+		powershellPath, encodedCmd,
+	)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	if err := cmd.Run(); err != nil {
+		fmt.Println("Error running command:", err)
+		os.Exit(1)
+	}
+	os.Exit(0)
+}
+
 // Get size of the terminal window
 
 func GetWindowSize() (int, int) {

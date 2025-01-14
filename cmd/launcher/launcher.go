@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"syscall"
 
+	"golang.org/x/sys/windows"
+
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
@@ -37,14 +39,15 @@ func ExecuteInsideShell(encodedCmd string) error {
 	validShells := []string{"powershell", "pwsh"}
 	var shell string
 	for _, s := range validShells {
-		if _, err := exec.LookPath(s); err == nil {
-			l.Logger.Debug("Shell found", "Shell", s)
-			shell = s
+		if path, err := exec.LookPath(s); err == nil {
+			l.Logger.Debug("Local Shell found", "Shell", path)
+			shell = path
 			break
 		}
 	}
 	var shellerr error
-	executable, shellerr := os.Executable()
+	executable, shellerr := getProcessPath(os.Getppid())
+	l.Logger.Debug("Executable path", "Executable", executable)
 	if shellerr != nil || executable != shell {
 		l.Logger.Error("No valid shell found")
 		return fmt.Errorf("no valid shell found")
@@ -58,4 +61,20 @@ func ExecuteInsideShell(encodedCmd string) error {
 		fmt.Println("Error running command:", err)
 	}
 	return nil
+}
+
+func getProcessPath(pid int) (string, error) {
+	handle, err := windows.OpenProcess(syscall.PROCESS_QUERY_INFORMATION|windows.PROCESS_VM_READ, false, uint32(pid))
+	if err != nil {
+		return "", err
+	}
+	defer windows.CloseHandle(handle)
+	var exePath [windows.MAX_PATH]uint16
+	size := uint32(len(exePath))
+	err = windows.QueryFullProcessImageName(handle, 0, &exePath[0], &size)
+	if err != nil {
+		return "", err
+	}
+
+	return windows.UTF16ToString(exePath[:]), nil
 }

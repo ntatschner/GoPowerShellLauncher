@@ -1,6 +1,7 @@
 package shellview
 
 import (
+	"os"
 	"strconv"
 
 	"github.com/charmbracelet/bubbles/list"
@@ -169,7 +170,7 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 							l.Logger.Error("Failed to execute command inside shell", "Error", err)
 						} else {
 							l.Logger.Info("Command executed, exiting")
-							return m, tea.Quit
+							os.Exit(0)
 						}
 					} else {
 						err = launcher.ExecutePowerShellProcess(encodedCommand, item.Path)

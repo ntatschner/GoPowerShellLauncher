@@ -208,11 +208,13 @@ func NewShellItemDelegate(keys *shelldelegateKeyMap) (*ShellItemDelegate, error)
 type shelldelegateKeyMap struct {
 	selected   key.Binding
 	unselected key.Binding
+	navigation key.Binding
 }
 
 func (d shelldelegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
 		d.selected,
+		d.navigation,
 	}
 }
 
@@ -223,6 +225,7 @@ func (d shelldelegateKeyMap) FullHelp() [][]key.Binding {
 		{
 			d.selected,
 			d.unselected,
+			d.navigation,
 		},
 	}
 }
@@ -232,6 +235,10 @@ func NewShellDelegateKeyMap() (*shelldelegateKeyMap, error) {
 		selected: key.NewBinding(
 			key.WithKeys(" "),
 			key.WithHelp("space", "(De)Select Shell"),
+		),
+		navigation: key.NewBinding(
+			key.WithKeys("ctrl+left", "ctrl+right"),
+			key.WithHelp("ctrl+←/→", "Navigate"),
 		),
 	}
 	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)

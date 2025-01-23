@@ -215,12 +215,14 @@ type profiledelegateKeyMap struct {
 	selected   key.Binding
 	unselected key.Binding
 	view       key.Binding
+	navigation key.Binding
 }
 
 func (d profiledelegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
 		d.selected,
 		d.view,
+		d.navigation,
 	}
 }
 
@@ -232,6 +234,7 @@ func (d profiledelegateKeyMap) FullHelp() [][]key.Binding {
 			d.selected,
 			d.unselected,
 			d.view,
+			d.navigation,
 		},
 	}
 }
@@ -245,6 +248,10 @@ func NewProfileDelegateKeyMap() (*profiledelegateKeyMap, error) {
 		view: key.NewBinding(
 			key.WithKeys("v"),
 			key.WithHelp("v", "View Profile"),
+		),
+		navigation: key.NewBinding(
+			key.WithKeys("ctrl+left", "ctrl+right"),
+			key.WithHelp("ctrl+←/→", "Navigate"),
 		),
 	}
 	l.Logger.Debug("Created delegate key map", "profiledelegateKeyMap", d)

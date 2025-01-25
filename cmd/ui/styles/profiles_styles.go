@@ -197,16 +197,8 @@ func NewProfileItemDelegate(keys *profiledelegateKeyMap) (*ProfileItemDelegate, 
 	}
 	l.Logger.Debug("Created item delegate UpdateFunc")
 
-	help := []key.Binding{keys.selected, keys.unselected, keys.view}
-	l.Logger.Debug("Created item delegate help", "help", help)
-
-	d.ShortHelpFunc = func() []key.Binding {
-		return help
-	}
-
-	d.FullHelpFunc = func() [][]key.Binding {
-		return [][]key.Binding{help}
-	}
+	d.ShortHelpFunc = keys.ShortHelp
+	d.FullHelpFunc = keys.FullHelp
 	l.Logger.Debug("Created item delegate", "delegate", d)
 	return d, nil
 }
@@ -215,14 +207,14 @@ type profiledelegateKeyMap struct {
 	selected   key.Binding
 	unselected key.Binding
 	view       key.Binding
-	navigation key.Binding
+	backpage   key.Binding
 }
 
 func (d profiledelegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
 		d.selected,
 		d.view,
-		d.navigation,
+		d.backpage,
 	}
 }
 
@@ -233,8 +225,10 @@ func (d profiledelegateKeyMap) FullHelp() [][]key.Binding {
 		{
 			d.selected,
 			d.unselected,
+		},
+		{
 			d.view,
-			d.navigation,
+			d.backpage,
 		},
 	}
 }
@@ -249,9 +243,9 @@ func NewProfileDelegateKeyMap() (*profiledelegateKeyMap, error) {
 			key.WithKeys("v"),
 			key.WithHelp("v", "View Profile"),
 		),
-		navigation: key.NewBinding(
-			key.WithKeys("ctrl+left", "ctrl+right"),
-			key.WithHelp("ctrl+←/→", "Navigate"),
+		backpage: key.NewBinding(
+			key.WithKeys("ctrl+left"),
+			key.WithHelp("ctrl+←", "Back Page"),
 		),
 	}
 	l.Logger.Debug("Created delegate key map", "profiledelegateKeyMap", d)

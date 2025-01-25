@@ -191,16 +191,8 @@ func NewShellItemDelegate(keys *shelldelegateKeyMap) (*ShellItemDelegate, error)
 	}
 	l.Logger.Debug("Created item delegate UpdateFunc")
 
-	help := []key.Binding{keys.selected, keys.unselected}
-	l.Logger.Debug("Created item delegate help", "help", help)
-
-	d.ShortHelpFunc = func() []key.Binding {
-		return help
-	}
-
-	d.FullHelpFunc = func() [][]key.Binding {
-		return [][]key.Binding{help}
-	}
+	d.ShortHelpFunc = keys.ShortHelp
+	d.FullHelpFunc = keys.FullHelp
 	l.Logger.Debug("Created item delegate", "delegate", d)
 	return d, nil
 }
@@ -208,13 +200,13 @@ func NewShellItemDelegate(keys *shelldelegateKeyMap) (*ShellItemDelegate, error)
 type shelldelegateKeyMap struct {
 	selected   key.Binding
 	unselected key.Binding
-	navigation key.Binding
+	backpage   key.Binding
 }
 
 func (d shelldelegateKeyMap) ShortHelp() []key.Binding {
 	return []key.Binding{
 		d.selected,
-		d.navigation,
+		d.backpage,
 	}
 }
 
@@ -224,8 +216,10 @@ func (d shelldelegateKeyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
 		{
 			d.selected,
+			d.backpage,
+		},
+		{
 			d.unselected,
-			d.navigation,
 		},
 	}
 }
@@ -236,9 +230,9 @@ func NewShellDelegateKeyMap() (*shelldelegateKeyMap, error) {
 			key.WithKeys(" "),
 			key.WithHelp("space", "(De)Select Shell"),
 		),
-		navigation: key.NewBinding(
-			key.WithKeys("ctrl+left", "ctrl+right"),
-			key.WithHelp("ctrl+←/→", "Navigate"),
+		backpage: key.NewBinding(
+			key.WithKeys("ctrl+left"),
+			key.WithHelp("ctrl+←", "Back Page"),
 		),
 	}
 	l.Logger.Debug("Created delegate key map", "delegateKeyMap", d)

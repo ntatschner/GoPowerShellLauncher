@@ -1,8 +1,11 @@
 package logger
 
 import (
+	"fmt"
 	"io"
 	"os"
+	"path/filepath"
+	"sort"
 	"time"
 
 	"github.com/charmbracelet/log"
@@ -10,6 +13,9 @@ import (
 
 var Logger *log.Logger
 var logFile *os.File
+
+const maxLogSize = 10 * 1024 * 1024 // 10 MB
+const maxLogFiles = 2
 
 func InitLogger(logPath, logFileName, logLevel string) error {
 	var err error
@@ -56,4 +62,66 @@ func CloseLogger() {
 	if logFile != nil {
 		logFile.Close()
 	}
+}
+
+func CheckLogSize(logPath, logFileName string) error {
+	fileInfo, err := logFile.Stat()
+	if err != nil {
+		return err
+	}
+	if fileInfo.Size() >= maxLogSize {
+		// Rotate the log file
+		backupName := fmt.Sprintf("%s.%s", logFileName, time.Now().Format("20060102T150405"))
+		if err := os.Rename(filepath.Join(logPath, logFileName), filepath.Join(logPath, backupName)); err != nil {
+			return err
+		}
+		// Open a new log file
+		logFile, err = os.OpenFile(filepath.Join(logPath, logFileName), os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err != nil {
+			return err
+		}
+		// Update the logger's output
+		writer := io.Writer(logFile)
+		Logger.SetOutput(writer)
+
+		// Remove old log files if there are more than maxLogFiles
+		if err := RemoveOldLogFiles(logPath, logFileName); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func RemoveOldLogFiles(logPath, logFileName string) error {
+	files, err := os.ReadDir(logPath)
+	if err != nil {
+		return err
+	}
+
+	var logFiles []os.FileInfo
+	for _, file := range files {
+		if file.Name() == logFileName || filepath.Ext(file.Name()) == ".log" {
+			fileInfo, err := file.Info()
+			if err != nil {
+				return err
+			}
+			logFiles = append(logFiles, fileInfo)
+		}
+	}
+
+	if len(logFiles) <= maxLogFiles {
+		return nil
+	}
+
+	sort.Slice(logFiles, func(i, j int) bool {
+		return logFiles[i].ModTime().After(logFiles[j].ModTime())
+	})
+
+	for _, file := range logFiles[maxLogFiles:] {
+		if err := os.Remove(filepath.Join(logPath, file.Name())); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

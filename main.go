@@ -31,6 +31,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	logErr := l.CheckLogSize(config.Logging.Path, config.Logging.File)
+	if logErr != nil {
+		l.Logger.Error("Failed to check log size", "Error", logErr)
+	}
 	defer l.CloseLogger()
 	defer cleanupTempFiles()
 	l.Logger.Info("Starting..")

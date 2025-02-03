@@ -5,10 +5,19 @@ Copyright © 2024 Nigel Tatschner
 package main
 
 import (
+	"os"
+
 	"github.com/ntatschner/GoPowerShellLauncher/cmd"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/launcher"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
+
+func cleanupTempFiles() {
+	for _, file := range launcher.TempFiles {
+		os.Remove(file)
+	}
+}
 
 var MousetrapHelpText = ""
 
@@ -23,6 +32,7 @@ func main() {
 		panic(err)
 	}
 	defer l.CloseLogger()
+	defer cleanupTempFiles()
 	l.Logger.Info("Starting..")
 	cmd.Execute()
 }

@@ -9,6 +9,8 @@ import (
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
+var TempFiles []string
+
 func ExecutePowerShellProcess(finalProfile string, shellPath string) error {
 	l.Logger.Info("Executing PowerShell process", "ShellPath", shellPath)
 	tmpFile, tmperr := os.CreateTemp("", "encoded_command_*.ps1")
@@ -16,7 +18,8 @@ func ExecutePowerShellProcess(finalProfile string, shellPath string) error {
 		l.Logger.Error("Failed to create temporary file", "Error", tmperr)
 		return tmperr
 	}
-	defer os.Remove(tmpFile.Name())
+	TempFiles = append(TempFiles, tmpFile.Name())
+
 	tmpFile.WriteString(finalProfile)
 	tmpFile.Close()
 	command := fmt.Sprintf(

@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strconv"
 
+	"github.com/kardianos/osext"
 	"github.com/spf13/viper"
 )
 
@@ -61,11 +62,13 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(UserConfigDir)
 
-	execPath, err := os.Executable()
 	if err != nil {
 		return nil, err
 	}
-	execDir := filepath.Dir(execPath)
+	execDir, direrr := osext.ExecutableFolder()
+	if direrr != nil {
+		return nil, fmt.Errorf("error getting executable folder: %w", direrr)
+	}
 
 	configPaths := []string{
 		".",

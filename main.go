@@ -1,5 +1,6 @@
+//go:generate goversioninfo
 /*
-Copyright © 2024 NAME HERE n
+Copyright © 2024 Nigel Tatschner
 */
 package main
 

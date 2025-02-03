@@ -22,7 +22,7 @@
         "Comments": "Powershell Profile Launcher",
         "CompanyName": "Tatux Solutions",
         "FileDescription": "A PowerShell Profile Launcher TUI/CLI Application",
-        "FileVersion": "0.0.5.0",
+        "FileVersion": "0.0.6.0",
         "InternalName": "powershellprofilelauncher",
         "LegalCopyright": "Nigel Tatschner",
         "LegalTrademarks": "",

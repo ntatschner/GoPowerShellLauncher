@@ -61,9 +61,16 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(UserConfigDir)
 
+	execPath, err := os.Executable()
+	if err != nil {
+		return nil, err
+	}
+	execDir := filepath.Dir(execPath)
+
 	configPaths := []string{
 		".",
 		UserConfigDir,
+		execDir,
 	}
 
 	// Log the configuration files found

@@ -18,6 +18,7 @@ func ExecutePowerShellProcess(finalProfile string, shellPath string) error {
 	}
 	defer os.Remove(tmpFile.Name())
 	tmpFile.WriteString(finalProfile)
+	tmpFile.Close()
 	command := fmt.Sprintf(
 		"Start-Process -FilePath \"%s\" -ArgumentList \"-NoProfile -NoExit -File %s\"",
 		shellPath, tmpFile.Name(),

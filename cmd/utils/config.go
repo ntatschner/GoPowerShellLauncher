@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/kardianos/osext"
+	shortcut "github.com/nyaosorg/go-windows-shortcut"
 	"github.com/spf13/viper"
 )
 
@@ -65,15 +66,27 @@ func LoadConfig() (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	execDir, direrr := osext.ExecutableFolder()
-	if direrr != nil {
-		return nil, fmt.Errorf("error getting executable folder: %w", direrr)
+	exe, exeerr := osext.Executable()
+	var exeDir string
+	if exeerr != nil {
+		return nil, fmt.Errorf("error getting executable: %w", exeerr)
+	}
+	if filepath.Ext(exe) == ".lnk" {
+		exePath, _, direrr := shortcut.Read(exe)
+		if direrr != nil {
+			return nil, fmt.Errorf("error reading shortcut: %w", direrr)
+		}
+		if exePath != "" {
+			exeDir = filepath.Dir(exePath)
+		} else {
+			exeDir = ""
+		}
 	}
 
 	configPaths := []string{
 		".",
 		UserConfigDir,
-		execDir,
+		exeDir,
 	}
 
 	// Log the configuration files found

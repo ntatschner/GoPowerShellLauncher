@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -10,8 +11,6 @@ import (
 	"github.com/kardianos/osext"
 	shortcut "github.com/nyaosorg/go-windows-shortcut"
 	"github.com/spf13/viper"
-
-	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 )
 
 type Profile struct {
@@ -51,13 +50,13 @@ var ConfigStoreData []ConfigStore
 var config *Config
 
 func LoadConfig() (*Config, error) {
-	l.Logger.Info("Loading config file")
+	log.Printf("Loading config file")
 	if config != nil {
 		return config, nil
 	}
 	usr, err := user.Current()
 	if err != nil {
-		l.Logger.Error("Error getting current user", "error", err)
+		log.Printf("Error getting current user: %v", err)
 		return nil, fmt.Errorf("error getting current user: %w", err)
 	}
 	UserConfigDir := filepath.Join(usr.HomeDir, "Documents", "GoPowerShellLauncher")
@@ -70,21 +69,21 @@ func LoadConfig() (*Config, error) {
 	exe, exeerr := osext.Executable()
 	var exeDir string
 	if exeerr != nil {
-		l.Logger.Error("Error getting executable", "error", exeerr)
+		log.Printf("Error getting executable: %v", exeerr)
 		return nil, fmt.Errorf("error getting executable: %w", exeerr)
 	}
 	if filepath.Ext(exe) == ".lnk" {
-		l.Logger.Info("Shortcut detected", "path", exe)
+		log.Printf("Shortcut detected: %s", exe)
 		exePath, _, direrr := shortcut.Read(exe)
 		if direrr != nil {
-			l.Logger.Error("Error reading shortcut", "error", direrr)
+			log.Printf("Error reading shortcut: %v", direrr)
 			return nil, fmt.Errorf("error reading shortcut: %w", direrr)
 		}
 		if exePath != "" {
-			l.Logger.Info("Shortcut path", "path", exePath)
+			log.Printf("Shortcut path: %s", exePath)
 			exeDir = filepath.Dir(exePath)
 		} else {
-			l.Logger.Info("Shortcut path is empty", "path", exePath)
+			log.Printf("Shortcut path is empty: %s", exePath)
 			exeDir = ""
 		}
 	}
@@ -97,33 +96,33 @@ func LoadConfig() (*Config, error) {
 
 	// Log the configuration files found
 	for _, path := range configPaths {
-		l.Logger.Info("Checking config file", "path", path)
+		log.Printf("Checking config directory: %s", path)
 		if path == "." {
-			l.Logger.Info("Getting current working directory")
+			log.Println("Getting current working directory")
 			path, _ = os.Getwd()
 		}
 		configFile := filepath.Join(path, "config.yaml")
-		l.Logger.Info("Checking config file", "path", configFile)
+		log.Printf("Checking config file: %s", configFile)
 		if _, err := os.Stat(configFile); err == nil {
-			l.Logger.Info("Config file exists", "path", configFile)
+			log.Printf("Config file exists: %s", configFile)
 			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: configFile, Exists: true})
 		} else {
-			l.Logger.Info("Config file doesn't exist", "path", configFile)
+			log.Printf("Config file doesn't exist: %s", configFile)
 			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: configFile, Exists: false})
 		}
 	}
 
 	if err := viper.ReadInConfig(); err != nil {
-		l.Logger.Error("Error reading config file", "error", err)
+		log.Printf("Error reading config file: %v", err)
 		return nil, fmt.Errorf("error reading config file: %w", err)
 	}
 
 	config = &Config{}
 	if err := viper.Unmarshal(config); err != nil {
-		l.Logger.Error("Unable to decode into struct", "error", err)
+		log.Printf("Unable to decode into struct: %v", err)
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
-	l.Logger.Info("Config file loaded", "config", config)
+	log.Printf("Config file loaded: %+v", config)
 	return config, nil
 }
 

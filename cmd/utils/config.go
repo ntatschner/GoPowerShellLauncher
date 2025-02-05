@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"strconv"
 
-	"github.com/kardianos/osext"
 	shortcut "github.com/nyaosorg/go-windows-shortcut"
 	"github.com/spf13/viper"
 )
@@ -66,7 +65,8 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(UserConfigDir)
 
-	exe, exeerr := osext.Executable()
+	exe, exeerr := os.Executable()
+	log.Printf("Executable: %s", exe)
 	var exeDir string
 	if exeerr != nil {
 		log.Printf("Error getting executable: %v", exeerr)

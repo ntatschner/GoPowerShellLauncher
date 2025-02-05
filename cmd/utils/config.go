@@ -86,6 +86,8 @@ func LoadConfig() (*Config, error) {
 			log.Printf("Shortcut path is empty: %s", exePath)
 			exeDir = ""
 		}
+	} else {
+		exeDir = filepath.Dir(exe)
 	}
 
 	configPaths := []string{

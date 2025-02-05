@@ -62,7 +62,6 @@ func LoadConfig() (*Config, error) {
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
 	viper.AddConfigPath(UserConfigDir)
 
 	exe, exeerr := os.Executable()
@@ -107,10 +106,16 @@ func LoadConfig() (*Config, error) {
 		log.Printf("Checking config file: %s", configFile)
 		if _, err := os.Stat(configFile); err == nil {
 			log.Printf("Config file exists: %s", configFile)
-			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: configFile, Exists: true})
+			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: true})
 		} else {
 			log.Printf("Config file doesn't exist: %s", configFile)
-			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: configFile, Exists: false})
+			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: false})
+		}
+	}
+	for _, store := range ConfigStoreData {
+		if store.Exists {
+			viper.AddConfigPath(store.Path)
+			break
 		}
 	}
 

@@ -40,7 +40,7 @@ func New(path string, windowSize tea.WindowSizeMsg, viewChanger view.ViewChanger
 	info := styles.ViewPortInfoStyle.Render(fmt.Sprintf("%3.f%%", vp.ScrollPercent()*100))
 	footer := lipgloss.JoinHorizontal(lipgloss.Center, line, info)
 	footerHeight := lipgloss.Height(footer)
-	help := styles.HelpStyle.Render("↑/k: up, ↓/j: down, u: ½ page up, d: ½ page down, backspace: back")
+	help := styles.HelpStyle.Render("↑/k: up, ↓/j: down, u: ½ page up, d: ½ page down, Ctrl+←: back")
 	helpHeight := lipgloss.Height(help)
 	verticalMarginHeight := headerHeight + footerHeight + helpHeight
 	vp.YPosition = headerHeight

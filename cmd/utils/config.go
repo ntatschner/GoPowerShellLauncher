@@ -49,7 +49,6 @@ var ConfigStoreData []ConfigStore
 var config *Config
 
 func LoadConfig() (*Config, error) {
-	log.Printf("Loading config file")
 	if config != nil {
 		return config, nil
 	}
@@ -65,24 +64,20 @@ func LoadConfig() (*Config, error) {
 	viper.AddConfigPath(UserConfigDir)
 
 	exe, exeerr := os.Executable()
-	log.Printf("Executable: %s", exe)
 	var exeDir string
 	if exeerr != nil {
 		log.Printf("Error getting executable: %v", exeerr)
 		return nil, fmt.Errorf("error getting executable: %w", exeerr)
 	}
 	if filepath.Ext(exe) == ".lnk" {
-		log.Printf("Shortcut detected: %s", exe)
 		exePath, _, direrr := shortcut.Read(exe)
 		if direrr != nil {
 			log.Printf("Error reading shortcut: %v", direrr)
 			return nil, fmt.Errorf("error reading shortcut: %w", direrr)
 		}
 		if exePath != "" {
-			log.Printf("Shortcut path: %s", exePath)
 			exeDir = filepath.Dir(exePath)
 		} else {
-			log.Printf("Shortcut path is empty: %s", exePath)
 			exeDir = ""
 		}
 	} else {
@@ -97,18 +92,13 @@ func LoadConfig() (*Config, error) {
 
 	// Log the configuration files found
 	for _, path := range configPaths {
-		log.Printf("Checking config directory: %s", path)
 		if path == "." {
-			log.Println("Getting current working directory")
 			path, _ = os.Getwd()
 		}
 		configFile := filepath.Join(path, "config.yaml")
-		log.Printf("Checking config file: %s", configFile)
 		if _, err := os.Stat(configFile); err == nil {
-			log.Printf("Config file exists: %s", configFile)
 			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: true})
 		} else {
-			log.Printf("Config file doesn't exist: %s", configFile)
 			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: false})
 		}
 	}
@@ -129,7 +119,6 @@ func LoadConfig() (*Config, error) {
 		log.Printf("Unable to decode into struct: %v", err)
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
-	log.Printf("Config file loaded: %+v", config)
 	return config, nil
 }
 

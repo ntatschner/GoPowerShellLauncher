@@ -61,3 +61,7 @@ func (db database) InitDB() error {
 func (db database) CloseDB() {
 	db.db.Close()
 }
+
+func (db database) RefreshLoadedProfilesDB() {
+
+}

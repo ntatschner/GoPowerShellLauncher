@@ -5,12 +5,31 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/types"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/codeviewerview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shellview"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/utils"
 )
+
+func init() {
+	ui.RegisterPage("profileSelector", Page{})
+}
+
+type Page struct{}
+
+func (p Page) New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) tea.Model {
+	return New(viewChanger, windowSize)
+}
+
+func (p Page) Title() string {
+	return "Select Profiles"
+}
+
+func (p Page) Description() string {
+	return "PowerShell profile selection screen."
+}
 
 type model struct {
 	profilesList list.Model

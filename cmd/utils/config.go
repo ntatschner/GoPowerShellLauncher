@@ -24,6 +24,10 @@ type Shortcut struct {
 	Profiles    []Profile `mapstructure:"profiles"`
 }
 
+func (s Shortcut) FilterValue() string { return s.Name }
+func (s Shortcut) Title() string       { return s.Name }
+func (s Shortcut) Description() string { return s.Destination }
+
 type Config struct {
 	Profile struct {
 		Path      string `mapstructure:"path"`

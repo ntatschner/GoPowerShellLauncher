@@ -5,22 +5,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/profileselector"
-	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/shortcutview"
+	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/styles"
 	"github.com/ntatschner/GoPowerShellLauncher/cmd/ui/view"
 )
 
 type menuItem struct {
-	title       string
-	description string
-	pageName    string
+	page ui.Page
 }
 
-func (m menuItem) Title() string       { return m.title }
-func (m menuItem) Description() string { return m.description }
-func (m menuItem) FilterValue() string { return m.title }
-func (m menuItem) PageName() string    { return m.pageName }
+func (m menuItem) Title() string       { return m.page.Title() }
+func (m menuItem) Description() string { return m.page.Description() }
+func (m menuItem) FilterValue() string { return m.page.Title() }
 
 type model struct {
 	menuList    list.Model
@@ -30,11 +26,11 @@ type model struct {
 
 func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	l.Logger.Debug("Initializing main menu")
-	items := []list.Item{
-		menuItem{title: "Select Profiles", description: "PowerShell profile selection screen.", pageName: "profilesView"},
-		menuItem{title: "Create Shortcuts", description: "Shortcut creation screen.", pageName: "shortcutsView"},
-		menuItem{title: "Exit", description: "Exit the application.", pageName: "exit"},
+	var items []list.Item
+	for _, page := range ui.GetPages() {
+		items = append(items, menuItem{page: page})
 	}
+	items = append(items, menuItem{page: exitPage{}})
 
 	delegate := list.NewDefaultDelegate()
 	delegate.Styles.NormalTitle = lipgloss.NewStyle().
@@ -67,6 +63,20 @@ func (m *model) Init() tea.Cmd {
 	return tea.SetWindowTitle("PowerShell Profile Launcher")
 }
 
+type exitPage struct{}
+
+func (e exitPage) New(view.ViewChanger, tea.WindowSizeMsg) tea.Model {
+	return nil
+}
+
+func (e exitPage) Title() string {
+	return "Exit"
+}
+
+func (e exitPage) Description() string {
+	return "Exit the application."
+}
+
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -77,17 +87,10 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			i := m.menuList.Index()
 			item := m.menuList.Items()[i].(menuItem)
-			switch item.PageName() {
-			case "profilesView":
-				l.Logger.Debug("Changing view to profile selector")
-				return m, m.viewChanger.ChangeView(profileselector.New(m.viewChanger, m.windowSize), true)
-			case "shortcutsView":
-				l.Logger.Debug("Changing view to shortcut selector")
-				return m, m.viewChanger.ChangeView(shortcutview.New(m.viewChanger, m.windowSize), true)
-			case "exit":
-				l.Logger.Info("Exiting application")
+			if item.page.Title() == "Exit" {
 				return m, tea.Quit
 			}
+			return m, m.viewChanger.ChangeView(item.page.New(m.viewChanger, m.windowSize), true)
 		}
 	}
 

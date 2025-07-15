@@ -48,64 +48,68 @@ var ConfigStoreData []ConfigStore
 
 var config *Config
 
-func LoadConfig() (*Config, error) {
-	if config != nil {
-		return config, nil
-	}
-	usr, err := user.Current()
-	if err != nil {
-		log.Printf("Error getting current user: %v", err)
-		return nil, fmt.Errorf("error getting current user: %w", err)
-	}
-	UserConfigDir := filepath.Join(usr.HomeDir, "Documents", "GoPowerShellLauncher")
-
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(UserConfigDir)
-
-	exe, exeerr := os.Executable()
-	var exeDir string
-	if exeerr != nil {
-		log.Printf("Error getting executable: %v", exeerr)
-		return nil, fmt.Errorf("error getting executable: %w", exeerr)
-	}
-	if filepath.Ext(exe) == ".lnk" {
-		exePath, _, direrr := shortcut.Read(exe)
-		if direrr != nil {
-			log.Printf("Error reading shortcut: %v", direrr)
-			return nil, fmt.Errorf("error reading shortcut: %w", direrr)
-		}
-		if exePath != "" {
-			exeDir = filepath.Dir(exePath)
-		} else {
-			exeDir = ""
-		}
+func LoadConfig(configPath ...string) (*Config, error) {
+	if len(configPath) > 0 {
+		viper.SetConfigFile(configPath[0])
 	} else {
-		exeDir = filepath.Dir(exe)
-	}
-
-	configPaths := []string{
-		".",
-		UserConfigDir,
-		exeDir,
-	}
-
-	// Log the configuration files found
-	for _, path := range configPaths {
-		if path == "." {
-			path, _ = os.Getwd()
+		if config != nil {
+			return config, nil
 		}
-		configFile := filepath.Join(path, "config.yaml")
-		if _, err := os.Stat(configFile); err == nil {
-			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: true})
+		usr, err := user.Current()
+		if err != nil {
+			log.Printf("Error getting current user: %v", err)
+			return nil, fmt.Errorf("error getting current user: %w", err)
+		}
+		UserConfigDir := filepath.Join(usr.HomeDir, "Documents", "GoPowerShellLauncher")
+
+		viper.SetConfigName("config")
+		viper.SetConfigType("yaml")
+		viper.AddConfigPath(UserConfigDir)
+
+		exe, exeerr := os.Executable()
+		var exeDir string
+		if exeerr != nil {
+			log.Printf("Error getting executable: %v", exeerr)
+			return nil, fmt.Errorf("error getting executable: %w", exeerr)
+		}
+		if filepath.Ext(exe) == ".lnk" {
+			exePath, _, direrr := shortcut.Read(exe)
+			if direrr != nil {
+				log.Printf("Error reading shortcut: %v", direrr)
+				return nil, fmt.Errorf("error reading shortcut: %w", direrr)
+			}
+			if exePath != "" {
+				exeDir = filepath.Dir(exePath)
+			} else {
+				exeDir = ""
+			}
 		} else {
-			ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: false})
+			exeDir = filepath.Dir(exe)
 		}
-	}
-	for _, store := range ConfigStoreData {
-		if store.Exists {
-			viper.AddConfigPath(store.Path)
-			break
+
+		configPaths := []string{
+			".",
+			UserConfigDir,
+			exeDir,
+		}
+
+		// Log the configuration files found
+		for _, path := range configPaths {
+			if path == "." {
+				path, _ = os.Getwd()
+			}
+			configFile := filepath.Join(path, "config.yaml")
+			if _, err := os.Stat(configFile); err == nil {
+				ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: true})
+			} else {
+				ConfigStoreData = append(ConfigStoreData, ConfigStore{Path: path, Exists: false})
+			}
+		}
+		for _, store := range ConfigStoreData {
+			if store.Exists {
+				viper.AddConfigPath(store.Path)
+				break
+			}
 		}
 	}
 
@@ -114,12 +118,17 @@ func LoadConfig() (*Config, error) {
 		return nil, fmt.Errorf("error reading config file: %w", err)
 	}
 
-	config = &Config{}
-	if err := viper.Unmarshal(config); err != nil {
+	newConfig := &Config{}
+	if err := viper.Unmarshal(newConfig); err != nil {
 		log.Printf("Unable to decode into struct: %v", err)
 		return nil, fmt.Errorf("unable to decode into struct: %w", err)
 	}
-	return config, nil
+
+	if len(configPath) == 0 {
+		config = newConfig
+	}
+
+	return newConfig, nil
 }
 
 func GenerateUniqueID() string {

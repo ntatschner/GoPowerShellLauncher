@@ -11,7 +11,6 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"syscall"
 	"unicode/utf16"
 
 	l "github.com/ntatschner/GoPowerShellLauncher/cmd/logger"
@@ -37,7 +36,7 @@ func (d DefaultHashValidator) ValidateHash(expectedHash, filePath string) (bool,
 	return ValidateHash(expectedHash, filePath)
 }
 
-func ValidatePath(path string) (bool, error) {
+var ValidatePath = func(path string) (bool, error) {
 	l.Logger.Info("Validating path", "Path", path)
 	_, err := os.Stat(path)
 	if os.IsNotExist(err) {
@@ -95,7 +94,7 @@ func ValidateHash(expectedHash, filePath string) (bool, error) {
 	return true, nil
 }
 
-func ValidateShellVersion(shellVersion string) (bool, error) {
+var ValidateShellVersion = func(shellVersion string) (bool, error) {
 	l.Logger.Info("Validating shell version", "ShellVersion", shellVersion)
 	shellVersion = strings.ToLower(shellVersion)
 	switch shellVersion {
@@ -106,7 +105,7 @@ func ValidateShellVersion(shellVersion string) (bool, error) {
 	return false, fmt.Errorf("invalid shell version: %s", shellVersion)
 }
 
-func ValidateDescription(description string) (bool, error) {
+var ValidateDescription = func(description string) (bool, error) {
 	l.Logger.Info("Validating description", "Description", description)
 	if len(description) > 100 {
 		return false, fmt.Errorf("description is too long (max 100 characters)")
@@ -169,30 +168,7 @@ func EncodeCommand(command string) (string, error) {
 }
 
 func ExecuteCommandWithPowershell(encodedCmd string) error {
-	l.Logger.Debug("Executing command with PowerShell")
-	// Get path of powershell.exe
-	powershellPath, err := exec.LookPath("powershell")
-	if err != nil {
-		l.Logger.Error("Failed to find PowerShell executable", "Error", err)
-		return err
-	}
-	l.Logger.Debug("PowerShell executable found", "Path", powershellPath)
-	command := fmt.Sprintf(
-		"Start-Process -FilePath \"%s\" -ArgumentList \"-NoProfile -NonInteractive -WindowStyle Hidden -EncodedCommand %s\"",
-		powershellPath, encodedCmd,
-	)
-	l.Logger.Debug("PowerShell command", "Command", command)
-	cmd := exec.Command("cmd", "/C", "start", "/b", "/wait", "powershell", "-Command", command)
-	cmd.SysProcAttr = &syscall.SysProcAttr{
-		CreationFlags: syscall.CREATE_NEW_PROCESS_GROUP}
-	exerr := cmd.Run()
-	if exerr != nil {
-		l.Logger.Error("Failed to start PowerShell process", "Error", err)
-		return err
-	}
-	l.Logger.Debug("PowerShell process started", "PID", cmd.Process.Pid)
-	l.Logger.Info("PowerShell process started successfully")
-	return nil
+	return executeCommandWithPowershell(encodedCmd)
 }
 
 func ExecuteInsideShell(encodedCmd string) error {

@@ -17,65 +17,35 @@ type model struct {
 	selected     map[int]struct{}
 	windowSize   tea.WindowSizeMsg
 	viewChanger  view.ViewChanger
+	loading      bool
+}
+
+type profilesLoadedMsg struct {
+	profiles []types.ProfileItem
+}
+
+func loadProfiles() tea.Cmd {
+	return func() tea.Msg {
+		profiles, err := utils.LoadProfilesFromDir()
+		if err != nil {
+			l.Logger.Error("Failed to load profiles", "error", err)
+			return profilesLoadedMsg{profiles: nil}
+		}
+		return profilesLoadedMsg{profiles: profiles}
+	}
 }
 
 func New(viewChanger view.ViewChanger, windowSize tea.WindowSizeMsg) *model {
 	l.Logger.Debug("Initializing profile list")
-	loadConfig, err := utils.LoadConfig()
-	if err != nil {
-		l.Logger.Error("Failed to load configuration file", "error", err)
-	} else {
-		l.Logger.Info("Loaded configuration file", "config", loadConfig)
-	}
-
-	profiles, err := utils.LoadProfilesFromDir()
-	if err != nil {
-		l.Logger.Error("Failed to load profiles", "error", err)
-	}
-
-	var items []list.Item
-	for _, p := range profiles {
-		item := types.ProfileItem{
-			ItemTitle:       p.ItemTitle,
-			ItemDescription: p.ItemDescription,
-			IsValid:         p.IsValid,
-			Path:            p.Path,
-			Shell:           p.Shell,
-			Name:            p.Name,
-		}
-		items = append(items, item)
-	}
-	delegateKeyMap, err := styles.NewProfileDelegateKeyMap()
-	if err != nil {
-		l.Logger.Fatal("Failed to create delegate key map", "error", err)
-		return nil
-	}
-	itemDelegate, delerr := styles.NewProfileItemDelegate(delegateKeyMap)
-	if delerr != nil {
-		l.Logger.Fatal("Failed to create item delegate", "error", delerr)
-		return nil
-	}
-	profilesList := list.New(items, itemDelegate, windowSize.Width+50, windowSize.Height)
-	profilesList.Title = "Available PowerShell Profiles"
-
-	profilesList.Styles.Title = styles.TitleStyle
-	profilesList.Styles.PaginationStyle = styles.PaginationStyle
-
-	profilesList.SetFilteringEnabled(true)
-	profilesList.FilterValue()
-	profilesList.SetShowStatusBar(true)
-	profilesList.SetShowTitle(true)
-
 	return &model{
-		profilesList: profilesList,
-		selected:     make(map[int]struct{}),
-		viewChanger:  viewChanger,
-		windowSize:   windowSize,
+		viewChanger: viewChanger,
+		windowSize:  windowSize,
+		loading:     true,
 	}
 }
 
 func (m *model) Init() tea.Cmd {
-	return tea.SetWindowTitle("Profile Selection")
+	return tea.Batch(tea.SetWindowTitle("Profile Selection"), loadProfiles())
 }
 
 func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -83,8 +53,47 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.windowSize = msg
-		m.profilesList.SetSize(msg.Width, msg.Height)
+		if !m.loading {
+			m.profilesList.SetSize(msg.Width, msg.Height)
+		}
+	case profilesLoadedMsg:
+		m.loading = false
+		var items []list.Item
+		for _, p := range msg.profiles {
+			item := types.ProfileItem{
+				ItemTitle:       p.ItemTitle,
+				ItemDescription: p.ItemDescription,
+				IsValid:         p.IsValid,
+				Path:            p.Path,
+				Shell:           p.Shell,
+				Name:            p.Name,
+			}
+			items = append(items, item)
+		}
+		delegateKeyMap, err := styles.NewProfileDelegateKeyMap()
+		if err != nil {
+			l.Logger.Fatal("Failed to create delegate key map", "error", err)
+			return m, tea.Quit
+		}
+		itemDelegate, delerr := styles.NewProfileItemDelegate(delegateKeyMap)
+		if delerr != nil {
+			l.Logger.Fatal("Failed to create item delegate", "error", delerr)
+			return m, tea.Quit
+		}
+		m.profilesList = list.New(items, itemDelegate, m.windowSize.Width+50, m.windowSize.Height)
+		m.profilesList.Title = "Available PowerShell Profiles"
+		m.profilesList.Styles.Title = styles.TitleStyle
+		m.profilesList.Styles.PaginationStyle = styles.PaginationStyle
+		m.profilesList.SetFilteringEnabled(true)
+		m.profilesList.FilterValue()
+		m.profilesList.SetShowStatusBar(true)
+		m.profilesList.SetShowTitle(true)
+		m.selected = make(map[int]struct{})
+
 	case tea.KeyMsg:
+		if m.loading {
+			return m, nil
+		}
 		switch msg.String() {
 		case " ":
 			items := m.profilesList.Items()
@@ -149,11 +158,16 @@ func (m *model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	m.profilesList, cmd = m.profilesList.Update(msg)
+	if !m.loading {
+		m.profilesList, cmd = m.profilesList.Update(msg)
+	}
 	return m, cmd
 }
 
 func (m *model) View() string {
+	if m.loading {
+		return "Loading profiles..."
+	}
 	return m.profilesList.View()
 }
 
